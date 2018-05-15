@@ -1,31 +1,21 @@
-// Define all constants usefull by the server and the client
+console.log(process.env);
 export const constant = {
-  SERVER_PORT: 4242,
-  SOCKET_PORT: 1337,
-  SOCKET_ADDR: 'http://localhost',
+  SERVER_PORT: process.env.SERVER_PORT,
+  SOCKET_PORT: process.env.SOCKET_PORT,
+  SOCKET_ADDR: process.env.SOCKET_ADDR,
 
-  SCREEN_WIDTH: 900,
-  SCREEN_HEIGHT: 768,
-  FLOOR_POS_Y: 672,
-  LEVEL_SPEED: 0.3,
-  TIME_BETWEEN_GAMES: 5000,
+  SCREEN_WIDTH: process.env.SCREEN_WIDTH,
+  SCREEN_HEIGHT: process.env.SCREEN_HEIGHT,
+  FLOOR_POS_Y: process.env.FLOOR_POS_Y,
+  LEVEL_SPEED: process.env.LEVEL_SPEED,
+  TIME_BETWEEN_GAMES: process.env.TIME_BETWEEN_GAMES,
 
-  BIRD_WIDTH: 42,
-  BIRD_HEIGHT: 30,
+  BIRD_WIDTH: process.env.BIRD_WIDTH,
+  BIRD_HEIGHT: process.env.BIRD_HEIGHT,
 
-  // Pipe constants
-  PIPE_WIDTH: 100,
-  DISTANCE_BETWEEN_PIPES: 380,
-  MIN_PIPE_HEIGHT: 60,
-  MAX_PIPE_HEIGHT: 630,
-  HEIGHT_BETWEEN_PIPES: 150
+  PIPE_WIDTH: process.env.PIPE_WIDTH,
+  DISTANCE_BETWEEN_PIPES: process.env.DISTANCE_BETWEEN_PIPES,
+  MIN_PIPE_HEIGHT: process.env.MIN_PIPE_HEIGHT,
+  MAX_PIPE_HEIGHT: process.env.MAX_PIPE_HEIGHT,
+  HEIGHT_BETWEEN_PIPES: process.env.HEIGHT_BETWEEN_PIPES
 };
-
-// // To be use by the server part, we have to provide the object with exports
-// if (typeof exports != 'undefined') {
-//   exports.constant = constant;
-// }
-// // Else provide the const object to require.js with define()
-// else {
-//   define(constant);
-// }

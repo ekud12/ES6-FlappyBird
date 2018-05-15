@@ -1,3 +1,4 @@
+const Dotenv = require('dotenv-webpack');
 export default {
   entry: './index.js',
   output: {
@@ -36,5 +37,6 @@ export default {
         ]
       }
     ]
-  }
+  },
+  plugins: [new Dotenv({ path: './.env' })]
 };
