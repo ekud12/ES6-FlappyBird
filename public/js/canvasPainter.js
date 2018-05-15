@@ -1,4 +1,4 @@
-import  Parallax from './parallax.js';
+import Parallax from './parallax.js';
 import BgRessources from './backgroundRessources.js';
 import { constant as Const } from '../../global.js';
 
