@@ -591,7 +591,7 @@
       function drawScore(score) {
         var posX = void 0;
         posX = _global2.default.SCREEN_WIDTH / 2 - ctx.measureText(score).width / 2;
-        ctx.font = '120px mini_pixel';
+        ctx.font = '120px Quantico';
         ctx.fillStyle = 'black';
         ctx.fillText(score, posX + SCORE_SHADOW_OFFSET, SCORE_POS_Y + SCORE_SHADOW_OFFSET);
         ctx.fillStyle = 'white';

@@ -31,7 +31,7 @@ class Player {
       ctx.save();
       if (this._isMe === false) {
         ctx.globalAlpha = 0.6;
-        ctx.font = '25px mini_pixel';
+        ctx.font = '25px Quantico';
         ctx.fillStyle = '#FFA24A';
         nickPos =
           this._serverInfos.posX +

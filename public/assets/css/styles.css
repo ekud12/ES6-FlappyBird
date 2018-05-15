@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'mini_pixel';
+  font-family: 'Quantico';
   src: url('../fonts/Quantico-Bold.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
@@ -17,7 +17,7 @@ h2 {
   width: 100%;
   padding: 0;
   margin: 0;
-  font-family: 'mini_pixel';
+  font-family: 'Quantico';
 
   text-align: center;
 }
@@ -45,7 +45,7 @@ h2 {
   width: 100%;
   height: 50px;
 
-  font-family: 'mini_pixel';
+  font-family: 'Quantico';
   font-size: 30px;
   color: white;
   line-height: 50px;
@@ -134,7 +134,7 @@ canvas {
   border: 4px solid #463740;
   border-radius: 2px;
 
-  font-family: 'mini_pixel';
+  font-family: 'Quantico';
 }
 
 .gs-ranking-medal {
@@ -226,7 +226,7 @@ input[type='text'] {
   margin: auto;
 
   font-size: 50px;
-  font-family: 'mini_pixel';
+  font-family: 'Quantico';
   text-shadow: 2px 2px 0px #e36116;
   color: #ffa24a;
   text-align: center;
@@ -241,7 +241,7 @@ input[type='button'] {
   margin: 25px auto;
 
   font-size: 35px;
-  font-family: 'mini_pixel';
+  font-family: 'Quantico';
   text-shadow: 2px 2px 0px #e36116;
   color: white;
   text-align: center;
