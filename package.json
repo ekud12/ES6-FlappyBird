@@ -27,6 +27,7 @@
     "webpack-livereload-plugin": "^1.0.0"
   },
   "dependencies": {
+    "babel-plugin-inline-dotenv": "^1.1.2",
     "body-parser": "^1.18.3",
     "connect": "^3.6.6",
     "dotenv": "^5.0.1",

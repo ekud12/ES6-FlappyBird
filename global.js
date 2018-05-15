@@ -1,4 +1,3 @@
-console.log(process.env);
 export const constant = {
   SERVER_PORT: process.env.SERVER_PORT,
   SOCKET_PORT: process.env.SOCKET_PORT,
