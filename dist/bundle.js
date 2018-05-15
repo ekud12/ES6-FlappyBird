@@ -544,7 +544,12 @@
       var SCORE_POS_Y = 200;
       var SCORE_SHADOW_OFFSET = 5;
       var NB_RESSOURCES_TO_LOAD = 2;
-      var BIRDS_SPRITES = ['images/clumsy.png', 'images/clumsy-blue.png', 'images/clumsy-red.png', 'images/clumsy-multi.png'];
+      var BIRDS_SPRITES = [
+        'assets/images/clumsy.png',
+        'assets/images/clumsy-blue.png',
+        'assets/images/clumsy-red.png',
+        'assets/images/clumsy-multi.png'
+      ];
       var that = {};
       var ctx = document.getElementById('gs-canvas').getContext('2d');
       var _isReadyToDraw = false;
@@ -640,7 +645,7 @@
         var nBg = void 0;
         var i = void 0;
         _picGround = new Image();
-        _picGround.src = 'images/ground.png';
+        _picGround.src = 'assets/images/ground.png';
         _picGround.onload = function() {
           onRessourceLoaded(onReadyCallback);
         };
@@ -654,7 +659,7 @@
           _global2.default.SCREEN_WIDTH
         );
         _picPipe = new Image();
-        _picPipe.src = 'images/pipe.png';
+        _picPipe.src = 'assets/images/pipe.png';
         _picPipe.onload = function() {
           onRessourceLoaded(onReadyCallback);
         };

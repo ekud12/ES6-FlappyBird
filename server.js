@@ -24,7 +24,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 // all environments
-app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')));
+app.use(favicon(path.join(__dirname, '/public/assets/images/favicon.ico')));
 app.use(logger('dev'));
 app.use(methodOverride());
 app.use(bodyParser.json());

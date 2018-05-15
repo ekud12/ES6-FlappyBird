@@ -1,31 +1,31 @@
 import { constant as Const } from '../../global.js';
 export default [
   {
-    nightSrc: 'images/night.png',
+    nightSrc: 'assets/images/night.png',
     width: 500,
     height: 768,
     posY: 0,
     speed: Const.LEVEL_SPEED / 4
   },
   {
-    daySrc: 'images/clouds.png',
-    nightSrc: 'images/night-clouds.png',
+    daySrc: 'assets/images/clouds.png',
+    nightSrc: 'assets/images/night-clouds.png',
     width: 300,
     height: 256,
     posY: 416,
     speed: Const.LEVEL_SPEED / 3
   },
   {
-    daySrc: 'images/city.png',
-    nightSrc: 'images/night-city.png',
+    daySrc: 'assets/images/city.png',
+    nightSrc: 'assets/images/night-city.png',
     width: 300,
     height: 256,
     posY: 416,
     speed: Const.LEVEL_SPEED / 2
   },
   {
-    daySrc: 'images/trees.png',
-    nightSrc: 'images/night-trees.png',
+    daySrc: 'assets/images/trees.png',
+    nightSrc: 'assets/images/night-trees.png',
     width: 300,
     height: 216,
     posY: 456,

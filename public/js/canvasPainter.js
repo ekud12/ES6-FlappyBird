@@ -7,7 +7,12 @@ const SPRITE_PIPE_WIDTH = 148;
 const SCORE_POS_Y = 200;
 const SCORE_SHADOW_OFFSET = 5;
 const NB_RESSOURCES_TO_LOAD = 2;
-const BIRDS_SPRITES = ['images/clumsy.png', 'images/clumsy-blue.png', 'images/clumsy-red.png', 'images/clumsy-multi.png'];
+const BIRDS_SPRITES = [
+  'assets/images/clumsy.png',
+  'assets/images/clumsy-blue.png',
+  'assets/images/clumsy-red.png',
+  'assets/images/clumsy-multi.png'
+];
 const canvasPainter = {};
 const ctx = document.getElementById('gs-canvas').getContext('2d');
 let _isReadyToDraw = false;
@@ -104,13 +109,13 @@ canvasPainter.loadRessources = onReadyCallback => {
   let nBg;
   let i;
   _picGround = new Image();
-  _picGround.src = 'images/ground.png';
+  _picGround.src = 'assets/images/ground.png';
   _picGround.onload = () => {
     onRessourceLoaded(onReadyCallback);
   };
   _parallaxGround = new Parallax(_picGround, null, 900, 96, Const.LEVEL_SPEED, 672, Const.SCREEN_WIDTH);
   _picPipe = new Image();
-  _picPipe.src = 'images/pipe.png';
+  _picPipe.src = 'assets/images/pipe.png';
   _picPipe.onload = () => {
     onRessourceLoaded(onReadyCallback);
   };
