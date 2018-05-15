@@ -10,7 +10,7 @@ let _pipeManager;
 let _gameState;
 let _timeStartGame;
 let _lastTime = null;
-
+let _timer;
 export function startServer() {
   // io.configure(() => {
   //   io.set('log level', 2);
@@ -34,23 +34,19 @@ export function startServer() {
   // On new client connection
   io.sockets.on('connection', socket => {
     // Add new player
-    const player = _playersManager.addNewPlayer(socket, socket.id);
-
+    let player = _playersManager.addNewPlayer(socket, socket.id);
+    socket.PlayerInstance = player;
     // Register to socket events
     socket.on('disconnect', () => {
-      socket.get('PlayerInstance', (error, player) => {
-        _playersManager.removePlayer(player);
-        socket.broadcast.emit('player_disconnect', player.getPlayerObject());
-        player = null;
-      });
+      _playersManager.removePlayer(player);
+      socket.broadcast.emit('player_disconnect', player.getPlayerObject());
+      player = null;
     });
+
     socket.on('say_hi', (nick, fn) => {
       fn(_gameState, player.getID());
       playerLog(socket, nick);
     });
-
-    // Remember PlayerInstance and push it to the player list
-    socket.set('PlayerInstance', player);
   });
 
   console.log(`Game started and waiting for players on port ${Const.SOCKET_PORT}`);
@@ -58,29 +54,26 @@ export function startServer() {
 
 function playerLog(socket, nick) {
   // Retreive PlayerInstance
-  socket.get('PlayerInstance', (error, player) => {
-    if (error) console.error(error);
-    else {
-      // Bind new client events
-      socket.on('change_ready_state', readyState => {
-        // If the server is currently waiting for players, update ready state
-        if (_gameState == enums.ServerState.WaitingForPlayers) {
-          _playersManager.changeLobbyState(player, readyState);
-          socket.broadcast.emit('player_ready_state', player.getPlayerObject());
-        }
-      });
-      socket.on('player_jump', () => {
-        player.jump();
-      });
+  let player = socket.PlayerInstance;
 
-      // Set player's nickname and prepare him for the next game
-      _playersManager.prepareNewPlayer(player, nick);
-
-      // Notify new client about other players AND notify other about the new one ;)
-      socket.emit('player_list', _playersManager.getPlayerList());
-      socket.broadcast.emit('new_player', player.getPlayerObject());
+  // Bind new client events
+  socket.on('change_ready_state', readyState => {
+    // If the server is currently waiting for players, update ready state
+    if (_gameState == enums.ServerState.WaitingForPlayers) {
+      _playersManager.changeLobbyState(player, readyState);
+      socket.broadcast.emit('player_ready_state', player.getPlayerObject());
     }
   });
+  socket.on('player_jump', () => {
+    player.jump();
+  });
+
+  // Set player's nickname and prepare him for the next game
+  _playersManager.prepareNewPlayer(player, nick);
+
+  // Notify new client about other players AND notify other about the new one ;)
+  socket.emit('player_list', _playersManager.getPlayerList());
+  socket.broadcast.emit('new_player', player.getPlayerObject());
 }
 
 function updateGameState(newState, notifyClients) {
