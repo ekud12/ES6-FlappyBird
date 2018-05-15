@@ -145,7 +145,7 @@ function loadGameRoom() {
     for (i = 0; i < nb; i++) {
       _playerManager.addPlayer(playersList[i], _userID);
     }
-
+ 
     // Redraw
     draw(0, 0);
   });
