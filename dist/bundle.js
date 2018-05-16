@@ -72,9 +72,9 @@
     /***/ function(module, exports, __webpack_require__) {
       'use strict';
 
-      var _canvasPainter = __webpack_require__(1);
+      var _GUIController = __webpack_require__(1);
 
-      var _canvasPainter2 = _interopRequireDefault(_canvasPainter);
+      var _GUIController2 = _interopRequireDefault(_GUIController);
 
       var _playersManager = __webpack_require__(2);
 
@@ -109,7 +109,7 @@
         .then(function() {
           var __WEBPACK_AMD_REQUIRE_ARRAY__ = [
             !(function webpackMissingModule() {
-              var e = new Error('Cannot find module "canvasPainter"');
+              var e = new Error('Cannot find module "GUIController"');
               e.code = 'MODULE_NOT_FOUND';
               throw e;
             })(),
@@ -124,7 +124,7 @@
               throw e;
             })()
           ];
-          (function(canvasPainter, PlayersManager, Const) {
+          (function(GUIController, PlayersManager, Const) {
             var enumState = {
               Login: 0,
               WaitingRoom: 1,
@@ -154,9 +154,9 @@
 
             function draw(currentTime, ellapsedTime) {
               // If player score is > 15, night !!
-              if (_gameState == enumState.OnGame && _playerManager.getCurrentPlayer().getScore() == 15) _isNight = true;
+              if (_gameState == enumState.OnGame && _playerManager.getActivePlayer().getScore() == 15) _isNight = true;
 
-              canvasPainter.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState, _isNight);
+              GUIController.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState, _isNight);
             }
 
             requestAnimationFrame =
@@ -273,19 +273,19 @@
                 draw(0, 0);
               });
               _socket.on('player_disconnect', function(player) {
-                _playerManager.removePlayer(player);
+                _playerManager.deletePlayer(player);
               });
               _socket.on('new_player', function(player) {
                 _playerManager.addPlayer(player);
               });
               _socket.on('player_ready_state', function(playerInfos) {
-                _playerManager.getPlayerFromId(playerInfos.id).updateFromServer(playerInfos);
+                _playerManager.getPlayerByID(playerInfos.id).updateFromServer(playerInfos);
               });
               _socket.on('update_game_state', function(gameState) {
                 changeGameState(gameState);
               });
               _socket.on('game_loop_update', function(serverDatasUpdated) {
-                _playerManager.updatePlayerListFromServer(serverDatasUpdated.players);
+                _playerManager.refreshPList(serverDatasUpdated.players);
                 _pipeList = serverDatasUpdated.pipes;
               });
               _socket.on('ranking', function(score) {
@@ -371,7 +371,7 @@
               }, Const.TIME_BETWEEN_GAMES / 2);
 
               // reset graphics in case to prepare the next game
-              canvasPainter.resetForNewGame();
+              GUIController.resetForNewGame();
               _isNight = false;
             }
 
@@ -430,7 +430,7 @@
                 case enumState.WaitingRoom:
                   _isCurrentPlayerReady = !_isCurrentPlayerReady;
                   _socket.emit('change_ready_state', _isCurrentPlayerReady);
-                  _playerManager.getCurrentPlayer().updateReadyState(_isCurrentPlayerReady);
+                  _playerManager.getActivePlayer().updateReadyState(_isCurrentPlayerReady);
                   break;
                 case enumState.OnGame:
                   _socket.emit('player_jump');
@@ -485,7 +485,7 @@
 
             // Load ressources and Start the client !
             console.log('Client started, load ressources...');
-            canvasPainter.loadRessources(function() {
+            GUIController.loadRessources(function() {
               console.log('Ressources loaded, connect to server...');
               runFBInstance();
             });
@@ -605,7 +605,7 @@
       that.draw = function(currentTime, ellapsedTime, playerManager, pipes, gameState, isNight) {
         var nb = void 0;
         var i = void 0;
-        var players = playerManager.getPlayers();
+        var players = playerManager.getAllPlayers();
         if (!_isReadyToDraw) {
           console.log('[ERROR] : Ressources not yet loaded !');
           return;
@@ -628,7 +628,7 @@
             players[i].draw(ctx, currentTime, _picBirds, gameState);
           }
         }
-        if (gameState == 2) drawScore(playerManager.getCurrentPlayer().getScore());
+        if (gameState == 2) drawScore(playerManager.getActivePlayer().getScore());
         if (pipes) _parallaxGround.draw(ctx, currentTime);
         else _parallaxGround.draw(ctx, 0);
       };
@@ -775,7 +775,7 @@
             key: 'addPlayer',
             value: function addPlayer(infos, playerID) {
               var player = void 0;
-              if (this.getPlayerFromId(infos.id) !== null) {
+              if (this.getPlayerByID(infos.id) !== null) {
                 console.log(infos.nick + ' is already in the list ! Adding aborted');
                 return;
               }
@@ -791,8 +791,8 @@
             }
           },
           {
-            key: 'removePlayer',
-            value: function removePlayer(player) {
+            key: 'deletePlayer',
+            value: function deletePlayer(player) {
               var pos = _keyMatching[player.id];
               var i = void 0;
               if (typeof pos == 'undefined') {
@@ -809,8 +809,8 @@
             }
           },
           {
-            key: 'updatePlayerListFromServer',
-            value: function updatePlayerListFromServer(playerlistUpdated) {
+            key: 'refreshPList',
+            value: function refreshPList(playerlistUpdated) {
               var nbUpdates = playerlistUpdated.length;
               var i = void 0;
               for (i = 0; i < nbUpdates; i++) {
@@ -819,20 +819,20 @@
             }
           },
           {
-            key: 'getPlayers',
-            value: function getPlayers() {
+            key: 'getAllPlayers',
+            value: function getAllPlayers() {
               return _playerList;
             }
           },
           {
-            key: 'getCurrentPlayer',
-            value: function getCurrentPlayer() {
+            key: 'getActivePlayer',
+            value: function getActivePlayer() {
               return _playerList[_currentPlayer];
             }
           },
           {
-            key: 'getPlayerFromId',
-            value: function getPlayerFromId(playerID) {
+            key: 'getPlayerByID',
+            value: function getPlayerByID(playerID) {
               var nbPlayers = _playerList.length;
               var i = void 0;
               for (i = 0; i < nbPlayers; i++) {

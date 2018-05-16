@@ -9,12 +9,24 @@ export const constant = {
   LEVEL_SPEED: 0.3,
   TIME_BETWEEN_GAMES: 5000,
 
-  BIRD_WIDTH: 64,
-  BIRD_HEIGHT: 64,
+  BIRD_WIDTH: 60,
+  BIRD_HEIGHT: 60,
 
   PIPE_WIDTH: 100,
   DISTANCE_BETWEEN_PIPES: 380,
   MIN_PIPE_HEIGHT: 50,
   MAX_PIPE_HEIGHT: 660,
-  HEIGHT_BETWEEN_PIPES: 220
+  HEIGHT_BETWEEN_PIPES: 220,
+  SPRITES: [
+    'assets/images/toucan.png',
+    'assets/images/toucan-red.png',
+    'assets/images/toucan-purple.png',
+    'assets/images/toucan-green.png'
+  ],
+  clientInstanceStates: {
+    Login: 0,
+    WaitingRoom: 1,
+    OnGame: 2,
+    Ranking: 3
+  }
 };

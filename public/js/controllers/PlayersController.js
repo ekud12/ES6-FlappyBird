@@ -1,8 +1,9 @@
 import Player from '../models/Player.model.js';
-import { map, filter, switchMap } from 'rxjs/operators';
+
 let players;
 let playersMap;
 let activePlayer;
+
 class PlayersController {
   constructor() {
     players = new Array();
@@ -11,10 +12,9 @@ class PlayersController {
 
   addPlayer(data, p_id) {
     let player;
-    if (this.findPlayer(data.id) !== null) {
+    if (this.getPlayerByID(data.id) !== null) {
       return;
     }
-
     player = new Player(data, p_id);
     players.push(player);
     playersMap[data.id] = players.length - 1;
@@ -23,7 +23,7 @@ class PlayersController {
     }
   }
 
-  removePlayer(player) {
+  deletePlayer(player) {
     const index = playersMap[player.id];
     if (!(typeof index == 'undefined')) {
       players.splice(index, 1);
@@ -35,25 +35,25 @@ class PlayersController {
     }
   }
 
-  updatePlayerListFromServer(playersData) {
+  refreshPList(playersData) {
     for (let i = 0; i < playersData.length; i++) {
       players[playersMap[playersData[i].id]].updateFromServer(playersData[i]);
     }
   }
 
-  getPlayers() {
+  getPlayerByID(playerID) {
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].getId() === playerID) return players[i];
+    }
+    return null;
+  }
+
+  getAllPlayers() {
     return players;
   }
 
-  getCurrentPlayer() {
+  getActivePlayer() {
     return players[activePlayer];
-  }
-
-  findPlayer(playerID) {
-    this.players.map(val => {
-      if (val.getId() === playerID) return val;
-    });
-    return null;
   }
 }
 

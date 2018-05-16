@@ -4,13 +4,7 @@
 
 import { constant as Const } from '../../../global.js';
 import PlayersController from '../controllers/PlayersController.js';
-import canvasPainter from '../controllers/UIController.js';
-const enumState = {
-  Login: 0,
-  WaitingRoom: 1,
-  OnGame: 2,
-  Ranking: 3
-};
+import GUIController from '../controllers/UIController.js';
 
 const enumPanels = {
   Login: 'gs-login',
@@ -19,7 +13,7 @@ const enumPanels = {
   Error: 'gs-error'
 };
 
-let _gameState = enumState.Login;
+let _gameState = Const.clientInstanceStates.Login;
 let _playerManager;
 let _pipeList;
 let _isCurrentPlayerReady = false;
@@ -33,9 +27,9 @@ let _isNight = false;
 
 function draw(currentTime, ellapsedTime) {
   // If player score is > 15, night !!
-  if (_gameState == enumState.OnGame && _playerManager.getCurrentPlayer().getScore() == 15) _isNight = true;
+  if (_gameState == Const.clientInstanceStates.OnGame && _playerManager.getActivePlayer().getScore() == 15) _isNight = true;
 
-  canvasPainter.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState, _isNight);
+  GUIController.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState, _isNight);
 }
 
 requestAnimationFrame =
@@ -49,7 +43,7 @@ function gameLoop() {
   let ellapsedTime = 0;
 
   // Call for next anim frame
-  if (_gameState == enumState.OnGame) requestAnimationFrame(gameLoop);
+  if (_gameState == Const.clientInstanceStates.OnGame) requestAnimationFrame(gameLoop);
 
   // Get time difference between the last call and now
   if (_lastTime) {
@@ -65,7 +59,7 @@ function lobbyLoop() {
   const now = new Date().getTime();
 
   // Call for next anim frame
-  if (_gameState == enumState.WaitingRoom) requestAnimationFrame(lobbyLoop);
+  if (_gameState == Const.clientInstanceStates.WaitingRoom) requestAnimationFrame(lobbyLoop);
 
   // Call draw with the ellapsed time between the last frame and the current one
   draw(now, 0);
@@ -126,19 +120,19 @@ function loadGameRoom() {
   });
 
   _socket.on('player_disconnect', player => {
-    _playerManager.removePlayer(player);
+    _playerManager.deletePlayer(player);
   });
   _socket.on('new_player', player => {
     _playerManager.addPlayer(player);
   });
   _socket.on('player_ready_state', playerInfos => {
-    _playerManager.getPlayerFromId(playerInfos.id).updateFromServer(playerInfos);
+    _playerManager.getPlayerByID(playerInfos.id).updateFromServer(playerInfos);
   });
   _socket.on('update_game_state', gameState => {
     changeGameState(gameState);
   });
   _socket.on('game_loop_update', serverDatasUpdated => {
-    _playerManager.updatePlayerListFromServer(serverDatasUpdated.players);
+    _playerManager.refreshPList(serverDatasUpdated.players);
     _pipeList = serverDatasUpdated.pipes;
   });
   _socket.on('ranking', score => {
@@ -149,7 +143,7 @@ function loadGameRoom() {
     _userID = uuid;
     changeGameState(serverState);
 
-    if (serverState == enumState.OnGame) {
+    if (serverState == Const.clientInstanceStates.OnGame) {
       alert(`Game in Progress. Please wait...`);
     }
   });
@@ -165,13 +159,13 @@ function loadGameRoom() {
   return false;
 }
 
-function displayRanking(score) {
+function displayRanking(data) {
   const nodeMedal = document.querySelector('.gs-ranking-medal');
   const nodeHS = document.getElementById('gs-highscores-scores');
   let i;
   let nbHs;
 
-  console.log(score);
+  console.log(data);
 
   // Remove previous medals just in case
   nodeMedal.classList.remove('third');
@@ -179,21 +173,21 @@ function displayRanking(score) {
   nodeMedal.classList.remove('winner');
 
   // Display scores
-  document.getElementById('gs-ranking-score').innerHTML = score.score;
-  document.getElementById('gs-ranking-best').innerHTML = score.bestScore;
-  document.getElementById('gs-ranking-pos').innerHTML = `${score.rank} / ${score.nbPlayers}`;
+  document.getElementById('gs-ranking-score').innerHTML = data.score;
+  document.getElementById('gs-ranking-best').innerHTML = data.bestScore;
+  document.getElementById('gs-ranking-pos').innerHTML = `${data.rank} / ${data.nbPlayers}`;
 
   // Set medal !
-  if (score.rank == 1) nodeMedal.classList.add('winner');
-  else if (score.rank == 2) nodeMedal.classList.add('second');
-  else if (score.rank == 3) nodeMedal.classList.add('third');
+  if (data.rank == 1) nodeMedal.classList.add('winner');
+  else if (data.rank == 2) nodeMedal.classList.add('second');
+  else if (data.rank == 3) nodeMedal.classList.add('third');
 
   // Display hish scores
   nodeHS.innerHTML = '';
-  nbHs = score.highscores.length;
+  nbHs = data.highscores.length;
   for (i = 0; i < nbHs; i++) {
-    nodeHS.innerHTML += `<li><span>#${i + 1}</span> ${score.highscores[i].player} <strong>${
-      score.highscores[i].score
+    nodeHS.innerHTML += `<li><span>#${i + 1}</span> ${data.highscores[i].player} <strong>${
+      data.highscores[i].score
     }</strong></li>`;
   }
 
@@ -206,7 +200,7 @@ function displayRanking(score) {
   }, Const.TIME_BETWEEN_GAMES / 2);
 
   // reset graphics in case to prepare the next game
-  canvasPainter.resetForNewGame();
+  GUIController.resetForNewGame();
   _isNight = false;
 }
 
@@ -216,18 +210,18 @@ function changeGameState(gameState) {
   _gameState = gameState;
 
   switch (_gameState) {
-    case enumState.WaitingRoom:
+    case Const.clientInstanceStates.WaitingRoom:
       strLog += 'waiting in lobby';
       _isCurrentPlayerReady = false;
       lobbyLoop();
       break;
 
-    case enumState.OnGame:
+    case Const.clientInstanceStates.OnGame:
       strLog += 'on game !';
       gameLoop();
       break;
 
-    case enumState.Ranking:
+    case Const.clientInstanceStates.Ranking:
       strLog += 'display ranking';
       // Start timer for next game
       _ranking_time = Const.TIME_BETWEEN_GAMES / 1000;
@@ -262,12 +256,12 @@ function changeGameState(gameState) {
 
 const inputsManager = () => {
   switch (_gameState) {
-    case enumState.WaitingRoom:
+    case Const.clientInstanceStates.WaitingRoom:
       _isCurrentPlayerReady = !_isCurrentPlayerReady;
       _socket.emit('change_ready_state', _isCurrentPlayerReady);
-      _playerManager.getCurrentPlayergetCurrentPlayer().updateReadyState(_isCurrentPlayerReady);
+      _playerManager.getActivePlayer().updateReadyState(_isCurrentPlayerReady);
       break;
-    case enumState.OnGame:
+    case Const.clientInstanceStates.OnGame:
       _socket.emit('player_jump');
       break;
     default:
@@ -286,7 +280,7 @@ const showHideMenu = (panelName, isShow) => {
     if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
   }
 };
-canvasPainter.loadRessources(() => {
+GUIController.loadRessources(() => {
   runFBInstance();
 });
 

@@ -1,9 +1,8 @@
 import { EventEmitter } from 'events';
 import util from 'util';
+import Scores from './ScoringController';
 import * as enums from './enums';
 import Player from './player';
-import Scores from './scoreSystem';
-
 const NB_AVAILABLE_BIRDS_COLOR = 4;
 
 const _playersList = new Array();
@@ -31,7 +30,7 @@ class PlayersManager {
     return newPlayer;
   }
 
-  removePlayer(player) {
+  deletePlayer(player) {
     const pos = _playersList.indexOf(player);
 
     if (pos < 0) {

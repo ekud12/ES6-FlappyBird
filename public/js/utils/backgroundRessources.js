@@ -8,7 +8,7 @@ export default [
     speed: Const.LEVEL_SPEED / 4
   },
   {
-    daySrc: 'assets/images/city.png',
+    daySrc: 'assets/images/bg2.png',
     nightSrc: 'assets/images/night-city.png',
     width: 300,
     height: 256,

@@ -38,7 +38,7 @@ export function startServer() {
     socket.PlayerInstance = player;
     // Register to socket events
     socket.on('disconnect', () => {
-      _playersManager.removePlayer(player);
+      _playersManager.deletePlayer(player);
       socket.broadcast.emit('player_disconnect', player.getPlayerObject());
       player = null;
     });

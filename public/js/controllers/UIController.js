@@ -8,13 +8,8 @@ const SPRITE_PIPE_WIDTH = 148;
 const SCORE_POS_Y = 200;
 const SCORE_SHADOW_OFFSET = 5;
 const TOT_RES = 2;
-const SPRITES = [
-  'assets/images/toucan.png',
-  'assets/images/toucan-red.png',
-  'assets/images/toucan-purple.png',
-  'assets/images/toucan-green.png'
-];
-const canvasPainter = {};
+
+const GUIController = {};
 
 const ctx = document.getElementById('canvas').getContext('2d');
 let _isReadyToDraw = false;
@@ -26,7 +21,7 @@ const _picBG = new Array();
 const _picBirds = new Array();
 
 function getNbRessourcesToLoad() {
-  let nbRessources = TOT_RES + SPRITES.length;
+  let nbRessources = TOT_RES + Const.SPRITES.length;
   const nbBg = BgRessources.length;
   let i;
   for (i = 0; i < nbBg; i++) {
@@ -69,20 +64,20 @@ const drawScore = score => {
   ctx.fillText(score, posX, SCORE_POS_Y);
 };
 
-canvasPainter.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState, isNight) => {
+GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState, isNight) => {
   let nb;
   let i;
-  const players = playerManager.getPlayers();
+  const players = playerManager.getAllPlayers();
   if (!_isReadyToDraw) {
     console.log('[ERROR] : Ressources not yet loaded !');
     return;
   }
-  ctx.fillStyle = '#0099CC';
+  ctx.fillStyle = 'rgba(255, 255, 255, .7)';
   ctx.fillRect(0, 0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
   nb = _picBG.length;
-  for (i = 0; i < nb; i++) {
-    _picBG[i].draw(ctx, ellapsedTime, isNight);
-  }
+  // for (i = 0; i < nb; i++) {
+  //   _picBG[i].draw(ctx, ellapsedTime, isNight);
+  // }
   if (pipes) {
     nb = pipes.length;
     for (i = 0; i < nb; i++) {
@@ -95,18 +90,20 @@ canvasPainter.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState
       players[i].draw(ctx, currentTime, _picBirds, gameState);
     }
   }
-  if (gameState == 2) drawScore(playerManager.getCurrentPlayer().getScore());
-  if (pipes) _parallaxGround.draw(ctx, currentTime);
-  else _parallaxGround.draw(ctx, 0);
+  if (gameState == 2) drawScore(playerManager.getActivePlayer().getScore());
+  // if (pipes) _parallaxGround.draw(ctx, currentTime);
+  // else _parallaxGround.draw(ctx, 0);
 };
-canvasPainter.resetForNewGame = () => {
+
+GUIController.resetForNewGame = () => {
   const nb = _picBG.length;
   let i;
   for (i = 0; i < nb; i++) {
     _picBG[i].resetToDayCycle();
   }
 };
-canvasPainter.loadRessources = onReadyCallback => {
+
+GUIController.loadRessources = onReadyCallback => {
   let bird;
   let dBg;
   let nBg;
@@ -125,9 +122,9 @@ canvasPainter.loadRessources = onReadyCallback => {
     onRessourceLoaded(onReadyCallback);
   };
 
-  for (i = 0; i < SPRITES.length; i++) {
+  for (i = 0; i < Const.SPRITES.length; i++) {
     bird = new Image();
-    bird.src = SPRITES[i];
+    bird.src = Const.SPRITES[i];
     bird.onload = () => {
       onRessourceLoaded(onReadyCallback);
     };
@@ -173,4 +170,4 @@ canvasPainter.loadRessources = onReadyCallback => {
     }
   }
 };
-export default canvasPainter;
+export default GUIController;

@@ -1,12 +1,5 @@
-const NUMBER_OF_HIGHSCORES_TO_RETREIVE = 10;
 
-/*
-* This class will store the best score of all players.
-* It will try to reach a DB by default (best way to store datas). But if you don't have a MySQL server or if the class
-* can't establish a connection, player's score will be store in an array (but values will be lost on server shutdown !)
-* 
-*/
-class ScoreSystem {
+class ScoringController {
   constructor() {
     this._bestScore = [];
   }
@@ -40,7 +33,7 @@ class ScoreSystem {
 
     // Return the NUMBER_OF_HIGHSCORES_TO_RETREIVE best scores
     hsArray = [];
-    nbRes = this._bestScore.length > NUMBER_OF_HIGHSCORES_TO_RETREIVE ? NUMBER_OF_HIGHSCORES_TO_RETREIVE : this._bestScore.length;
+    nbRes = this._bestScore.length;
 
     for (key in this._bestScore) {
       hsArray.push({ player: key, score: this._bestScore[key] });
@@ -50,4 +43,4 @@ class ScoreSystem {
   }
 }
 
-export default ScoreSystem;
+export default ScoringController;

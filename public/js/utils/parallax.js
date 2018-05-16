@@ -42,24 +42,24 @@ class ParallaxBg {
     this.changeOpacityTime = 0;
   }
 
-  calcOpacity(time, isNight) {
-    if (this.nightCycle != isNight) {
-      this.nightCycle = isNight;
-      this.isCalcOpacity = true;
-      this.changeOpacityTime = 0;
-      console.log(`Switching background to ${this.nightCycle == true ? 'night' : 'day'}`);
-    }
-    if (this.isCalcOpacity == true) {
-      this.changeOpacityTime += time;
-      this.nightOpacity = this.changeOpacityTime / SMOOTH_DAY_NIGHHT_TRANSITION_DURATION;
-      if (this.changeOpacityTime >= SMOOTH_DAY_NIGHHT_TRANSITION_DURATION) {
-        this.isCalcOpacity = false;
-        this.nightOpacity = this.nightCycle == true ? 1 : 0;
-        this.changeOpacityTime = 0;
-      }
-      if (this.nightCycle == false) this.nightOpacity = 1 - this.nightOpacity;
-    }
-  }
+  // calcOpacity(time, isNight) {
+  //   if (this.nightCycle != isNight) {
+  //     this.nightCycle = isNight;
+  //     this.isCalcOpacity = true;
+  //     this.changeOpacityTime = 0;
+  //     console.log(`Switching background to ${this.nightCycle == true ? 'night' : 'day'}`);
+  //   }
+  //   if (this.isCalcOpacity == true) {
+  //     this.changeOpacityTime += time;
+  //     this.nightOpacity = this.changeOpacityTime / SMOOTH_DAY_NIGHHT_TRANSITION_DURATION;
+  //     if (this.changeOpacityTime >= SMOOTH_DAY_NIGHHT_TRANSITION_DURATION) {
+  //       this.isCalcOpacity = false;
+  //       this.nightOpacity = this.nightCycle == true ? 1 : 0;
+  //       this.changeOpacityTime = 0;
+  //     }
+  //     if (this.nightCycle == false) this.nightOpacity = 1 - this.nightOpacity;
+  //   }
+  // }
 }
 
 export default ParallaxBg;
