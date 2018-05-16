@@ -8,8 +8,8 @@ const SPACE_BETWEEN_BIRDS_X = 120;
 const START_BIRD_POS_Y = 100;
 const SPACE_BETWEEN_BIRDS_Y = 100;
 const GRAVITY_SPEED = 0.05;
-const JUMP_SPEED = -0.6;
-const MAX_ROTATION = -10;
+const JUMP_SPEED = -0.5;
+const MAX_ROTATION = -6;
 const MIN_ROTATION = 60;
 const ROTATION_SPEED = 8;
 

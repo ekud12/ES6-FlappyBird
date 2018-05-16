@@ -5,10 +5,10 @@ const enumPlayerState = {
   Playing: 3,
   Died: 4
 };
-const SPRITE_BIRD_HEIGHT = 60;
-const SPRITE_BIRD_WIDTH = 85;
+const SPRITE_BIRD_HEIGHT = 64;
+const SPRITE_BIRD_WIDTH = 64;
 const COMPLETE_ANNIMATION_DURATION = 150;
-const ANIMATION_FRAME_NUMBER = 3;
+const ANIMATION_FRAME_NUMBER = 4;
 
 class Player {
   constructor(infos, uuid) {

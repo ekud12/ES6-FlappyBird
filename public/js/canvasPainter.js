@@ -1,6 +1,6 @@
-import Parallax from './parallax.js';
-import BgRessources from './backgroundRessources.js';
 import { constant as Const } from '../../global.js';
+import BgRessources from './backgroundRessources.js';
+import Parallax from './parallax.js';
 
 const SPRITE_PIPE_HEIGHT = 768;
 const SPRITE_PIPE_WIDTH = 148;
@@ -8,10 +8,10 @@ const SCORE_POS_Y = 200;
 const SCORE_SHADOW_OFFSET = 5;
 const NB_RESSOURCES_TO_LOAD = 2;
 const BIRDS_SPRITES = [
-  'assets/images/clumsy.png',
-  'assets/images/clumsy-blue.png',
-  'assets/images/clumsy-red.png',
-  'assets/images/clumsy-multi.png'
+  'assets/images/toucan.png',
+  'assets/images/toucan-red.png',
+  'assets/images/toucan-purple.png',
+  'assets/images/toucan-green.png'
 ];
 const canvasPainter = {};
 const ctx = document.getElementById('gs-canvas').getContext('2d');

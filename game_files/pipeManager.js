@@ -3,7 +3,7 @@ import util from 'util';
 import { constant as Const } from '../global';
 import Pipe from './pipe';
 
-const FIRST_PIPE_POSX = Const.SCREEN_WIDTH + 100;
+const FIRST_PIPE_POSX = Const.SCREEN_WIDTH + 60;
 const SPAWN_PIPE_ALERT = Const.SCREEN_WIDTH;
 const MAX_PIPE_CHECK_COLLISION = 3;
 

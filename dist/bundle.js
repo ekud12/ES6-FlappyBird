@@ -545,10 +545,10 @@
       var SCORE_SHADOW_OFFSET = 5;
       var NB_RESSOURCES_TO_LOAD = 2;
       var BIRDS_SPRITES = [
-        'assets/images/clumsy.png',
-        'assets/images/clumsy-blue.png',
-        'assets/images/clumsy-red.png',
-        'assets/images/clumsy-multi.png'
+        'assets/images/toucan.png',
+        'assets/images/toucan-red.png',
+        'assets/images/toucan-purple.png',
+        'assets/images/toucan-green.png'
       ];
       var that = {};
       var ctx = document.getElementById('gs-canvas').getContext('2d');
