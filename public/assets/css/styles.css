@@ -21,16 +21,16 @@ h2 {
   text-align: center;
 }
 
-#gameScreen {
+#main-canvas {
   position: relative;
   height: 768px;
   width: 100%;
-  margin: 100px 0;
+  margin: 0 0;
   overflow: hidden;
 }
 
-#gameScreen h1 {
-  font-size: 100px;
+#main-canvas h1 {
+  font-size: 60px;
   color: white;
   text-shadow: 5px 0px 0px black, 0px 5px 0px black, -5px 0px 0px black, 0px -5px 0px black;
   margin: 90px 0 50px 0;
@@ -237,15 +237,27 @@ input[type='button'] {
   padding: 10px;
   border: 0;
   margin: 25px auto;
-
   font-size: 35px;
   font-family: 'Quantico';
-  text-shadow: 2px 2px 0px #e36116;
-  color: white;
+  text-shadow: 2px 2px 0px #002b13;
+  color: rgb(0, 0, 0);
   text-align: center;
-  background: #e76100;
+  background: #00ff73;
 
   box-shadow: inset 0px 3px 0px 0px white, inset 3px 0px 0px 0px white, inset -3px 0px 0px 0px white, inset 0px -3px 0px 0px white;
+}
+
+.filler-top {
+  width: 100%;
+  background-color: #0099cc;
+  height: 70px;
+  border-bottom: 3px solid black;
+}
+
+.filler-bottom {
+  width: 100%;
+  background-color: #000000;
+  height: 132px;
 }
 
 /* @keyframes boxMove {

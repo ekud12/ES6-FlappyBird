@@ -7,7 +7,7 @@ const enumPlayerState = {
 };
 const SPRITE_BIRD_HEIGHT = 64;
 const SPRITE_BIRD_WIDTH = 64;
-const COMPLETE_ANNIMATION_DURATION = 150;
+const COMPLETE_ANNIMATION_DURATION = 250;
 const ANIMATION_FRAME_NUMBER = 4;
 
 class Player {

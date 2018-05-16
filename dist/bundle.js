@@ -192,7 +192,7 @@
               draw(now, 0);
             }
 
-            function startClient() {
+            function runFBInstance() {
               if (typeof io == 'undefined') {
                 document.getElementById('gs-error-message').innerHTML =
                   'Cannot retreive socket.io file at the address ' +
@@ -487,7 +487,7 @@
             console.log('Client started, load ressources...');
             canvasPainter.loadRessources(function() {
               console.log('Ressources loaded, connect to server...');
-              startClient();
+              runFBInstance();
             });
           }.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));
         })

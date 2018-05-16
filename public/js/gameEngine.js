@@ -2,8 +2,8 @@
 *   Game Engine
 */
 
-import canvasPainter from './canvasPainter.js';
 import { constant as Const } from '../../../global.js';
+import canvasPainter from './canvasPainter.js';
 import PlayerManager from './playersManager.js';
 const enumState = {
   Login: 0,
@@ -72,38 +72,21 @@ function lobbyLoop() {
   draw(now, 0);
 }
 
-function startClient() {
+function runFBInstance() {
   if (typeof io == 'undefined') {
-    document.getElementById('gs-error-message').innerHTML = `Cannot retreive socket.io file at the address ${
-      Const.SOCKET_ADDR
-    }<br/><br/>Please provide a valid address.`;
-    showHideMenu(enumPanels.Error, true);
-    console.log('Cannot reach socket.io file !');
+    console.log('Error With Socket.IO');
     return;
   }
 
   _playerManager = new PlayerManager();
 
-  document.getElementById('gs-loader-text').innerHTML = 'Connecting to the server...';
   _socket = io.connect(`${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}`, { reconnect: false });
   _socket.on('connect', () => {
-    console.log('Connection established :)');
-
-    // Bind disconnect event
     _socket.on('disconnect', () => {
-      document.getElementById('gs-error-message').innerHTML = 'Connection with the server lost';
+      document.getElementById('gs-error-message').innerHTML = 'Player Left/Disconnected';
       showHideMenu(enumPanels.Error, true);
-      console.log('Connection with the server lost :( ');
     });
 
-    // Try to retreive previous player name if exists
-    if (typeof sessionStorage != 'undefined') {
-      if ('playerName' in sessionStorage) {
-        document.getElementById('player-name').value = sessionStorage.getItem('playerName');
-      }
-    }
-
-    // Draw bg and bind button click
     draw(0, 0);
     showHideMenu(enumPanels.Login, true);
     document.getElementById('player-connection').onclick = loadGameRoom;
@@ -121,16 +104,9 @@ function loadGameRoom() {
   const nick = document.getElementById('player-name').value;
 
   // If nick is empty or if it has the default value,
-  if (nick == '' || nick == 'Player_1') {
-    infoPanel(true, 'Please choose your <strong>name</strong> !', 2000);
-    document.getElementById('player-name').focus();
+  if (nick == '') {
+    alert(true, 'Please choose a name!');
     return false;
-  }
-  // Else store it in sessionstorage if available
-  else {
-    if (typeof sessionStorage != 'undefined') {
-      sessionStorage.setItem('playerName', nick);
-    }
   }
 
   // Unbind button event to prevent "space click"
@@ -145,10 +121,11 @@ function loadGameRoom() {
     for (i = 0; i < nb; i++) {
       _playerManager.addPlayer(playersList[i], _userID);
     }
- 
+
     // Redraw
     draw(0, 0);
   });
+
   _socket.on('player_disconnect', player => {
     _playerManager.removePlayer(player);
   });
@@ -169,33 +146,20 @@ function loadGameRoom() {
     displayRanking(score);
   });
 
-  // Send nickname to the server
-  console.log(`Send nickname ${nick}`);
   _socket.emit('say_hi', nick, (serverState, uuid) => {
     _userID = uuid;
     changeGameState(serverState);
 
-    // Display a message according to the game state
     if (serverState == enumState.OnGame) {
-      infoPanel(true, '<strong>Please wait</strong> for the previous game to finish...');
-    } else {
-      // Display a little help text
-      if (_isTouchDevice == false) infoPanel(true, 'Press <strong>space</strong> to fly !', 3000);
-      else infoPanel(true, '<strong>Tap</strong> to fly !', 3000);
+      alert(`Game in Progress. Please wait...`);
     }
   });
 
-  // Get input
-  if (_isTouchDevice == false) {
-    document.addEventListener('keydown', event => {
-      if (event.keyCode == 32) {
-        inputsManager();
-      }
-    });
-  } else {
-    const evt = window.navigator.msPointerEnabled ? 'MSPointerDown' : 'touchstart';
-    document.addEventListener(evt, inputsManager);
-  }
+  document.addEventListener('keydown', event => {
+    if (event.keyCode == 32) {
+      inputsManager();
+    }
+  });
 
   // Hide login screen
   showHideMenu(enumPanels.Login, false);
@@ -325,29 +289,26 @@ function showHideMenu(panelName, isShow) {
 }
 
 function infoPanel(isShow, htmlText, timeout) {
-  const topBar = document.getElementById('gs-info-panel');
-
-  // Reset timer if there is one pending
-  if (_infPanlTimer != null) {
-    window.clearTimeout(_infPanlTimer);
-    _infPanlTimer = null;
-  }
-
-  // Hide the bar
-  if (isShow == false) {
-    topBar.classList.remove('showTopBar');
-  } else {
-    // If a set is setted, print it
-    if (htmlText) topBar.innerHTML = htmlText;
-    // If a timeout is specified, close the bar after this time !
-    if (timeout)
-      _infPanlTimer = setTimeout(() => {
-        infoPanel(false);
-      }, timeout);
-
-    // Don't forget to display the bar :)
-    topBar.classList.add('showTopBar');
-  }
+  // const topBar = document.getElementById('gs-info-panel');
+  // // Reset timer if there is one pending
+  // if (_infPanlTimer != null) {
+  //   window.clearTimeout(_infPanlTimer);
+  //   _infPanlTimer = null;
+  // }
+  // // Hide the bar
+  // if (isShow == false) {
+  //   topBar.classList.remove('showTopBar');
+  // } else {
+  //   // If a set is setted, print it
+  //   if (htmlText) topBar.innerHTML = htmlText;
+  //   // If a timeout is specified, close the bar after this time !
+  //   if (timeout)
+  //     _infPanlTimer = setTimeout(() => {
+  //       infoPanel(false);
+  //     }, timeout);
+  //   // Don't forget to display the bar :)
+  //   topBar.classList.add('showTopBar');
+  // }
 }
 
 // Detect touch event. If available, we will use touch events instead of space key
@@ -359,5 +320,5 @@ else _isTouchDevice = false;
 console.log('Client started, load ressources...');
 canvasPainter.loadRessources(() => {
   console.log('Ressources loaded, connect to server...');
-  startClient();
+  runFBInstance();
 });

@@ -9,10 +9,11 @@
 </head>
 
 <body>
-  <div id="gameScreen">
+  <div class="filler-top">
+    <h2 id="gs-loader-text">Welcome to Birds.js !</h2>
+  </div>
+  <div id="main-canvas">
 
-    <div id="gs-info-panel">To fly, press your
-      <strong>space bar</strong> !</div>
 
     <canvas id="gs-canvas" width="1920" height="768"></canvas>
 
@@ -21,14 +22,14 @@
       <div id="gs-loader-anim-box">
         <div id="gs-loader-anim-bird"></div>
       </div>
-      <h2 id="gs-loader-text">Welcome to Birds.js !</h2>
+
 
     </div>
 
     <div id="gs-login" class="inGamePanel">
       <h1>Afeka Flappy Toucan! </h1>
 
-      <input type="text" id="player-name" maxlength="8" value="Player_1" />
+      <input type="text" id="player-name" maxlength="8" value="Afeka" />
       <input type="button" id="player-connection" value="Play !" />
 
     </div>
@@ -65,6 +66,9 @@
       <h1 id="gs-error-title">Ouuuuuups :(</h1>
       <h2 id="gs-error-message">Something goes wrong. Please reload the page</h2>
     </div>
+
+  </div>
+  <div class="filler-bottom">
 
   </div>
 </body>

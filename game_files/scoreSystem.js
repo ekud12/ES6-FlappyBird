@@ -1,4 +1,3 @@
-
 const NUMBER_OF_HIGHSCORES_TO_RETREIVE = 10;
 
 /*
@@ -21,8 +20,6 @@ class ScoreSystem {
   savePlayerScore(player, lastScore) {
     let nick = player.getNick();
     const highScore = player.getHighScore();
-
-    // If the player just beats his highscore, record it !
     if (lastScore > highScore) {
       this._bestScore[nick] = lastScore;
       console.info(`${nick} new high score (${lastScore}) was saved in the score array !`);

@@ -108,17 +108,20 @@ canvasPainter.loadRessources = onReadyCallback => {
   let dBg;
   let nBg;
   let i;
+
   _picGround = new Image();
   _picGround.src = 'assets/images/ground.png';
   _picGround.onload = () => {
     onRessourceLoaded(onReadyCallback);
   };
-  _parallaxGround = new Parallax(_picGround, null, 1920, 96, Const.LEVEL_SPEED, 672, Const.SCREEN_WIDTH);
+  _parallaxGround = new Parallax(_picGround, null, 900, 96, Const.LEVEL_SPEED, 672, Const.SCREEN_WIDTH);
+
   _picPipe = new Image();
   _picPipe.src = 'assets/images/pipe.png';
   _picPipe.onload = () => {
     onRessourceLoaded(onReadyCallback);
   };
+
   for (i = 0; i < BIRDS_SPRITES.length; i++) {
     bird = new Image();
     bird.src = BIRDS_SPRITES[i];
@@ -127,6 +130,7 @@ canvasPainter.loadRessources = onReadyCallback => {
     };
     _picBirds.push(bird);
   }
+
   for (i = 0; i < BgRessources.length; i++) {
     if (typeof BgRessources[i].daySrc !== 'undefined') {
       dBg = new Image();
@@ -142,6 +146,7 @@ canvasPainter.loadRessources = onReadyCallback => {
         onRessourceLoaded(onReadyCallback);
       };
     } else nBg = null;
+
     _picBG.push(
       new Parallax(
         dBg,
@@ -154,14 +159,14 @@ canvasPainter.loadRessources = onReadyCallback => {
       )
     );
   }
+
   function onRessourceLoaded(onReadyCallback) {
     const totalRessources = getNbRessourcesToLoad();
     if (--_nbRessourcesToLoad <= 0) {
       _isReadyToDraw = true;
       onReadyCallback();
     } else {
-      document.getElementById('gs-loader-text').innerHTML = `Load ressource ${totalRessources -
-        _nbRessourcesToLoad} / ${totalRessources}`;
+      console.log('Still Loading Files');
     }
   }
 };
