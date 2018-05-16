@@ -27,6 +27,6 @@ export const constant = {
     Login: 0,
     WaitingRoom: 1,
     OnGame: 2,
-    Ranking: 3
+    End: 3
   }
 };

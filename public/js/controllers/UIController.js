@@ -1,5 +1,4 @@
 import { constant as Const } from '../../global.js';
-import Parallax from '../utils/DynamicObject.model.js';
 
 const SPRITE_PIPE_HEIGHT = 768;
 const SPRITE_PIPE_WIDTH = 148;
@@ -12,20 +11,10 @@ const GUIController = {};
 const ctx = document.getElementById('canvas').getContext('2d');
 let _isReadyToDraw = false;
 let _nbRessourcesToLoad = getNbRessourcesToLoad();
-let _picGround;
-let _parallaxGround;
 let _picPipe;
-const _picBG = new Array();
 const _picBirds = new Array();
 
 function getNbRessourcesToLoad() {
-  // let nbRessources = TOT_RES + Const.SPRITES.length;
-  // const nbBg = BgRessources.length;
-  // let i;
-  // for (i = 0; i < nbBg; i++) {
-  //   if (typeof BgRessources[i].daySrc !== 'undefined') nbRessources++;
-  //   if (typeof BgRessources[i].nightSrc !== 'undefined') nbRessources++;
-  // }
   return Const.SPRITES.length;
 }
 function drawPipe(pipe) {
@@ -85,11 +74,11 @@ GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState
 };
 
 GUIController.resetForNewGame = () => {
-  const nb = _picBG.length;
-  let i;
-  for (i = 0; i < nb; i++) {
-    _picBG[i].resetToDayCycle();
-  }
+  // const nb = _picBG.length;
+  // let i;
+  // for (i = 0; i < nb; i++) {
+  //   _picBG[i].resetToDayCycle();
+  // }
 };
 
 GUIController.loadRessources = onReadyCallback => {
@@ -98,15 +87,8 @@ GUIController.loadRessources = onReadyCallback => {
   let nBg;
   let i;
 
-  _picGround = new Image();
-  _picGround.src = 'assets/images/ground.png';
-  _picGround.onload = () => {
-    onRessourceLoaded(onReadyCallback);
-  };
-  _parallaxGround = new Parallax(_picGround, null, 900, 96, Const.LEVEL_SPEED, 672, Const.SCREEN_WIDTH);
-
   _picPipe = new Image();
-  _picPipe.src = 'assets/images/pipe.png';
+  _picPipe.src = 'assets/images/pipe2.png';
   _picPipe.onload = () => {
     onRessourceLoaded(onReadyCallback);
   };
