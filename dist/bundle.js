@@ -762,15 +762,15 @@
       var _keyMatching = void 0;
       var _currentPlayer = void 0;
 
-      var PlayerManager = (function() {
-        function PlayerManager() {
-          _classCallCheck(this, PlayerManager);
+      var PlayersController = (function() {
+        function PlayersController() {
+          _classCallCheck(this, PlayersController);
 
           _playerList = new Array();
           _keyMatching = new Array();
         }
 
-        _createClass(PlayerManager, [
+        _createClass(PlayersController, [
           {
             key: 'addPlayer',
             value: function addPlayer(infos, playerID) {
@@ -844,10 +844,10 @@
           }
         ]);
 
-        return PlayerManager;
+        return PlayersController;
       })();
 
-      exports.default = PlayerManager;
+      exports.default = PlayersController;
 
       /***/
     },

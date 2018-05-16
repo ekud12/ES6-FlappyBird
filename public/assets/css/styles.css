@@ -27,6 +27,7 @@ h2 {
   width: 100%;
   margin: 0 0;
   overflow: hidden;
+  background-image: url('../images/bg2.png');
 }
 
 #main-canvas h1 {
@@ -59,7 +60,6 @@ h2 {
 }
 
 canvas {
-  background: #0099cc;
 }
 
 .inGamePanel {
@@ -85,25 +85,6 @@ canvas {
   font-size: 35px;
   margin-top: 80px;
 }
-
-/* #gs-loader-anim-box {
-  position: absolute;
-  top: 200px;
-  width: 100%;
-  text-align: center;
-  animation: boxMove 1s ease alternate infinite;
-  -webkit-animation: boxMove 1s ease alternate infinite;
-}
-
-#gs-loader-anim-bird {
-  display: inline-block;
-  width: 85px;
-  height: 60px;
-  background: url('../images/toucan.png');
-  background-position: 0 0;
-  animation: birdFly 300ms steps(3, end) infinite;
-  -webkit-animation: birdFly 300ms steps(2, end) infinite;
-} */
 
 #gs-loader-text {
   position: absolute;
@@ -233,23 +214,21 @@ input[type='text'] {
 
 input[type='button'] {
   display: block;
-  width: 120px;
+  width: 150px;
   padding: 10px;
-  border: 0;
+  border: 4px solid black;
+  border-radius: 5px;
   margin: 25px auto;
   font-size: 35px;
   font-family: 'Quantico';
-  text-shadow: 2px 2px 0px #002b13;
   color: rgb(0, 0, 0);
   text-align: center;
   background: #00ff73;
-
-  box-shadow: inset 0px 3px 0px 0px white, inset 3px 0px 0px 0px white, inset -3px 0px 0px 0px white, inset 0px -3px 0px 0px white;
 }
 
 .filler-top {
   width: 100%;
-  background-color: #0099cc;
+  background-color: #a9ff70;
   height: 70px;
   border-bottom: 3px solid black;
 }
@@ -259,36 +238,3 @@ input[type='button'] {
   background-color: #000000;
   height: 132px;
 }
-
-/* @keyframes boxMove {
-  from {
-    top: 200px;
-  }
-  to {
-    top: 150px;
-  }
-}
-@-webkit-keyframes boxMove {
-  from {
-    top: 200px;
-  }
-  to {
-    top: 150px;
-  }
-} */
-/* @keyframes birdFly {
-  from {
-    background-position: 0;
-  }
-  to {
-    background-position: 170px;
-  }
-}
-@-webkit-keyframes birdFly {
-  from {
-    background-position: 0;
-  }
-  to {
-    background-position: 170px;
-  }
-} */

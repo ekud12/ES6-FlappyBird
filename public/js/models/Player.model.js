@@ -5,6 +5,7 @@ const enumPlayerState = {
   Playing: 3,
   Died: 4
 };
+
 const SPRITE_BIRD_HEIGHT = 64;
 const SPRITE_BIRD_WIDTH = 64;
 const COMPLETE_ANNIMATION_DURATION = 250;

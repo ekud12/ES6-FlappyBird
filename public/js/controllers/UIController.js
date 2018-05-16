@@ -1,20 +1,22 @@
 import { constant as Const } from '../../global.js';
-import BgRessources from './backgroundRessources.js';
-import Parallax from './parallax.js';
+import BgRessources from '../utils/backgroundRessources.js';
+import Parallax from '../utils/parallax.js';
 
 const SPRITE_PIPE_HEIGHT = 768;
 const SPRITE_PIPE_WIDTH = 148;
+
 const SCORE_POS_Y = 200;
 const SCORE_SHADOW_OFFSET = 5;
-const NB_RESSOURCES_TO_LOAD = 2;
-const BIRDS_SPRITES = [
+const TOT_RES = 2;
+const SPRITES = [
   'assets/images/toucan.png',
   'assets/images/toucan-red.png',
   'assets/images/toucan-purple.png',
   'assets/images/toucan-green.png'
 ];
 const canvasPainter = {};
-const ctx = document.getElementById('gs-canvas').getContext('2d');
+
+const ctx = document.getElementById('canvas').getContext('2d');
 let _isReadyToDraw = false;
 let _nbRessourcesToLoad = getNbRessourcesToLoad();
 let _picGround;
@@ -24,7 +26,7 @@ const _picBG = new Array();
 const _picBirds = new Array();
 
 function getNbRessourcesToLoad() {
-  let nbRessources = NB_RESSOURCES_TO_LOAD + BIRDS_SPRITES.length;
+  let nbRessources = TOT_RES + SPRITES.length;
   const nbBg = BgRessources.length;
   let i;
   for (i = 0; i < nbBg; i++) {
@@ -57,7 +59,7 @@ function drawPipe(pipe) {
     SPRITE_PIPE_HEIGHT
   );
 }
-function drawScore(score) {
+const drawScore = score => {
   let posX;
   posX = Const.SCREEN_WIDTH / 2 - ctx.measureText(score).width / 2;
   ctx.font = '120px Quantico';
@@ -65,7 +67,8 @@ function drawScore(score) {
   ctx.fillText(score, posX + SCORE_SHADOW_OFFSET, SCORE_POS_Y + SCORE_SHADOW_OFFSET);
   ctx.fillStyle = 'white';
   ctx.fillText(score, posX, SCORE_POS_Y);
-}
+};
+
 canvasPainter.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState, isNight) => {
   let nb;
   let i;
@@ -122,9 +125,9 @@ canvasPainter.loadRessources = onReadyCallback => {
     onRessourceLoaded(onReadyCallback);
   };
 
-  for (i = 0; i < BIRDS_SPRITES.length; i++) {
+  for (i = 0; i < SPRITES.length; i++) {
     bird = new Image();
-    bird.src = BIRDS_SPRITES[i];
+    bird.src = SPRITES[i];
     bird.onload = () => {
       onRessourceLoaded(onReadyCallback);
     };

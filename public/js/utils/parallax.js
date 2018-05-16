@@ -20,19 +20,19 @@ class ParallaxBg {
     let drawPos;
     this.posX = (this.posX - Math.floor(time * this.speed)) % this.width;
     drawPos = this.posX;
-    this.calcOpacity(time, isNight);
-    while (drawPos < this.maxW) {
-      if (this.dPic && this.nightOpacity != 1) ctx.drawImage(this.dPic, drawPos, this.posY, this.width, this.height);
-      if (this.nPic && this.nightCycle == true) {
-        if (this.nightOpacity != 1) {
-          ctx.save();
-          ctx.globalAlpha = this.nightOpacity;
-        }
-        ctx.drawImage(this.nPic, drawPos, this.posY, this.width, this.height);
-        if (this.nightOpacity != 1) ctx.restore();
-      }
-      drawPos += this.width;
-    }
+    // this.calcOpacity(time, isNight);
+    // while (drawPos < this.maxW) {
+    //   if (this.dPic && this.nightOpacity != 1) ctx.drawImage(this.dPic, drawPos, this.posY, this.width, this.height);
+    //   if (this.nPic && this.nightCycle == true) {
+    //     if (this.nightOpacity != 1) {
+    //       ctx.save();
+    //       ctx.globalAlpha = this.nightOpacity;
+    //     }
+    //     ctx.drawImage(this.nPic, drawPos, this.posY, this.width, this.height);
+    //     if (this.nightOpacity != 1) ctx.restore();
+    //   }
+    //   drawPos += this.width;
+    // }
   }
 
   resetToDayCycle() {

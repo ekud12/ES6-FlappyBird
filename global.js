@@ -1,6 +1,6 @@
 export const constant = {
-  SERVER_PORT: 4243,
-  SOCKET_PORT: 1338,
+  SERVER_PORT: 4242,
+  SOCKET_PORT: 1337,
   SOCKET_ADDR: 'http://localhost',
 
   SCREEN_WIDTH: 1920,

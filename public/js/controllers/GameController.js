@@ -3,8 +3,8 @@
 */
 
 import { constant as Const } from '../../../global.js';
-import canvasPainter from './canvasPainter.js';
-import PlayerManager from './playersManager.js';
+import PlayersController from '../controllers/PlayersController.js';
+import canvasPainter from '../controllers/UIController.js';
 const enumState = {
   Login: 0,
   WaitingRoom: 1,
@@ -27,7 +27,6 @@ let _userID = null;
 let _lastTime = null;
 let _rankingTimer;
 let _ranking_time;
-let _isTouchDevice = false;
 let _socket;
 let _infPanlTimer;
 let _isNight = false;
@@ -78,7 +77,7 @@ function runFBInstance() {
     return;
   }
 
-  _playerManager = new PlayerManager();
+  _playerManager = new PlayersController();
 
   _socket = io.connect(`${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}`, { reconnect: false });
   _socket.on('connect', () => {
@@ -261,12 +260,12 @@ function changeGameState(gameState) {
   console.log(strLog);
 }
 
-function inputsManager() {
+const inputsManager = () => {
   switch (_gameState) {
     case enumState.WaitingRoom:
       _isCurrentPlayerReady = !_isCurrentPlayerReady;
       _socket.emit('change_ready_state', _isCurrentPlayerReady);
-      _playerManager.getCurrentPlayer().updateReadyState(_isCurrentPlayerReady);
+      _playerManager.getCurrentPlayergetCurrentPlayer().updateReadyState(_isCurrentPlayerReady);
       break;
     case enumState.OnGame:
       _socket.emit('player_jump');
@@ -274,9 +273,9 @@ function inputsManager() {
     default:
       break;
   }
-}
+};
 
-function showHideMenu(panelName, isShow) {
+const showHideMenu = (panelName, isShow) => {
   const panel = document.getElementById(panelName);
   const currentOverlayPanel = document.querySelector('.overlay');
 
@@ -286,39 +285,9 @@ function showHideMenu(panelName, isShow) {
   } else {
     if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
   }
-}
-
-function infoPanel(isShow, htmlText, timeout) {
-  // const topBar = document.getElementById('gs-info-panel');
-  // // Reset timer if there is one pending
-  // if (_infPanlTimer != null) {
-  //   window.clearTimeout(_infPanlTimer);
-  //   _infPanlTimer = null;
-  // }
-  // // Hide the bar
-  // if (isShow == false) {
-  //   topBar.classList.remove('showTopBar');
-  // } else {
-  //   // If a set is setted, print it
-  //   if (htmlText) topBar.innerHTML = htmlText;
-  //   // If a timeout is specified, close the bar after this time !
-  //   if (timeout)
-  //     _infPanlTimer = setTimeout(() => {
-  //       infoPanel(false);
-  //     }, timeout);
-  //   // Don't forget to display the bar :)
-  //   topBar.classList.add('showTopBar');
-  // }
-}
-
-// Detect touch event. If available, we will use touch events instead of space key
-if (window.navigator.msPointerEnabled) _isTouchDevice = true;
-else if ('ontouchstart' in window) _isTouchDevice = true;
-else _isTouchDevice = false;
-
-// Load ressources and Start the client !
-console.log('Client started, load ressources...');
+};
 canvasPainter.loadRessources(() => {
-  console.log('Ressources loaded, connect to server...');
   runFBInstance();
 });
+
+function infoPanel(isShow, htmlText, timeout) {}
