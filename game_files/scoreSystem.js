@@ -1,15 +1,5 @@
-import MySQL from 'mysql';
-
-const DB_HOST = '127.0.0.1';
-const DB_USER = 'root';
-const DB_PASS = '';
-const DB_DATA = 'birds';
 
 const NUMBER_OF_HIGHSCORES_TO_RETREIVE = 10;
-
-let isDbAvailable = false;
-
-('SELECT * FROM `highscores` ORDER BY `highscores`.`hs_score` DESC LIMIT 0, 10');
 
 /*
 * This class will store the best score of all players.
@@ -19,182 +9,48 @@ let isDbAvailable = false;
 */
 class ScoreSystem {
   constructor() {
-    let testConnection;
-
-    // Default array
     this._bestScore = [];
-
-    testConnection = MySQL.createConnection({
-      host: DB_HOST,
-      user: DB_USER,
-      password: DB_PASS,
-      database: DB_DATA
-    });
-
-    // Test if DB is available
-    testConnection.connect(err => {
-      if (err) {
-        console.info(`\n\t[ScoreSystem] Can't connect user [${DB_USER}] to database hosted in [${DB_HOST}]`);
-        console.info('\t[ScoreSystem] Players score will be store in an array, and loose when server will be off\n');
-        isDbAvailable = false;
-      } else {
-        console.info('\n\t[ScoreSystem] Database available and connected !\n');
-        isDbAvailable = true;
-
-        // Close connection after test
-        testConnection.end();
-      }
-    });
   }
 
   setPlayerHighScore(player) {
     let nick = player.getNick();
-    let connection;
-
-    // If DB is available, try to get the highscore of the player.
-    // If there is no score, insert this player in DB
-    if (isDbAvailable === true) {
-      // Connect to DB and escape user entry by precaution
-      connection = openConnection();
-      nick = connection.escape(nick);
-
-      // Get the player highscore
-      connection.query(
-        `SELECT \`hs_score\` AS \`HS\` FROM \`highscores\` WHERE \`hs_player\` = ${nick};`,
-        (err, rows, fields) => {
-          if (rows.length == 0) {
-            // If no score had been found for this player, it's his first game. Store him in DB
-            console.info(`\n\t[ScoreSystem] Unknow player ${nick}. Insert him in DB :) !`);
-
-            connection.query(
-              `INSERT INTO \`highscores\` (\`hs_id\`, \`hs_player\`, \`hs_score\`) VALUES (NULL, ${nick}, '0');`,
-              (err, rows, fields) => {
-                // Set player HS
-                if (rows.affectedRows == 1) {
-                  player.setBestScore(0);
-                } else {
-                  console.error(`\n\t[MYSQL ERROR] Fail to insert player ${nick} in DB`);
-                }
-              }
-            );
-          } else {
-            // Set player HS
-            player.setBestScore(parseInt(rows[0].HS, 10));
-          }
-          // Close connection
-          connection.end();
-        }
-      );
-    } else {
-      if (typeof this._bestScore[nick] != 'undefined') player.setBestScore(this._bestScore[nick]);
-      else player.setBestScore(0);
-    }
+    if (typeof this._bestScore[nick] != 'undefined') player.setBestScore(this._bestScore[nick]);
+    else player.setBestScore(0);
   }
 
   savePlayerScore(player, lastScore) {
     let nick = player.getNick();
     const highScore = player.getHighScore();
-    let connection;
 
     // If the player just beats his highscore, record it !
     if (lastScore > highScore) {
-      if (isDbAvailable === true) {
-        // Open connection to DB
-        connection = openConnection();
-        nick = connection.escape(nick);
-
-        // Store the last score
-        connection.query(
-          `UPDATE \`highscores\` SET \`hs_score\` = '${lastScore}' WHERE \`highscores\`.\`hs_player\` = ${nick};`,
-          (err, rows, fields) => {
-            if (rows.affectedRows != 1) {
-              console.error(`\n\t[MYSQL ERROR] Fail to update ${nick} high score in DB`);
-            }
-            console.info(`${nick} new high score (${lastScore}) was saved in DB !`);
-
-            // Close connection
-            connection.end();
-          }
-        );
-      } else {
-        this._bestScore[nick] = lastScore;
-        console.info(`${nick} new high score (${lastScore}) was saved in the score array !`);
-      }
+      this._bestScore[nick] = lastScore;
+      console.info(`${nick} new high score (${lastScore}) was saved in the score array !`);
     }
   }
 
   getHighScores(callback) {
-    let connection;
     let hsArray = null;
     let nbRes;
-    let i;
     let key;
 
-    // If DB is available, request it highscores
-    if (isDbAvailable === true) {
-      // Open connection to DB
-      connection = openConnection();
+    // Sort tab
+    this._bestScore.sort((a, b) => {
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
+    });
 
-      // get the 10 best scores
-      connection.query(
-        `SELECT * FROM \`highscores\` ORDER BY \`highscores\`.\`hs_score\` DESC LIMIT 0, ${NUMBER_OF_HIGHSCORES_TO_RETREIVE}`,
-        (err, rows, fields) => {
-          if (rows.affectedRows <= 0) {
-            console.error('\n\t[MYSQL ERROR] Cannot retreive highscore in DB');
-          } else {
-            nbRes = rows.length;
-            hsArray = [];
+    // Return the NUMBER_OF_HIGHSCORES_TO_RETREIVE best scores
+    hsArray = [];
+    nbRes = this._bestScore.length > NUMBER_OF_HIGHSCORES_TO_RETREIVE ? NUMBER_OF_HIGHSCORES_TO_RETREIVE : this._bestScore.length;
 
-            for (i = 0; i < nbRes; i++) {
-              hsArray.push({ player: rows[i].hs_player, score: rows[i].hs_score });
-            }
-
-            callback(hsArray);
-          }
-
-          // Close connection
-          connection.end();
-        }
-      );
-    } else {
-      // Sort tab
-      this._bestScore.sort((a, b) => {
-        if (a > b) return -1;
-        if (a < b) return 1;
-        return 0;
-      });
-
-      // Return the NUMBER_OF_HIGHSCORES_TO_RETREIVE best scores
-      hsArray = [];
-      nbRes =
-        this._bestScore.length > NUMBER_OF_HIGHSCORES_TO_RETREIVE ? NUMBER_OF_HIGHSCORES_TO_RETREIVE : this._bestScore.length;
-
-      for (key in this._bestScore) {
-        hsArray.push({ player: key, score: this._bestScore[key] });
-      }
+    for (key in this._bestScore) {
+      hsArray.push({ player: key, score: this._bestScore[key] });
     }
 
     callback(hsArray);
   }
-}
-
-function openConnection() {
-  // Create connection
-  const connection = MySQL.createConnection({
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASS,
-    database: DB_DATA
-  });
-
-  // Connection to DB
-  connection.connect(err => {
-    if (err) {
-      console.error(`\n\t[MYSQL ERROR] Can't connect user [${DB_USER}] to database hosted in [${DB_HOST}]`);
-    }
-  });
-
-  return connection;
 }
 
 export default ScoreSystem;
