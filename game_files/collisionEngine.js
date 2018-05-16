@@ -1,7 +1,7 @@
-var Const = require('../global').constant;
+import { constant as Const } from '../global';
 
 function checkBirdCollision(pipe, birdInstance) {
-  var bird = birdInstance.getPlayerObject();
+  const bird = birdInstance.getPlayerObject();
 
   // If the bird is inside a pipe on the X axis, check if he touch it
   if (bird.posX + Const.BIRD_WIDTH > pipe.posX && bird.posX < pipe.posX + Const.PIPE_WIDTH) {
@@ -25,12 +25,12 @@ function checkBirdCollision(pipe, birdInstance) {
   return false;
 }
 
-exports.checkCollision = function(pipe, birdsList) {
-  var thereIsCollision = false,
-    pipeLength = pipe.length,
-    birdLength = birdsList.length,
-    i,
-    j;
+export function checkCollision(pipe, birdsList) {
+  let thereIsCollision = false;
+  const pipeLength = pipe.length;
+  const birdLength = birdsList.length;
+  let i;
+  let j;
 
   for (i = 0; i < pipeLength; i++) {
     for (j = 0; j < birdsList.length; j++) {
@@ -44,4 +44,4 @@ exports.checkCollision = function(pipe, birdsList) {
   }
 
   return thereIsCollision;
-};
+}

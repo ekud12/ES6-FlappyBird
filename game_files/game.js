@@ -1,8 +1,8 @@
-import PlayersManager from './playersManager';
-import PipeManager from './pipeManager';
-import CollisionEngine from './collisionEngine';
-import enums from './enums';
 import { constant as Const } from '../global';
+import * as CollisionEngine from './collisionEngine';
+import * as enums from './enums';
+import PipeManager from './pipeManager';
+import PlayersManager from './playersManager';
 let io = require('socket.io').listen(Const.SOCKET_PORT);
 let _playersManager;
 let _pipeManager;
