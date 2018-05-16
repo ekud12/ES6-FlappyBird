@@ -18,17 +18,14 @@ h2 {
   padding: 0;
   margin: 0;
   font-family: 'Quantico';
-
   text-align: center;
 }
 
 #gameScreen {
   position: relative;
   height: 768px;
-  width: 900px;
-
-  margin: auto;
-
+  width: 100%;
+  margin: 100px 0;
   overflow: hidden;
 }
 
@@ -89,7 +86,7 @@ canvas {
   margin-top: 80px;
 }
 
-#gs-loader-anim-box {
+/* #gs-loader-anim-box {
   position: absolute;
   top: 200px;
   width: 100%;
@@ -106,11 +103,12 @@ canvas {
   background-position: 0 0;
   animation: birdFly 300ms steps(3, end) infinite;
   -webkit-animation: birdFly 300ms steps(2, end) infinite;
-}
+} */
+
 #gs-loader-text {
   position: absolute;
   width: 100%;
-  top: 340px;
+  top: 240px;
   color: white;
   font-size: 35px;
   text-align: center;
@@ -221,14 +219,14 @@ canvas {
 
 input[type='text'] {
   display: block;
-  width: 160px;
-  border: 0;
+  width: 320px;
+  border: 12px dotted #00ff73;
   margin: auto;
-
+  padding: 15px 15px;
   font-size: 50px;
   font-family: 'Quantico';
-  text-shadow: 2px 2px 0px #e36116;
-  color: #ffa24a;
+  text-shadow: 2px 2px 0px #073d00;
+  color: #00ff73;
   text-align: center;
   background: transparent;
 }
@@ -250,7 +248,7 @@ input[type='button'] {
   box-shadow: inset 0px 3px 0px 0px white, inset 3px 0px 0px 0px white, inset -3px 0px 0px 0px white, inset 0px -3px 0px 0px white;
 }
 
-@keyframes boxMove {
+/* @keyframes boxMove {
   from {
     top: 200px;
   }
@@ -265,8 +263,8 @@ input[type='button'] {
   to {
     top: 150px;
   }
-}
-@keyframes birdFly {
+} */
+/* @keyframes birdFly {
   from {
     background-position: 0;
   }
@@ -281,4 +279,4 @@ input[type='button'] {
   to {
     background-position: 170px;
   }
-}
+} */

@@ -3,7 +3,7 @@ export const constant = {
   SOCKET_PORT: 1338,
   SOCKET_ADDR: 'http://localhost',
 
-  SCREEN_WIDTH: 900,
+  SCREEN_WIDTH: 1920,
   SCREEN_HEIGHT: 768,
   FLOOR_POS_Y: 672,
   LEVEL_SPEED: 0.3,

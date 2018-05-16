@@ -113,7 +113,7 @@ canvasPainter.loadRessources = onReadyCallback => {
   _picGround.onload = () => {
     onRessourceLoaded(onReadyCallback);
   };
-  _parallaxGround = new Parallax(_picGround, null, 900, 96, Const.LEVEL_SPEED, 672, Const.SCREEN_WIDTH);
+  _parallaxGround = new Parallax(_picGround, null, 1920, 96, Const.LEVEL_SPEED, 672, Const.SCREEN_WIDTH);
   _picPipe = new Image();
   _picPipe.src = 'assets/images/pipe.png';
   _picPipe.onload = () => {
