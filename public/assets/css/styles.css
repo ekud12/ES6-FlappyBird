@@ -138,13 +138,13 @@ h2 {
 
 .gs-ranking-text {
   display: block;
-  font-size: 50px;
+  font-size: 25px;
   color: white;
   text-shadow: 5px 0px 0px #40394a, 0px 5px 0px #40394a, -5px 0px 0px #40394a, 0px -5px 0px #40394a;
 }
 
 .gs-ranking-text-mini {
-  font-size: 35px;
+  font-size: 25px;
   margin: 12px;
 }
 
@@ -174,7 +174,7 @@ h2 {
   position: relative;
   list-style-type: none;
   color: #463740;
-  font-size: 32px;
+  font-size: 15px;
   margin: 0 0 15px 10px;
 
   color: white;
@@ -192,7 +192,7 @@ h2 {
   right: 15px;
   display: inline-block;
   margin-left: 5px;
-  font-size: 1.15em;
+  font-size: 1em;
 }
 
 input[type='text'] {
