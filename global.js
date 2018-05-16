@@ -5,7 +5,7 @@ export const constant = {
 
   SCREEN_WIDTH: 1920,
   SCREEN_HEIGHT: 768,
-  FLOOR_POS_Y: 672,
+  FLOOR_POS_Y: 768,
   LEVEL_SPEED: 0.3,
   TIME_BETWEEN_GAMES: 5000,
 

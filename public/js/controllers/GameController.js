@@ -221,7 +221,7 @@ function changeGameState(gameState) {
       gameLoop();
       break;
 
-    case Const.clientInstanceStates.Ranking:
+    case Const.clientInstanceStates.End:
       strLog += 'display ranking';
       // Start timer for next game
       _ranking_time = Const.TIME_BETWEEN_GAMES / 1000;
