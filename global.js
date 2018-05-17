@@ -28,5 +28,11 @@ export const constant = {
     WaitingRoom: 1,
     OnGame: 2,
     End: 3
+  },
+  enumPlayerState: {
+    Unset: 1,
+    WaitingInLobby: 2,
+    Playing: 3,
+    Died: 4
   }
 };

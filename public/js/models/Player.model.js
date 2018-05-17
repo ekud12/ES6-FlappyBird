@@ -1,10 +1,4 @@
 import { constant as Const } from '../../global.js';
-const enumPlayerState = {
-  Unset: 1,
-  WaitingInLobby: 2,
-  Playing: 3,
-  Died: 4
-};
 
 const SPRITE_BIRD_HEIGHT = 64;
 const SPRITE_BIRD_WIDTH = 64;
@@ -24,9 +18,9 @@ class Player {
   draw(ctx, time, spriteList, gameState) {
     let frameNumber;
     let nickPos;
-    if (this._serverInfos.state == enumPlayerState.Unset) {
+    if (this._serverInfos.state == Const.enumPlayerState.Unset) {
       return;
-    } else if (this._serverInfos.state == enumPlayerState.WaitingInLobby && gameState == 2) {
+    } else if (this._serverInfos.state == Const.enumPlayerState.WaitingInLobby && gameState == 2) {
       return;
     } else {
       ctx.save();
@@ -42,7 +36,7 @@ class Player {
       }
       ctx.translate(this._serverInfos.posX + Const.BIRD_WIDTH / 2, this._serverInfos.posY + Const.BIRD_HEIGHT / 2);
       ctx.rotate(this._serverInfos.rotation * Math.PI / 180);
-      if (this._serverInfos.state == enumPlayerState.WaitingInLobby) {
+      if (this._serverInfos.state == Const.enumPlayerState.WaitingInLobby) {
         ctx.drawImage(
           spriteList[this._serverInfos.color],
           0,
@@ -93,8 +87,10 @@ class Player {
   }
 
   updateReadyState(readyState) {
-    this._serverInfos.state = readyState === true ? enumPlayerState.Ready : enumPlayerState.WaitingInLobby;
-    console.log(`${this._serverInfos.nick} is ${this._serverInfos.state == enumPlayerState.Ready ? 'ready !' : 'not yet ready'}`);
+    this._serverInfos.state = readyState === true ? Const.enumPlayerState.Ready : Const.enumPlayerState.WaitingInLobby;
+    console.log(
+      `${this._serverInfos.nick} is ${this._serverInfos.state == Const.enumPlayerState.Ready ? 'ready !' : 'not yet ready'}`
+    );
   }
 }
 

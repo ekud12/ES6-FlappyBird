@@ -30,7 +30,8 @@ class PlayersController {
       playersMap = new Array();
       for (let i = 0; i < players.length; i++) {
         playersMap[players[i].getId()] = i;
-        if (players[i].isCurrentPlayer() == true) activePlayer = i;
+        if (players[i].isCurrentPlayer() == true) 
+        activePlayer = i;
       }
     }
   }

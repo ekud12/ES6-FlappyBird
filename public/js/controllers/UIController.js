@@ -41,14 +41,8 @@ function drawPipe(pipe) {
     SPRITE_PIPE_HEIGHT
   );
 }
-const drawScore = score => {
-  let posX;
-  posX = Const.SCREEN_WIDTH / 2 - ctx.measureText(score).width / 2;
-  ctx.font = '120px Quantico';
-  ctx.fillStyle = 'black';
-  ctx.fillText(score, posX + SCORE_SHADOW_OFFSET, SCORE_POS_Y + SCORE_SHADOW_OFFSET);
-  ctx.fillStyle = 'white';
-  ctx.fillText(score, posX, SCORE_POS_Y);
+const updateScore = score => {
+  document.getElementById('score-container').innerHTML = `Your score is: ${score}`;
 };
 
 GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState, isNight) => {
@@ -70,15 +64,11 @@ GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState
       players[i].draw(ctx, currentTime, _picBirds, gameState);
     }
   }
-  if (gameState == 2) drawScore(playerManager.getActivePlayer().getScore());
+  if (gameState == 2) updateScore(playerManager.getActivePlayer().getScore());
 };
 
-GUIController.resetForNewGame = () => {
-  // const nb = _picBG.length;
-  // let i;
-  // for (i = 0; i < nb; i++) {
-  //   _picBG[i].resetToDayCycle();
-  // }
+GUIController.resetGUI = () => {
+  document.getElementById('score-container').innerHTML = ``;
 };
 
 GUIController.loadRessources = onReadyCallback => {

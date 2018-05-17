@@ -195,6 +195,16 @@ h2 {
   font-size: 1em;
 }
 
+#score-container {
+  display: block;
+  font-family: 'Quantico';
+  margin-left: 5%;
+  padding-top: 5px;
+  font-size: 40px;
+  text-decoration: underline;
+  color: white;
+}
+
 input[type='text'] {
   display: block;
   width: 320px;

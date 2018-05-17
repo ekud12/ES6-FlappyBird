@@ -200,7 +200,7 @@ function displayRanking(data) {
   }, Const.TIME_BETWEEN_GAMES / 2);
 
   // reset graphics in case to prepare the next game
-  GUIController.resetForNewGame();
+  GUIController.resetGUI();
   _isNight = false;
 }
 
