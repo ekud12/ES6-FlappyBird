@@ -91,6 +91,7 @@ function updateGameState(newState, notifyClients) {
       log += 'displaying ranking';
       break;
     default:
+    
       log += 'dead :p';
   }
   console.info(log);

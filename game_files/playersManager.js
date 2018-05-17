@@ -141,6 +141,7 @@ class PlayersManager {
     // Save player score
     for (i = 0; i < nbPlayers; i++) {
       _scores.savePlayerScore(_playersList[i], _playersList[i].getScore());
+      console.log(_playersList[i]._rank);
     }
 
     // Retreive highscores and then send scores to players
