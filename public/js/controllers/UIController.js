@@ -45,11 +45,10 @@ const updateScore = score => {
   document.getElementById('score-container').innerHTML = `Your score is: ${score}`;
 };
 
-GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState, isNight) => {
+GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState) => {
   let i;
   const players = playerManager.getAllPlayers();
   if (!_isReadyToDraw) {
-    console.log('[ERROR] : Ressources not yet loaded !');
     return;
   }
   ctx.clearRect(0, 0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
@@ -69,6 +68,7 @@ GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState
 
 GUIController.resetGUI = () => {
   document.getElementById('score-container').innerHTML = ``;
+
 };
 
 GUIController.loadRessources = onReadyCallback => {

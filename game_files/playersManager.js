@@ -3,7 +3,6 @@ import util from 'util';
 import Scores from './ScoringController';
 import * as enums from './enums';
 import Player from './player';
-const NB_AVAILABLE_BIRDS_COLOR = 4;
 
 const _playersList = new Array();
 let _posOnGrid = 0;
@@ -16,13 +15,13 @@ class PlayersManager {
 
   addNewPlayer(playerSocket, id) {
     let newPlayer;
-    let birdColor;
+    let newPlayerAvatarColor;
 
     // Set an available color according the number of client's sprites
-    birdColor = Math.floor(Math.random() * (NB_AVAILABLE_BIRDS_COLOR - 1 + 1));
+    newPlayerAvatarColor = Math.floor(Math.random() * 4);
 
     // Create new player and add it in the list
-    newPlayer = new Player(playerSocket, id, birdColor);
+    newPlayer = new Player(playerSocket, id, newPlayerAvatarColor);
     _playersList.push(newPlayer);
 
     console.info(`New player connected. There is currently ${_playersList.length} player(s)`);
@@ -137,23 +136,42 @@ class PlayersManager {
   sendPlayerScore() {
     const nbPlayers = _playersList.length;
     let i;
-
-    // Save player score
+    let winner;
     for (i = 0; i < nbPlayers; i++) {
-      _scores.savePlayerScore(_playersList[i], _playersList[i].getScore());
-      console.log(_playersList[i]._rank);
+      if (_playersList[i].getPlayerRank()) {
+        winner = _playersList[i].getNick();
+      }
     }
+    // Save player score
+    // for (i = 0; i < nbPlayers; i++) {
+    //   _scores.savePlayerScore(_playersList[i], _playersList[i].getScore());
+    //   console.log(_playersList[i]._rank);
+    // }
 
     // Retreive highscores and then send scores to players
-    _scores.getHighScores(highScores => {
-      const nbPlayers = _playersList.length;
-      let i;
+    // _scores.getHighScores(highScores => {
+    //   const nbPlayers = _playersList.length;
+    //   let i;
 
-      // Send score to the players
-      for (i = 0; i < nbPlayers; i++) {
-        _playersList[i].sendScore(nbPlayers, highScores);
+    // Send score to the players
+    for (i = 0; i < nbPlayers; i++) {
+      _playersList[i].sendWinner(winner);
+    }
+    // });
+  }
+
+  sendWinner() {
+    let winner, score;
+    let i;
+    for (i = 0; i < _playersList.length; i++) {
+      if (_playersList[i].getPlayerRank() === 1) {
+        winner = _playersList[i].getNick();
+        score = _playersList[i].getPlayerObject().score;
       }
-    });
+    }
+    for (i = 0; i < _playersList.length; i++) {
+      _playersList[i].sendWinner(winner, score);
+    }
   }
 
   prepareNewPlayer(player, nickname) {

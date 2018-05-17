@@ -112,6 +112,9 @@ class Player {
   getPlayerObject() {
     return this._playerTinyObject;
   }
+  getPlayerRank() {
+    return this._rank;
+  }
 
   preparePlayer(pos) {
     let line;
@@ -155,6 +158,21 @@ class Player {
       rank: this._rank,
       nbPlayers: NBPlayers,
       highscores: HighScores
+    });
+  }
+
+  sendWinner(winner, score) {
+    // Update player best score if he just make a new one !
+    // if (this._playerTinyObject.score > this._playerTinyObject.best_score) {
+    //   this._playerTinyObject.best_score = this._playerTinyObject.score;
+    // }
+
+    // Send him complete ranking
+    console.log(winner);
+    console.log(score);
+    this._socket.emit('ranking', {
+      winner: winner,
+      score: score
     });
   }
 }

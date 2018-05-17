@@ -88,9 +88,6 @@ class Player {
 
   updateReadyState(readyState) {
     this._serverInfos.state = readyState === true ? Const.enumPlayerState.Ready : Const.enumPlayerState.WaitingInLobby;
-    console.log(
-      `${this._serverInfos.nick} is ${this._serverInfos.state == Const.enumPlayerState.Ready ? 'ready !' : 'not yet ready'}`
-    );
   }
 }
 

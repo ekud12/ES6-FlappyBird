@@ -91,13 +91,12 @@ function updateGameState(newState, notifyClients) {
       log += 'displaying ranking';
       break;
     default:
-    
       log += 'dead :p';
   }
   console.info(log);
 
   // If requested, inform clients qbout the chsnge
-  if (notifyClients) io.sockets.emit('update_game_state', _gameState);
+  io.sockets.emit('update_game_state', _gameState);
 }
 
 function createNewGame() {
@@ -124,15 +123,9 @@ function gameOver() {
   // Stop game loop
   clearInterval(_timer);
   _lastTime = null;
-
-  // Change server state
   updateGameState(enums.ServerState.Ranking, true);
-
-  // Send players score
-  _playersManager.sendPlayerScore();
-
-  // After 5s, create a new game
-  setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
+  _playersManager.sendWinner();
+  setTimeout(createNewGame, 3000);
 }
 
 function startGameLoop() {

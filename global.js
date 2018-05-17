@@ -7,7 +7,6 @@ export const constant = {
   SCREEN_HEIGHT: 768,
   FLOOR_POS_Y: 768,
   LEVEL_SPEED: 0.3,
-  TIME_BETWEEN_GAMES: 5000,
 
   BIRD_WIDTH: 60,
   BIRD_HEIGHT: 60,

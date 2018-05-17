@@ -23,13 +23,9 @@ let _rankingTimer;
 let _ranking_time;
 let _socket;
 let _infPanlTimer;
-let _isNight = false;
 
 function draw(currentTime, ellapsedTime) {
-  // If player score is > 15, night !!
-  if (_gameState == Const.clientInstanceStates.OnGame && _playerManager.getActivePlayer().getScore() == 15) _isNight = true;
-
-  GUIController.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState, _isNight);
+  GUIController.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState);
 }
 
 requestAnimationFrame =
@@ -160,98 +156,97 @@ function loadGameRoom() {
 }
 
 function displayRanking(data) {
-  const nodeMedal = document.querySelector('.gs-ranking-medal');
-  const nodeHS = document.getElementById('gs-highscores-scores');
-  let i;
-  let nbHs;
+  // const nodeMedal = document.querySelector('.gs-ranking-medal');
+  // const nodeHS = document.getElementById('gs-highscores-scores');
+  // let i;
+  // let nbHs;
 
   console.log(data);
 
   // Remove previous medals just in case
-  nodeMedal.classList.remove('third');
-  nodeMedal.classList.remove('second');
-  nodeMedal.classList.remove('winner');
+  // nodeMedal.classList.remove('third');
+  // nodeMedal.classList.remove('second');
+  // nodeMedal.classList.remove('winner');
 
-  // Display scores
-  document.getElementById('gs-ranking-score').innerHTML = data.score;
-  document.getElementById('gs-ranking-best').innerHTML = data.bestScore;
-  document.getElementById('gs-ranking-pos').innerHTML = `${data.rank} / ${data.nbPlayers}`;
+  // // Display scores
+  // document.getElementById('gs-ranking-score').innerHTML = data.score;
+  document.getElementById('gs-ranking-best').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
+  // document.getElementById('gs-ranking-pos').innerHTML = `${data.rank} / ${data.nbPlayers}`;
 
-  // Set medal !
-  if (data.rank == 1) nodeMedal.classList.add('winner');
-  else if (data.rank == 2) nodeMedal.classList.add('second');
-  else if (data.rank == 3) nodeMedal.classList.add('third');
+  // // Set medal !
+  // if (data.rank == 1) nodeMedal.classList.add('winner');
+  // else if (data.rank == 2) nodeMedal.classList.add('second');
+  // else if (data.rank == 3) nodeMedal.classList.add('third');
 
-  // Display hish scores
-  nodeHS.innerHTML = '';
-  nbHs = data.highscores.length;
-  for (i = 0; i < nbHs; i++) {
-    nodeHS.innerHTML += `<li><span>#${i + 1}</span> ${data.highscores[i].player} <strong>${
-      data.highscores[i].score
-    }</strong></li>`;
-  }
+  // // Display hish scores
+  // nodeHS.innerHTML = '';
+  // nbHs = data.highscores.length;
+  // for (i = 0; i < nbHs; i++) {
+  //   nodeHS.innerHTML += `<li><span>#${i + 1}</span> ${data.highscores[i].player} <strong>${
+  //     data.highscores[i].score
+  //   }</strong></li>`;
+  // }
 
   // Show ranking
-  showHideMenu(enumPanels.Ranking, true);
+  // showHideMenu(enumPanels.Ranking, true);
 
   // Display hish scores in a middle of the waiting time
-  window.setTimeout(() => {
-    showHideMenu(enumPanels.HighScores, true);
-  }, Const.TIME_BETWEEN_GAMES / 2);
+  // window.setTimeout(() => {
+  //   showHideMenu(enumPanels.HighScores, true);
+  // }, 10000 / 2);
 
   // reset graphics in case to prepare the next game
-  GUIController.resetGUI();
-  _isNight = false;
+  setTimeout(GUIController.resetGUI(), 3000);
 }
 
 function changeGameState(gameState) {
   let strLog = 'Server just change state to ';
+  console.log('WHATS');
 
   _gameState = gameState;
 
   switch (_gameState) {
     case Const.clientInstanceStates.WaitingRoom:
       strLog += 'waiting in lobby';
+      _pipeList = null;
       _isCurrentPlayerReady = false;
       lobbyLoop();
       break;
 
     case Const.clientInstanceStates.OnGame:
-      strLog += 'on game !';
+      document.getElementById('gs-ranking-best').innerHTML = null;
       gameLoop();
       break;
 
     case Const.clientInstanceStates.End:
-      strLog += 'display ranking';
-      // Start timer for next game
-      _ranking_time = Const.TIME_BETWEEN_GAMES / 1000;
+      _pipeList = null;
+      // // Start timer for next game
+      // _ranking_time = 5000 / 1000;
 
-      // Display the remaining time on the top bar
-      infoPanel(true, `Next game in <strong>${_ranking_time}s</strong>...`);
-      _rankingTimer = window.setInterval(() => {
-        // Set seconds left
-        infoPanel(true, `Next game in <strong>${--_ranking_time}s</strong>...`);
+      // // Display the remaining time on the top bar
+      // infoPanel(true, `Next game in <strong>${_ranking_time}s</strong>...`);
+      // _rankingTimer = window.setInterval(() => {
+      //   // Set seconds left
+      //   infoPanel(true, `Next game in <strong>${--_ranking_time}s</strong>...`);
 
-        // Stop timer if time is running up
-        if (_ranking_time <= 0) {
-          // Reset timer and remove top bar
-          window.clearInterval(_rankingTimer);
-          infoPanel(false);
+      //   // Stop timer if time is running up
+      //   if (_ranking_time <= 0) {
+      //     // Reset timer and remove top bar
+      //     window.clearInterval(_rankingTimer);
+      //     infoPanel(false);
 
-          // Reset pipe list and hide ranking panel
-          _pipeList = null;
-          showHideMenu(enumPanels.Ranking, false);
-        }
-      }, 1000);
+      //     // Reset pipe list and hide ranking panel
+      //     console.log('Flushing pipes');
+      //     _pipeList = null;
+      //     showHideMenu(enumPanels.Ranking, false);
+      //   }
+      // }, 1000);
+
       break;
 
     default:
-      console.log(`Unknew game state [${_gameState}]`);
-      strLog += 'undefined state';
       break;
   }
-
-  console.log(strLog);
 }
 
 const inputsManager = () => {
