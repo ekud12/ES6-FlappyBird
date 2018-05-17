@@ -59,11 +59,11 @@ h2 {
   opacity: 0;
 }
 
-.inGamePanel {
+/* .inGamePanel {
   position: relative;
   width: 100%;
   height: 100%;
-}
+} */
 
 .overlay {
   position: absolute;
@@ -79,7 +79,7 @@ h2 {
   margin-top: 80px;
 }
 
-#gs-loader-text {
+/* #gs-loader-text {
   position: absolute;
   width: 100%;
   top: 240px;
@@ -189,14 +189,14 @@ h2 {
   display: inline-block;
   margin-left: 5px;
   font-size: 1em;
-}
+} */
 
 #score-container {
   display: block;
   font-family: 'Quantico';
   margin-left: 5%;
   padding-top: 5px;
-  font-size: 40px;
+  font-size: 10px;
   text-decoration: underline;
   color: white;
 }
@@ -204,13 +204,13 @@ h2 {
 input[type='text'] {
   display: block;
   width: 320px;
-  border: 12px dotted #00ff73;
+  border: 12px dotted #3bff93;
   margin: auto;
   padding: 15px 15px;
   font-size: 50px;
   font-family: 'Quantico';
   text-shadow: 2px 2px 0px #073d00;
-  color: #00ff73;
+  color: #ffffff;
   text-align: center;
   background: transparent;
 }
@@ -229,7 +229,21 @@ input[type='button'] {
   background: #00ff73;
 }
 
+#gs-ranking-best {
+  display: block;
+  width: 400px;
+  padding: 10px;
+  margin: 25px auto;
+  font-size: 35px;
+  font-family: 'Quantico';
+  color: rgb(0, 0, 0);
+  text-align: center;
+  background: #00ff73;
+}
+
 .filler-top {
+  display: flex;
+  direction: row;
   width: 100%;
   background-color: #00c410;
   height: 70px;

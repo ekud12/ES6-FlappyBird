@@ -279,4 +279,4 @@ GUIController.loadRessources(() => {
   runFBInstance();
 });
 
-function infoPanel(isShow, htmlText, timeout) {}
+// function infoPanel(isShow, htmlText, timeout) {}
