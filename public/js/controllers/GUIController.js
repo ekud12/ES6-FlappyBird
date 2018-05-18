@@ -5,10 +5,10 @@
 // const canvasCTX = document.getElementById('canvas').getContext('2d');
 // let toDraw = false;
 // let _nbRessourcesToLoad = Config.TOUCAN_SOURCES.length;
-// let _picPipe;
+// let _picVine;
 // const toucanSrcs = new Array();
 
-// GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState) => {
+// GUIController.draw = (currentTime, ellapsedTime, playerManager, vines, gameState) => {
 //   let i;
 //   const players = playerManager.getAllPlayers();
 //   if (!toDraw) {
@@ -16,9 +16,9 @@
 //   }
 //   canvasCTX.clearRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
-//   if (pipes) {
-//     for (i = 0; i < pipes.length; i++) {
-//       drawPipe(pipes[i]);
+//   if (vines) {
+//     for (i = 0; i < vines.length; i++) {
+//       drawVine(vines[i]);
 //     }
 //   }
 //   if (players) {
@@ -36,9 +36,9 @@
 // GUIController.loadAssets = doneCallBack => {
 //   let toucan;
 
-//   _picPipe = new Image();
-//   _picPipe.src = 'assets/images/pipe2.png';
-//   _picPipe.onload = () => {
+//   _picVine = new Image();
+//   _picVine.src = 'assets/images/vine.png';
+//   _picVine.onload = () => {
 //     onAssetsLoadingDone(doneCallBack);
 //   };
 
@@ -62,28 +62,28 @@
 //   }
 // };
 
-// function drawPipe(pipe) {
+// function drawVine(vine) {
 //   canvasCTX.drawImage(
-//     _picPipe,
+//     _picVine,
 //     0,
 //     0,
-//     Config.SPRITE_PIPE_WIDTH,
-//     Config.SPRITE_PIPE_HEIGHT,
-//     pipe.posX,
-//     pipe.posY - Config.SPRITE_PIPE_HEIGHT,
-//     Config.PIPE_WIDTH,
-//     Config.SPRITE_PIPE_HEIGHT
+//     Config.SPRITE_VINE_WIDTH,
+//     Config.SPRITE_VINE_HEIGHT,
+//     vine.posX,
+//     vine.posY - Config.SPRITE_VINE_HEIGHT,
+//     Config.VINE_WIDTH,
+//     Config.SPRITE_VINE_HEIGHT
 //   );
 //   canvasCTX.drawImage(
-//     _picPipe,
+//     _picVine,
 //     0,
 //     0,
-//     Config.SPRITE_PIPE_WIDTH,
-//     Config.SPRITE_PIPE_HEIGHT,
-//     pipe.posX,
-//     pipe.posY + Config.HEIGHT_BETWEEN_PIPES,
-//     Config.PIPE_WIDTH,
-//     Config.SPRITE_PIPE_HEIGHT
+//     Config.SPRITE_VINE_WIDTH,
+//     Config.SPRITE_VINE_HEIGHT,
+//     vine.posX,
+//     vine.posY + Config.HEIGHT_BETWEEN_VINES,
+//     Config.VINE_WIDTH,
+//     Config.SPRITE_VINE_HEIGHT
 //   );
 // }
 // const updateScore = score => {
@@ -96,7 +96,7 @@ import { config as Config } from '../../config.js';
 let canvasCTX;
 let toDraw;
 let totalSrcsCount;
-let _picPipe;
+let _picVine;
 let toucanSrcs;
 export default class GUIController {
   constructor() {
@@ -106,7 +106,7 @@ export default class GUIController {
     canvasCTX = document.getElementById('canvas').getContext('2d');
   }
 
-  draw(currentTime, ellapsedTime, playerManager, pipes, gameState) {
+  draw(currentTime, ellapsedTime, playerManager, vines, gameState) {
     let i;
     const players = playerManager.getAllPlayers();
     if (!toDraw) {
@@ -114,9 +114,9 @@ export default class GUIController {
     }
     canvasCTX.clearRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
-    if (pipes) {
-      for (i = 0; i < pipes.length; i++) {
-        this.drawPipe(pipes[i]);
+    if (vines) {
+      for (i = 0; i < vines.length; i++) {
+        this.drawVine(vines[i]);
       }
     }
     if (players) {
@@ -134,9 +134,9 @@ export default class GUIController {
   loadAssets(doneCallBack) {
     let toucan;
 
-    _picPipe = new Image();
-    _picPipe.src = 'assets/images/pipe2.png';
-    _picPipe.onload = () => {
+    _picVine = new Image();
+    _picVine.src = 'assets/images/vine.png';
+    _picVine.onload = () => {
       this.onAssetsLoadingDone(doneCallBack);
     };
 
@@ -152,28 +152,28 @@ export default class GUIController {
   updateScore(score) {
     document.getElementById('score-container').innerHTML = `Your score is: ${score}`;
   }
-  drawPipe(pipe) {
+  drawVine(vine) {
     canvasCTX.drawImage(
-      _picPipe,
+      _picVine,
       0,
       0,
-      Config.SPRITE_PIPE_WIDTH,
-      Config.SPRITE_PIPE_HEIGHT,
-      pipe.posX,
-      pipe.posY - Config.SPRITE_PIPE_HEIGHT,
-      Config.PIPE_WIDTH,
-      Config.SPRITE_PIPE_HEIGHT
+      Config.SPRITE_VINE_WIDTH,
+      Config.SPRITE_VINE_HEIGHT,
+      vine.posX,
+      vine.posY - Config.SPRITE_VINE_HEIGHT,
+      Config.VINE_WIDTH,
+      Config.SPRITE_VINE_HEIGHT
     );
     canvasCTX.drawImage(
-      _picPipe,
+      _picVine,
       0,
       0,
-      Config.SPRITE_PIPE_WIDTH,
-      Config.SPRITE_PIPE_HEIGHT,
-      pipe.posX,
-      pipe.posY + Config.HEIGHT_BETWEEN_PIPES,
-      Config.PIPE_WIDTH,
-      Config.SPRITE_PIPE_HEIGHT
+      Config.SPRITE_VINE_WIDTH,
+      Config.SPRITE_VINE_HEIGHT,
+      vine.posX,
+      vine.posY + Config.HEIGHT_BETWEEN_VINES,
+      Config.VINE_WIDTH,
+      Config.SPRITE_VINE_HEIGHT
     );
   }
   onAssetsLoadingDone(doneCallBack) {

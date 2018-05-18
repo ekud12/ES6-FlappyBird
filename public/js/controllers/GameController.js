@@ -9,7 +9,7 @@ let playerID = null;
 let isPlayerReady = false;
 let updateIntervalTime = null;
 let socket;
-let gamePipes;
+let gameVines;
 requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -28,7 +28,6 @@ function runClientInstance() {
   if (typeof io == 'undefined') {
     return;
   }
-
   playersCInstance = new PlayersController();
 
   socket = io.connect(`${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}`, { reconnect: false });
@@ -37,14 +36,17 @@ function runClientInstance() {
       console.log(`Disconnected or player quit. Refresh Page.`);
     });
     canvasPaint(0, 0);
-    document.getElementById('player-connection').onclick = initClientSocketBindings;
+    document.getElementById('enter-game').onclick = initClientSocketBindings;
   });
 
   socket.on('error', () => {
-    console.log(`Cannot connect the web_socket`);
+    console.log(`Error connecting to WebSocket`);
   });
 }
 
+/**
+ * Game Loops
+ */
 function clientWaitingLoop() {
   if (state == Config.clientInstanceStates.Waiting) requestAnimationFrame(clientWaitingLoop);
   canvasPaint(new Date().getTime(), 0);
@@ -65,7 +67,7 @@ function clientGetUpdatedState(gameState) {
   state = gameState;
   switch (state) {
     case Config.clientInstanceStates.Waiting:
-      gamePipes = null;
+      gameVines = null;
       isPlayerReady = false;
       clientWaitingLoop();
       break;
@@ -74,31 +76,33 @@ function clientGetUpdatedState(gameState) {
       clientInGameLoop();
       break;
     case Config.clientInstanceStates.Ended:
-      gamePipes = null;
+      gameVines = null;
       break;
     default:
       break;
   }
 }
 function canvasPaint(nowTime, totalTime) {
-  GUIControllerInstance.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
+  GUIControllerInstance.draw(nowTime, totalTime, playersCInstance, gameVines, state);
 }
 
 function initClientSocketBindings() {
   const name = document.getElementById(`player-name`).value;
   if (name === '' || name === 'Afeka') {
-    alert('Please choose a name!');
+    alert('Please choose a name First!');
     return;
   }
-  document.getElementById('player-connection').onclick = () => false;
 
   /**
    * Binding sockets on different actions
    */
-  socket.on('player_list', list => {
+  socket.on('list_of_players_update', list => {
     for (let i = 0; i < list.length; i++) {
       playersCInstance.addPlayer(list[i], playerID);
     }
+    /**
+     * Reset Canvas
+     */
     canvasPaint(0, 0);
   });
   socket.on('player_joined', player => {
@@ -118,9 +122,10 @@ function initClientSocketBindings() {
   });
   socket.on('update_game_digital_assets', newServerData => {
     playersCInstance.refreshPList(newServerData.players);
-    gamePipes = newServerData.pipes;
+    gameVines = newServerData.vines;
   });
 
+  /** TODO: REMOVE */
   socket.emit('say_hi', name, (serverState, uuid) => {
     playerID = uuid;
     clientGetUpdatedState(serverState);
@@ -131,7 +136,7 @@ function initClientSocketBindings() {
   });
 
   document.addEventListener('keydown', event => {
-    if (event.keyCode == 32) {
+    if (event.keyCode == Config.PLAY_KEYCODE) {
       switch (state) {
         case Config.clientInstanceStates.Waiting:
           isPlayerReady = !isPlayerReady;
@@ -151,6 +156,6 @@ function initClientSocketBindings() {
 }
 
 function displayWinner(data) {
-  document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
+  document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner}! </br> The winner Score is: ${data.score}!`;
   setTimeout(GUIControllerInstance.resetGUI(), 3000);
 }

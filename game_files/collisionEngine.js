@@ -1,18 +1,18 @@
 import { config as Config } from '../config';
 
-function checkBirdCollision(pipe, birdInstance) {
+function checkBirdCollision(vine, birdInstance) {
   const bird = birdInstance.getPlayerObject();
 
-  // If the bird is inside a pipe on the X axis, check if he touch it
-  if (bird.posX + Config.BIRD_WIDTH > pipe.posX && bird.posX < pipe.posX + Config.PIPE_WIDTH) {
-    // Notify the bird he is inside the pipe
-    birdInstance.updateScore(pipe.id);
+  // If the bird is inside a vine on the X axis, check if he touch it
+  if (bird.posX + Config.BIRD_WIDTH > vine.posX && bird.posX < vine.posX + Config.VINE_WIDTH) {
+    // Notify the bird he is inside the vine
+    birdInstance.updateScore(vine.id);
 
-    // Check if the bird touch the upper pipe
-    if (bird.posY < pipe.posY) return true;
+    // Check if the bird touch the upper vine
+    if (bird.posY < vine.posY) return true;
 
-    // Check if the bird touch the ground pipe
-    if (bird.posY + Config.BIRD_HEIGHT > pipe.posY + Config.HEIGHT_BETWEEN_PIPES) {
+    // Check if the bird touch the ground vine
+    if (bird.posY + Config.BIRD_HEIGHT > vine.posY + Config.HEIGHT_BETWEEN_VINES) {
       return true;
     }
   }
@@ -25,16 +25,16 @@ function checkBirdCollision(pipe, birdInstance) {
   return false;
 }
 
-export function checkCollision(pipe, birdsList) {
+export function checkCollision(vine, birdsList) {
   let thereIsCollision = false;
-  const pipeLength = pipe.length;
+  const vineLength = vine.length;
   const birdLength = birdsList.length;
   let i;
   let j;
 
-  for (i = 0; i < pipeLength; i++) {
+  for (i = 0; i < vineLength; i++) {
     for (j = 0; j < birdsList.length; j++) {
-      if (checkBirdCollision(pipe[i], birdsList[j]) == true) {
+      if (checkBirdCollision(vine[i], birdsList[j]) == true) {
         // Change player state to died
         birdsList[j].sorryYouAreDie(birdsList.length);
 

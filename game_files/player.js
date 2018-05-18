@@ -18,7 +18,7 @@ class Player {
     this._socket = socket;
     this._speedY = 0;
     this._rank = 1;
-    this._lastPipe = 0;
+    this._lastVine = 0;
     this._playerTinyObject = {
       id: uid,
       nick: '',
@@ -137,11 +137,11 @@ class Player {
     if (this._playerTinyObject.nick != '') this._playerTinyObject.state = enums.PlayerState.WaitingForGameStart;
   }
 
-  updateScore(pipeID) {
-    // If the current pipe ID is different from the last one, it means the players meets a new pipe. So update score
-    if (pipeID != this._lastPipe) {
+  updateScore(vineID) {
+    // If the current vine ID is different from the last one, it means the players meets a new vine. So update score
+    if (vineID != this._lastVine) {
       this._playerTinyObject.score++;
-      this._lastPipe = pipeID;
+      this._lastVine = vineID;
     }
   }
 

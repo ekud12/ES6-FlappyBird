@@ -1,11 +1,11 @@
 import { config as Config } from '../config';
 import * as CollisionEngine from './collisionEngine';
 import * as enums from './enums';
-import PipeManager from './pipeManager';
+import VineManager from './vineManager';
 import PlayersManager from './playersManager';
 let io = require('socket.io').listen(Config.SOCKET_PORT);
 let _playersManager;
-let _pipeManager;
+let _vineManager;
 
 let _gameState;
 let _timeStartGame;
@@ -24,11 +24,11 @@ export function startServer() {
     startGameLoop();
   });
 
-  // Create pipe manager and bind event
-  _pipeManager = new PipeManager();
-  _pipeManager.on('need_new_pipe', () => {
-    // Create a pipe and send it to clients
-    const pipe = _pipeManager.newPipe();
+  // Create vine manager and bind event
+  _vineManager = new VineManager();
+  _vineManager.on('need_new_vine', () => {
+    // Create a vine and send it to clients
+    const vine = _vineManager.newVine();
   });
 
   // On new client connection
@@ -72,7 +72,7 @@ function playerLog(socket, nick) {
   _playersManager.prepareNewPlayer(player, nick);
 
   // Notify new client about other players AND notify other about the new one ;)
-  socket.emit('player_list', _playersManager.getPlayerList());
+  socket.emit('list_of_players_update', _playersManager.getPlayerList());
   socket.broadcast.emit('player_joined', player.getPlayerObject());
 }
 
@@ -103,8 +103,8 @@ function createNewGame() {
   let players;
   let i;
 
-  // Flush pipe list
-  _pipeManager.flushPipeList();
+  // Flush vine list
+  _vineManager.flushVineList();
 
   // Reset players state and send it
   players = _playersManager.resetPlayersForNewGame();
@@ -132,8 +132,8 @@ function startGameLoop() {
   // Change server state
   updateGameState(enums.ServerState.OnGame, true);
 
-  // Create the first pipe
-  _pipeManager.newPipe();
+  // Create the first vine
+  _vineManager.newVine();
 
   // Start timer
   _timer = setInterval(() => {
@@ -158,13 +158,13 @@ function startGameLoop() {
     // Update players position
     _playersManager.updatePlayers(ellapsedTime);
 
-    // Update pipes
-    _pipeManager.updatePipes(ellapsedTime);
+    // Update vines
+    _vineManager.updateVines(ellapsedTime);
 
     // Check collisions
     if (
       CollisionEngine.checkCollision(
-        _pipeManager.getPotentialPipeHit(),
+        _vineManager.getPotentialVineHit(),
         _playersManager.getPlayerList(enums.PlayerState.InProgress)
       ) == true
     ) {
@@ -176,7 +176,7 @@ function startGameLoop() {
     // Notify players
     io.sockets.emit('update_game_digital_assets', {
       players: _playersManager.getOnGamePlayerList(),
-      pipes: _pipeManager.getPipeList()
+      vines: _vineManager.getVineList()
     });
   }, 1000 / 60);
 }
