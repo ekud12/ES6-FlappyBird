@@ -151,8 +151,8 @@ class Player {
       this._playerTinyObject.best_score = this._playerTinyObject.score;
     }
 
-    // Send him complete ranking
-    this._socket.emit('ranking', {
+    // Send him complete we_have_a_winner
+    this._socket.emit('we_have_a_winner', {
       score: this._playerTinyObject.score,
       bestScore: this._playerTinyObject.best_score,
       rank: this._rank,
@@ -167,10 +167,10 @@ class Player {
     //   this._playerTinyObject.best_score = this._playerTinyObject.score;
     // }
 
-    // Send him complete ranking
+    // Send him complete we_have_a_winner
     console.log(winner);
     console.log(score);
-    this._socket.emit('ranking', {
+    this._socket.emit('we_have_a_winner', {
       winner: winner,
       score: score
     });

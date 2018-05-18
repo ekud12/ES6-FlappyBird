@@ -133,7 +133,7 @@
             };
 
             var enumPanels = {
-              Login: 'gs-login',
+              Login: 'login-div',
               Ranking: 'gs-ranking',
               HighScores: 'gs-highscores',
               Error: 'gs-error'
@@ -275,28 +275,28 @@
               _socket.on('player_disconnect', function(player) {
                 _playerManager.deletePlayer(player);
               });
-              _socket.on('new_player', function(player) {
+              _socket.on('player_joined', function(player) {
                 _playerManager.addPlayer(player);
               });
-              _socket.on('player_ready_state', function(playerInfos) {
+              _socket.on('player_is_ready', function(playerInfos) {
                 _playerManager.getPlayerByID(playerInfos.id).updateData(playerInfos);
               });
-              _socket.on('update_game_state', function(gameState) {
-                changeGameState(gameState);
+              _socket.on('state_updated', function(gameState) {
+                updateClientState(gameState);
               });
               _socket.on('update_game', function(serverDatasUpdated) {
                 _playerManager.refreshPList(serverDatasUpdated.players);
                 _pipeList = serverDatasUpdated.pipes;
               });
               _socket.on('ranking', function(score) {
-                displayRanking(score);
+                displayWinner(score);
               });
 
               // Send nickname to the server
               console.log('Send nickname ' + nick);
               _socket.emit('say_hi', nick, function(serverState, uuid) {
                 _userID = uuid;
-                changeGameState(serverState);
+                updateClientState(serverState);
 
                 // Display a message according to the game state
                 if (serverState == enumState.OnGame) {
@@ -325,7 +325,7 @@
               return false;
             }
 
-            function displayRanking(score) {
+            function displayWinner(score) {
               var nodeMedal = document.querySelector('.gs-ranking-medal');
               var nodeHS = document.getElementById('gs-highscores-scores');
               var i = void 0;
@@ -375,7 +375,7 @@
               _isNight = false;
             }
 
-            function changeGameState(gameState) {
+            function updateClientState(gameState) {
               var strLog = 'Server just change state to ';
 
               _gameState = gameState;
@@ -429,11 +429,11 @@
               switch (_gameState) {
                 case enumState.WaitingRoom:
                   _isCurrentPlayerReady = !_isCurrentPlayerReady;
-                  _socket.emit('change_ready_state', _isCurrentPlayerReady);
+                  _socket.emit('update_ready_state', _isCurrentPlayerReady);
                   _playerManager.getActivePlayer().isPlayerReady(_isCurrentPlayerReady);
                   break;
                 case enumState.OnGame:
-                  _socket.emit('player_jump');
+                  _socket.emit('play_action');
                   break;
                 default:
                   break;

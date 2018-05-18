@@ -57,14 +57,14 @@ function playerLog(socket, nick) {
   let player = socket.PlayerInstance;
 
   // Bind new client events
-  socket.on('change_ready_state', readyState => {
+  socket.on('update_ready_state', readyState => {
     // If the server is currently waiting for players, update ready state
     if (_gameState == enums.ServerState.WaitingForPlayers) {
       _playersManager.changeLobbyState(player, readyState);
-      socket.broadcast.emit('player_ready_state', player.getPlayerObject());
+      socket.broadcast.emit('player_is_ready', player.getPlayerObject());
     }
   });
-  socket.on('player_jump', () => {
+  socket.on('play_action', () => {
     player.jump();
   });
 
@@ -73,7 +73,7 @@ function playerLog(socket, nick) {
 
   // Notify new client about other players AND notify other about the new one ;)
   socket.emit('player_list', _playersManager.getPlayerList());
-  socket.broadcast.emit('new_player', player.getPlayerObject());
+  socket.broadcast.emit('player_joined', player.getPlayerObject());
 }
 
 function updateGameState(newState, notifyClients) {
@@ -96,7 +96,7 @@ function updateGameState(newState, notifyClients) {
   console.info(log);
 
   // If requested, inform clients qbout the chsnge
-  io.sockets.emit('update_game_state', _gameState);
+  io.sockets.emit('state_updated', _gameState);
 }
 
 function createNewGame() {
@@ -109,7 +109,7 @@ function createNewGame() {
   // Reset players state and send it
   players = _playersManager.resetPlayersForNewGame();
   for (i = 0; i < players.length; i++) {
-    io.sockets.emit('player_ready_state', players[i]);
+    io.sockets.emit('player_is_ready', players[i]);
   }
 
   // Notify players of the new game state

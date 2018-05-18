@@ -2,12 +2,12 @@ import { constant as Const } from '../../../global.js';
 import PlayersController from '../controllers/PlayersController.js';
 import GUIController from '../controllers/UIController.js';
 
-const enumPanels = {
-  Login: 'gs-login',
-  Ranking: 'gs-ranking',
-  HighScores: 'gs-highscores',
-  Error: 'gs-error'
-};
+// const enumPanels = {
+//   Login: 'login-div',
+//   Ranking: 'gs-we_have_a_winner',
+//   HighScores: 'gs-highscores',
+//   Error: 'gs-error'
+// };
 
 let state = Const.clientInstanceStates.Login;
 let playersCInstance;
@@ -26,6 +26,12 @@ function canvasPaint(nowTime, totalTime) {
   GUIController.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
 }
 
+function clientWaitingLoop() {
+  const now = new Date().getTime();
+  if (state == Const.clientInstanceStates.WaitingRoom) requestAnimationFrame(clientWaitingLoop);
+  canvasPaint(now, 0);
+}
+
 function clientInGameLoop() {
   const now = new Date().getTime();
   let ellapsedTime = 0;
@@ -37,10 +43,25 @@ function clientInGameLoop() {
   canvasPaint(now, ellapsedTime);
 }
 
-function clientWaitingLoop() {
-  const now = new Date().getTime();
-  if (state == Const.clientInstanceStates.WaitingRoom) requestAnimationFrame(clientWaitingLoop);
-  canvasPaint(now, 0);
+function clientGetUpdatedState(gameState) {
+  state = gameState;
+  switch (state) {
+    case Const.clientInstanceStates.WaitingRoom:
+      gamePipes = null;
+      isPlayerReady = false;
+      clientWaitingLoop();
+      break;
+    case Const.clientInstanceStates.OnGame:
+      document.getElementById('winner-div').innerHTML = null;
+      clientInGameLoop();
+      break;
+
+    case Const.clientInstanceStates.End:
+      gamePipes = null;
+      break;
+    default:
+      break;
+  }
 }
 
 function runClientInstance() {
@@ -52,13 +73,13 @@ function runClientInstance() {
   socket = io.connect(`${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}`, { reconnect: false });
   socket.on('connect', () => {
     socket.on('disconnect', () => {
-      alert(`Disconnected or player quit`);
+      console.log(`Disconnected or player quit. Refresh Page`);
       // document.getElementById('gs-error-message').innerHTML = 'Player Left/Disconnected';
       // showHideMenu(enumPanels.Error, true);
     });
 
     canvasPaint(0, 0);
-    showHideMenu(enumPanels.Login, true);
+    // showHideMenu(enumPanels.Login, true);
 
     /** bind button to load the waiting room */
     document.getElementById('player-connection').onclick = loadClientWaitingRoom;
@@ -89,21 +110,21 @@ function loadClientWaitingRoom() {
     }
     canvasPaint(0, 0);
   });
-  socket.on('new_player', player => {
+  socket.on('player_joined', player => {
     playersCInstance.addPlayer(player);
   });
-  socket.on('player_ready_state', playerInfos => {
+  socket.on('player_is_ready', playerInfos => {
     playersCInstance.getPlayerByID(playerInfos.id).updateData(playerInfos);
   });
-  socket.on('update_game_state', gameState => {
-    changeGameState(gameState);
+  socket.on('state_updated', gameState => {
+    clientGetUpdatedState(gameState);
   });
   socket.on('player_disconnect', player => {
     playersCInstance.deletePlayer(player);
   });
 
-  socket.on('ranking', score => {
-    displayRanking(score);
+  socket.on('we_have_a_winner', score => {
+    displayWinner(score);
   });
   socket.on('update_game', serverDatasUpdated => {
     playersCInstance.refreshPList(serverDatasUpdated.players);
@@ -112,7 +133,7 @@ function loadClientWaitingRoom() {
 
   socket.emit('say_hi', name, (serverState, uuid) => {
     playerID = uuid;
-    changeGameState(serverState);
+    clientGetUpdatedState(serverState);
 
     if (serverState == Const.clientInstanceStates.OnGame) {
       alert(`Game in Progress. Please wait...`);
@@ -121,68 +142,43 @@ function loadClientWaitingRoom() {
 
   document.addEventListener('keydown', event => {
     if (event.keyCode == 32) {
-      inputsManager();
+      switch (state) {
+        case Const.clientInstanceStates.WaitingRoom:
+          isPlayerReady = !isPlayerReady;
+          socket.emit('update_ready_state', isPlayerReady);
+          playersCInstance.getActivePlayer().isPlayerReady(isPlayerReady);
+          break;
+        case Const.clientInstanceStates.OnGame:
+          socket.emit('play_action');
+          break;
+        default:
+          break;
+      }
     }
   });
 
-  showHideMenu(enumPanels.Login, false);
+  // showHideMenu(enumPanels.Login, false);
   return false;
 }
 
-function displayRanking(data) {
+// const inputsManager = () => {};
+
+function displayWinner(data) {
   document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
   setTimeout(GUIController.resetGUI(), 3000);
 }
 
-function changeGameState(gameState) {
-  state = gameState;
-  switch (state) {
-    case Const.clientInstanceStates.WaitingRoom:
-      gamePipes = null;
-      isPlayerReady = false;
-      clientWaitingLoop();
-      break;
+// const showHideMenu = (panelName, isShow) => {
+//   const panel = document.getElementById(panelName);
+//   const currentOverlayPanel = document.querySelector('.overlay');
 
-    case Const.clientInstanceStates.OnGame:
-      document.getElementById('winner-div').innerHTML = null;
-      clientInGameLoop();
-      break;
-
-    case Const.clientInstanceStates.End:
-      gamePipes = null;
-      break;
-
-    default:
-      break;
-  }
-}
-
-const inputsManager = () => {
-  switch (state) {
-    case Const.clientInstanceStates.WaitingRoom:
-      isPlayerReady = !isPlayerReady;
-      socket.emit('change_ready_state', isPlayerReady);
-      playersCInstance.getActivePlayer().isPlayerReady(isPlayerReady);
-      break;
-    case Const.clientInstanceStates.OnGame:
-      socket.emit('player_jump');
-      break;
-    default:
-      break;
-  }
-};
-
-const showHideMenu = (panelName, isShow) => {
-  const panel = document.getElementById(panelName);
-  const currentOverlayPanel = document.querySelector('.overlay');
-
-  if (isShow) {
-    if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
-    panel.classList.add('overlay');
-  } else {
-    if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
-  }
-};
+//   if (isShow) {
+//     if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
+//     panel.classList.add('overlay');
+//   } else {
+//     if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
+//   }
+// };
 GUIController.loadRessources(() => {
   runClientInstance();
 });
