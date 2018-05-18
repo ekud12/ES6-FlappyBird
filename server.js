@@ -12,7 +12,7 @@ import path from 'path';
 import favicon from 'serve-favicon';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
-import * as game from './game_files/game';
+import * as game from './server/game';
 import { config as Config } from './config';
 import webpackConfig from './webpack.config.babel.js';
 
@@ -29,7 +29,7 @@ app.use(logger('dev'));
 app.use(methodOverride());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 /** TODO : REMOVE */
 if ('development' == app.get('env')) {
@@ -37,14 +37,14 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', (req, res) => {
-  res.render('../public/flappybird', { ws: `${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}` });
+  res.render('../client/flappybird', { ws: `${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}` });
 });
 
 /**
  * Load Config File
  */
 app.get('/config.js', (req, res) => {
-  res.sendfile('config.js');
+  res.sendFile('config.js', { root: __dirname });
 });
 
 /**
