@@ -33,5 +33,9 @@ export const constant = {
     WaitingInLobby: 2,
     Playing: 3,
     Died: 4
-  }
+  },
+  SPRITE_BIRD_HEIGHT: 64,
+  SPRITE_BIRD_WIDTH: 64,
+  COMPLETE_ANNIMATION_DURATION: 250,
+  ANIMATION_FRAME_NUMBER: 4
 };

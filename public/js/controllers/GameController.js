@@ -1,7 +1,3 @@
-/*
-*   Game Engine
-*/
-
 import { constant as Const } from '../../../global.js';
 import PlayersController from '../controllers/PlayersController.js';
 import GUIController from '../controllers/UIController.js';
@@ -13,130 +9,109 @@ const enumPanels = {
   Error: 'gs-error'
 };
 
-let _gameState = Const.clientInstanceStates.Login;
-let _playerManager;
-let _pipeList;
-let _isCurrentPlayerReady = false;
-let _userID = null;
-let _lastTime = null;
-let _rankingTimer;
-let _ranking_time;
-let _socket;
-let _infPanlTimer;
-
-function draw(currentTime, ellapsedTime) {
-  GUIController.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState);
-}
-
+let state = Const.clientInstanceStates.Login;
+let playersCInstance;
+let playerID = null;
+let isPlayerReady = false;
+let updateIntervalTime = null;
+let socket;
+let gamePipes;
 requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
 
-function gameLoop() {
+function canvasPaint(nowTime, totalTime) {
+  GUIController.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
+}
+
+function clientInGameLoop() {
   const now = new Date().getTime();
   let ellapsedTime = 0;
-
-  // Call for next anim frame
-  if (_gameState == Const.clientInstanceStates.OnGame) requestAnimationFrame(gameLoop);
-
-  // Get time difference between the last call and now
-  if (_lastTime) {
-    ellapsedTime = now - _lastTime;
+  if (state == Const.clientInstanceStates.OnGame) requestAnimationFrame(clientInGameLoop);
+  if (updateIntervalTime) {
+    ellapsedTime = now - updateIntervalTime;
   }
-  _lastTime = now;
-
-  // Call draw with the ellapsed time between the last frame and the current one
-  draw(now, ellapsedTime);
+  updateIntervalTime = now;
+  canvasPaint(now, ellapsedTime);
 }
 
-function lobbyLoop() {
+function clientWaitingLoop() {
   const now = new Date().getTime();
-
-  // Call for next anim frame
-  if (_gameState == Const.clientInstanceStates.WaitingRoom) requestAnimationFrame(lobbyLoop);
-
-  // Call draw with the ellapsed time between the last frame and the current one
-  draw(now, 0);
+  if (state == Const.clientInstanceStates.WaitingRoom) requestAnimationFrame(clientWaitingLoop);
+  canvasPaint(now, 0);
 }
 
-function runFBInstance() {
+function runClientInstance() {
   if (typeof io == 'undefined') {
-    console.log('Error With Socket.IO');
     return;
   }
 
-  _playerManager = new PlayersController();
-
-  _socket = io.connect(`${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}`, { reconnect: false });
-  _socket.on('connect', () => {
-    _socket.on('disconnect', () => {
-      document.getElementById('gs-error-message').innerHTML = 'Player Left/Disconnected';
-      showHideMenu(enumPanels.Error, true);
+  playersCInstance = new PlayersController();
+  socket = io.connect(`${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}`, { reconnect: false });
+  socket.on('connect', () => {
+    socket.on('disconnect', () => {
+      alert(`Disconnected or player quit`);
+      // document.getElementById('gs-error-message').innerHTML = 'Player Left/Disconnected';
+      // showHideMenu(enumPanels.Error, true);
     });
 
-    draw(0, 0);
+    canvasPaint(0, 0);
     showHideMenu(enumPanels.Login, true);
-    document.getElementById('player-connection').onclick = loadGameRoom;
+
+    /** bind button to load the waiting room */
+    document.getElementById('player-connection').onclick = loadClientWaitingRoom;
   });
 
-  _socket.on('error', () => {
-    document.getElementById('gs-error-message').innerHTML =
-      'Fail to connect the WebSocket to the server.<br/><br/>Please check the WS address.';
-    showHideMenu(enumPanels.Error, true);
+  socket.on('error', () => {
+    // document.getElementById('gs-error-message').innerHTML =
+    //   'Fail to connect the WebSocket to the server.<br/><br/>Please check the WS address.';
+    // showHideMenu(enumPanels.Error, true);
     console.log('Cannot connect the web_socket ');
   });
 }
 
-function loadGameRoom() {
-  const nick = document.getElementById('player-name').value;
-
-  // If nick is empty or if it has the default value,
-  if (nick == '') {
-    alert(true, 'Please choose a name!');
-    return false;
+function loadClientWaitingRoom() {
+  const name = document.getElementById('player-name').value;
+  if (name === '' || name === 'Afeka') {
+    alert('Please choose a name!');
+    return;
   }
-
-  // Unbind button event to prevent "space click"
   document.getElementById('player-connection').onclick = () => false;
 
-  // Bind new socket events
-  _socket.on('player_list', playersList => {
-    const nb = playersList.length;
-    let i;
-
-    // Add this player in the list
-    for (i = 0; i < nb; i++) {
-      _playerManager.addPlayer(playersList[i], _userID);
+  /**
+   * Binding sockets on different actions
+   */
+  socket.on('player_list', list => {
+    for (let i = 0; i < list.length; i++) {
+      playersCInstance.addPlayer(list[i], playerID);
     }
-
-    // Redraw
-    draw(0, 0);
+    canvasPaint(0, 0);
   });
-
-  _socket.on('player_disconnect', player => {
-    _playerManager.deletePlayer(player);
+  socket.on('new_player', player => {
+    playersCInstance.addPlayer(player);
   });
-  _socket.on('new_player', player => {
-    _playerManager.addPlayer(player);
+  socket.on('player_ready_state', playerInfos => {
+    playersCInstance.getPlayerByID(playerInfos.id).updateData(playerInfos);
   });
-  _socket.on('player_ready_state', playerInfos => {
-    _playerManager.getPlayerByID(playerInfos.id).updateFromServer(playerInfos);
-  });
-  _socket.on('update_game_state', gameState => {
+  socket.on('update_game_state', gameState => {
     changeGameState(gameState);
   });
-  _socket.on('game_loop_update', serverDatasUpdated => {
-    _playerManager.refreshPList(serverDatasUpdated.players);
-    _pipeList = serverDatasUpdated.pipes;
-  });
-  _socket.on('ranking', score => {
-    displayRanking(score);
+  socket.on('player_disconnect', player => {
+    playersCInstance.deletePlayer(player);
   });
 
-  _socket.emit('say_hi', nick, (serverState, uuid) => {
-    _userID = uuid;
+  socket.on('ranking', score => {
+    displayRanking(score);
+  });
+  socket.on('update_game', serverDatasUpdated => {
+    playersCInstance.refreshPList(serverDatasUpdated.players);
+    gamePipes = serverDatasUpdated.pipes;
+  });
+
+  socket.emit('say_hi', name, (serverState, uuid) => {
+    playerID = uuid;
     changeGameState(serverState);
 
     if (serverState == Const.clientInstanceStates.OnGame) {
@@ -150,98 +125,31 @@ function loadGameRoom() {
     }
   });
 
-  // Hide login screen
   showHideMenu(enumPanels.Login, false);
   return false;
 }
 
 function displayRanking(data) {
-  // const nodeMedal = document.querySelector('.gs-ranking-medal');
-  // const nodeHS = document.getElementById('gs-highscores-scores');
-  // let i;
-  // let nbHs;
-
-  console.log(data);
-
-  // Remove previous medals just in case
-  // nodeMedal.classList.remove('third');
-  // nodeMedal.classList.remove('second');
-  // nodeMedal.classList.remove('winner');
-
-  // // Display scores
-  // document.getElementById('gs-ranking-score').innerHTML = data.score;
-  document.getElementById('gs-ranking-best').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
-  // document.getElementById('gs-ranking-pos').innerHTML = `${data.rank} / ${data.nbPlayers}`;
-
-  // // Set medal !
-  // if (data.rank == 1) nodeMedal.classList.add('winner');
-  // else if (data.rank == 2) nodeMedal.classList.add('second');
-  // else if (data.rank == 3) nodeMedal.classList.add('third');
-
-  // // Display hish scores
-  // nodeHS.innerHTML = '';
-  // nbHs = data.highscores.length;
-  // for (i = 0; i < nbHs; i++) {
-  //   nodeHS.innerHTML += `<li><span>#${i + 1}</span> ${data.highscores[i].player} <strong>${
-  //     data.highscores[i].score
-  //   }</strong></li>`;
-  // }
-
-  // Show ranking
-  // showHideMenu(enumPanels.Ranking, true);
-
-  // Display hish scores in a middle of the waiting time
-  // window.setTimeout(() => {
-  //   showHideMenu(enumPanels.HighScores, true);
-  // }, 10000 / 2);
-
-  // reset graphics in case to prepare the next game
+  document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
   setTimeout(GUIController.resetGUI(), 3000);
 }
 
 function changeGameState(gameState) {
-  let strLog = 'Server just change state to ';
-  console.log('WHATS');
-
-  _gameState = gameState;
-
-  switch (_gameState) {
+  state = gameState;
+  switch (state) {
     case Const.clientInstanceStates.WaitingRoom:
-      strLog += 'waiting in lobby';
-      _pipeList = null;
-      _isCurrentPlayerReady = false;
-      lobbyLoop();
+      gamePipes = null;
+      isPlayerReady = false;
+      clientWaitingLoop();
       break;
 
     case Const.clientInstanceStates.OnGame:
-      document.getElementById('gs-ranking-best').innerHTML = null;
-      gameLoop();
+      document.getElementById('winner-div').innerHTML = null;
+      clientInGameLoop();
       break;
 
     case Const.clientInstanceStates.End:
-      _pipeList = null;
-      // // Start timer for next game
-      // _ranking_time = 5000 / 1000;
-
-      // // Display the remaining time on the top bar
-      // infoPanel(true, `Next game in <strong>${_ranking_time}s</strong>...`);
-      // _rankingTimer = window.setInterval(() => {
-      //   // Set seconds left
-      //   infoPanel(true, `Next game in <strong>${--_ranking_time}s</strong>...`);
-
-      //   // Stop timer if time is running up
-      //   if (_ranking_time <= 0) {
-      //     // Reset timer and remove top bar
-      //     window.clearInterval(_rankingTimer);
-      //     infoPanel(false);
-
-      //     // Reset pipe list and hide ranking panel
-      //     console.log('Flushing pipes');
-      //     _pipeList = null;
-      //     showHideMenu(enumPanels.Ranking, false);
-      //   }
-      // }, 1000);
-
+      gamePipes = null;
       break;
 
     default:
@@ -250,14 +158,14 @@ function changeGameState(gameState) {
 }
 
 const inputsManager = () => {
-  switch (_gameState) {
+  switch (state) {
     case Const.clientInstanceStates.WaitingRoom:
-      _isCurrentPlayerReady = !_isCurrentPlayerReady;
-      _socket.emit('change_ready_state', _isCurrentPlayerReady);
-      _playerManager.getActivePlayer().updateReadyState(_isCurrentPlayerReady);
+      isPlayerReady = !isPlayerReady;
+      socket.emit('change_ready_state', isPlayerReady);
+      playersCInstance.getActivePlayer().isPlayerReady(isPlayerReady);
       break;
     case Const.clientInstanceStates.OnGame:
-      _socket.emit('player_jump');
+      socket.emit('player_jump');
       break;
     default:
       break;
@@ -276,7 +184,7 @@ const showHideMenu = (panelName, isShow) => {
   }
 };
 GUIController.loadRessources(() => {
-  runFBInstance();
+  runClientInstance();
 });
 
 // function infoPanel(isShow, htmlText, timeout) {}

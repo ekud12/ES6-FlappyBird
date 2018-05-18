@@ -27,7 +27,7 @@ h2 {
   width: 100%;
   margin: 0 0;
   overflow: hidden;
-  background-image: url('../images/bg2.png');
+  background-image: url('../images/bg.jpg');
 }
 
 #main-canvas h1 {
@@ -37,7 +37,7 @@ h2 {
   margin: 90px 0 50px 0;
 }
 
-#gs-info-panel {
+/* #gs-info-panel {
   position: absolute;
   opacity: 1;
   width: 100%;
@@ -57,7 +57,7 @@ h2 {
 }
 #gs-info-panel.showTopBar {
   opacity: 0;
-}
+} */
 
 /* .inGamePanel {
   position: relative;
@@ -74,8 +74,9 @@ h2 {
   background: rgba(0, 0, 0, 0.6);
 }
 #gs-error h2 {
-  color: #e76100;
-  font-size: 35px;
+  color: #ffffff;
+  outline: 1px solid black;
+  font-size: 25px;
   margin-top: 80px;
 }
 
@@ -229,7 +230,7 @@ input[type='button'] {
   background: #00ff73;
 }
 
-#gs-ranking-best {
+#winner-div {
   display: block;
   width: 400px;
   padding: 10px;

@@ -35,7 +35,7 @@ class PlayersManager {
     if (pos < 0) {
       console.error("[ERROR] Can't find player in playerList");
     } else {
-      console.info(`Removing player ${player.getNick()}`);
+      console.info(`Removing player ${player.getPlayerName()}`);
       _playersList.splice(pos, 1);
       console.info(`It remains ${_playersList.length} player(s)`);
     }
@@ -57,7 +57,7 @@ class PlayersManager {
     for (i = 0; i < nbPlayers; i++) {
       // if at least one player doesn't ready, return
       if (_playersList[i].getState() == enums.PlayerState.WaitingInLobby) {
-        console.info(`${_playersList[i].getNick()} is not yet ready, don't start game`);
+        console.info(`${_playersList[i].getPlayerName()} is not yet ready, don't start game`);
         return;
       }
     }
@@ -139,7 +139,7 @@ class PlayersManager {
     let winner;
     for (i = 0; i < nbPlayers; i++) {
       if (_playersList[i].getPlayerRank()) {
-        winner = _playersList[i].getNick();
+        winner = _playersList[i].getPlayerName();
       }
     }
     // Save player score
@@ -165,7 +165,7 @@ class PlayersManager {
     let i;
     for (i = 0; i < _playersList.length; i++) {
       if (_playersList[i].getPlayerRank() === 1) {
-        winner = _playersList[i].getNick();
+        winner = _playersList[i].getPlayerName();
         score = _playersList[i].getPlayerObject().score;
       }
     }

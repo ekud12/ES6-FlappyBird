@@ -30,15 +30,14 @@ class PlayersController {
       playersMap = new Array();
       for (let i = 0; i < players.length; i++) {
         playersMap[players[i].getId()] = i;
-        if (players[i].isCurrentPlayer() == true) 
-        activePlayer = i;
+        if (players[i].isCurrentPlayer() == true) activePlayer = i;
       }
     }
   }
 
   refreshPList(playersData) {
     for (let i = 0; i < playersData.length; i++) {
-      players[playersMap[playersData[i].id]].updateFromServer(playersData[i]);
+      players[playersMap[playersData[i].id]].updateData(playersData[i]);
     }
   }
 

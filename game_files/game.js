@@ -174,6 +174,6 @@ function startGameLoop() {
     }
 
     // Notify players
-    io.sockets.emit('game_loop_update', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList() });
+    io.sockets.emit('update_game', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList() });
   }, 1000 / 60);
 }

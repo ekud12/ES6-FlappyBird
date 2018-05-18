@@ -279,12 +279,12 @@
                 _playerManager.addPlayer(player);
               });
               _socket.on('player_ready_state', function(playerInfos) {
-                _playerManager.getPlayerByID(playerInfos.id).updateFromServer(playerInfos);
+                _playerManager.getPlayerByID(playerInfos.id).updateData(playerInfos);
               });
               _socket.on('update_game_state', function(gameState) {
                 changeGameState(gameState);
               });
-              _socket.on('game_loop_update', function(serverDatasUpdated) {
+              _socket.on('update_game', function(serverDatasUpdated) {
                 _playerManager.refreshPList(serverDatasUpdated.players);
                 _pipeList = serverDatasUpdated.pipes;
               });
@@ -340,7 +340,7 @@
 
               // Display scores
               document.getElementById('gs-ranking-score').innerHTML = score.score;
-              document.getElementById('gs-ranking-best').innerHTML = score.bestScore;
+              document.getElementById('winner-div').innerHTML = score.bestScore;
               document.getElementById('gs-ranking-pos').innerHTML = score.rank + ' / ' + score.nbPlayers;
 
               // Set medal !
@@ -430,7 +430,7 @@
                 case enumState.WaitingRoom:
                   _isCurrentPlayerReady = !_isCurrentPlayerReady;
                   _socket.emit('change_ready_state', _isCurrentPlayerReady);
-                  _playerManager.getActivePlayer().updateReadyState(_isCurrentPlayerReady);
+                  _playerManager.getActivePlayer().isPlayerReady(_isCurrentPlayerReady);
                   break;
                 case enumState.OnGame:
                   _socket.emit('player_jump');
@@ -782,7 +782,7 @@
               player = new _playerEntity2.default(infos, playerID);
               _playerList.push(player);
               _keyMatching[infos.id] = _playerList.length - 1;
-              console.log('[' + player.getNick() + '] just join the game !');
+              console.log('[' + player.getPlayerName() + '] just join the game !');
               console.log(player);
               if (player.isCurrentPlayer() == true) {
                 _currentPlayer = _playerList.length - 1;
@@ -798,7 +798,7 @@
               if (typeof pos == 'undefined') {
                 console.log("Can't find the disconected player in list");
               } else {
-                console.log('Removing ' + _playerList[pos].getNick());
+                console.log('Removing ' + _playerList[pos].getPlayerName());
                 _playerList.splice(pos, 1);
                 _keyMatching = new Array();
                 for (i = 0; i < _playerList.length; i++) {
@@ -814,7 +814,7 @@
               var nbUpdates = playerlistUpdated.length;
               var i = void 0;
               for (i = 0; i < nbUpdates; i++) {
-                _playerList[_keyMatching[playerlistUpdated[i].id]].updateFromServer(playerlistUpdated[i]);
+                _playerList[_keyMatching[playerlistUpdated[i].id]].updateData(playerlistUpdated[i]);
               }
             }
           },

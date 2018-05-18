@@ -63,12 +63,11 @@ GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState
       players[i].draw(ctx, currentTime, _picBirds, gameState);
     }
   }
-  if (gameState == 2) updateScore(playerManager.getActivePlayer().getScore());
+  if (gameState == 2) updateScore(playerManager.getActivePlayer().getPlayerScore());
 };
 
 GUIController.resetGUI = () => {
   document.getElementById('score-container').innerHTML = ``;
-
 };
 
 GUIController.loadRessources = onReadyCallback => {

@@ -58,7 +58,7 @@ class Player {
     this._playerTinyObject.rotation = MAX_ROTATION;
   }
 
-  getNick() {
+  getPlayerName() {
     return this._playerTinyObject.nick;
   }
 

@@ -1,17 +1,16 @@
-
 class ScoringController {
   constructor() {
     this._bestScore = [];
   }
 
   setPlayerHighScore(player) {
-    let nick = player.getNick();
+    let nick = player.getPlayerName();
     if (typeof this._bestScore[nick] != 'undefined') player.setBestScore(this._bestScore[nick]);
     else player.setBestScore(0);
   }
 
   savePlayerScore(player, lastScore) {
-    let nick = player.getNick();
+    let nick = player.getPlayerName();
     const highScore = player.getHighScore();
     if (lastScore > highScore) {
       this._bestScore[nick] = lastScore;

@@ -1,61 +1,51 @@
 import { constant as Const } from '../../global.js';
 
-const SPRITE_BIRD_HEIGHT = 64;
-const SPRITE_BIRD_WIDTH = 64;
-const COMPLETE_ANNIMATION_DURATION = 250;
-const ANIMATION_FRAME_NUMBER = 4;
-
 class Player {
-  constructor(infos, uuid) {
-    this._serverInfos = infos;
-    this._isMe = false;
-    if (uuid && uuid == infos.id) {
-      this._isMe = true;
-      console.log(`Adding player ${infos.nick}`);
+  constructor(data, userId) {
+    this.playerData = data;
+    this.isSelf = false;
+    if (userId && userId == data.id) {
+      this.isSelf = true;
     }
   }
-
-  draw(ctx, time, spriteList, gameState) {
+  draw(cnvsCTX, time, spriteList, gameState) {
     let frameNumber;
     let nickPos;
-    if (this._serverInfos.state == Const.enumPlayerState.Unset) {
+    if (this.playerData.state == Const.enumPlayerState.Unset) {
       return;
-    } else if (this._serverInfos.state == Const.enumPlayerState.WaitingInLobby && gameState == 2) {
+    } else if (this.playerData.state == Const.enumPlayerState.WaitingInLobby && gameState == 2) {
       return;
     } else {
-      ctx.save();
-      if (this._isMe === false) {
-        ctx.globalAlpha = 0.6;
-        ctx.font = '25px Quantico';
-        ctx.fillStyle = '#FFA24A';
-        nickPos =
-          this._serverInfos.posX +
-          Const.BIRD_WIDTH / 2 -
-          ctx.measureText(`${this._serverInfos.nick} (${this._serverInfos.best_score})`).width / 2;
-        ctx.fillText(`${this._serverInfos.nick} (${this._serverInfos.best_score})`, nickPos, this._serverInfos.posY - 20);
+      cnvsCTX.save();
+      if (this.isSelf === false) {
+        cnvsCTX.globalAlpha = 0.3;
+        cnvsCTX.font = '15px Quantico';
+        cnvsCTX.fillStyle = 'green';
+        nickPos = this.playerData.posX + Const.BIRD_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
+        cnvsCTX.fillText(`${this.playerData.nick}`, nickPos, this.playerData.posY - 20);
       }
-      ctx.translate(this._serverInfos.posX + Const.BIRD_WIDTH / 2, this._serverInfos.posY + Const.BIRD_HEIGHT / 2);
-      ctx.rotate(this._serverInfos.rotation * Math.PI / 180);
-      if (this._serverInfos.state == Const.enumPlayerState.WaitingInLobby) {
-        ctx.drawImage(
-          spriteList[this._serverInfos.color],
+      cnvsCTX.translate(this.playerData.posX + Const.BIRD_WIDTH / 2, this.playerData.posY + Const.BIRD_HEIGHT / 2);
+      cnvsCTX.rotate(this.playerData.rotation * Math.PI / 180);
+      if (this.playerData.state == Const.enumPlayerState.WaitingInLobby) {
+        cnvsCTX.drawImage(
+          spriteList[this.playerData.color],
           0,
           0,
-          SPRITE_BIRD_WIDTH,
-          SPRITE_BIRD_HEIGHT,
+          Const.SPRITE_BIRD_WIDTH,
+          Const.SPRITE_BIRD_HEIGHT,
           -(Const.BIRD_WIDTH / 2),
           -(Const.BIRD_HEIGHT / 2),
           Const.BIRD_WIDTH,
           Const.BIRD_HEIGHT
         );
       } else {
-        frameNumber = Math.round(time / COMPLETE_ANNIMATION_DURATION) % ANIMATION_FRAME_NUMBER;
-        ctx.drawImage(
-          spriteList[this._serverInfos.color],
-          frameNumber * SPRITE_BIRD_WIDTH,
+        frameNumber = Math.round(time / Const.COMPLETE_ANNIMATION_DURATION) % Const.ANIMATION_FRAME_NUMBER;
+        cnvsCTX.drawImage(
+          spriteList[this.playerData.color],
+          frameNumber * Const.SPRITE_BIRD_WIDTH,
           0,
-          SPRITE_BIRD_WIDTH,
-          SPRITE_BIRD_HEIGHT,
+          Const.SPRITE_BIRD_WIDTH,
+          Const.SPRITE_BIRD_HEIGHT,
           -(Const.BIRD_WIDTH / 2),
           -(Const.BIRD_HEIGHT / 2),
           Const.BIRD_WIDTH,
@@ -63,31 +53,31 @@ class Player {
         );
       }
     }
-    ctx.restore();
+    cnvsCTX.restore();
   }
 
-  updateFromServer(infos) {
-    this._serverInfos = infos;
+  updateData(data) {
+    this.playerData = data;
   }
 
   isCurrentPlayer() {
-    return this._isMe;
+    return this.isSelf;
   }
 
   getId() {
-    return this._serverInfos.id;
+    return this.playerData.id;
   }
 
-  getNick() {
-    return this._serverInfos.nick;
+  getPlayerName() {
+    return this.playerData.nick;
   }
 
-  getScore() {
-    return this._serverInfos.score;
+  getPlayerScore() {
+    return this.playerData.score;
   }
 
-  updateReadyState(readyState) {
-    this._serverInfos.state = readyState === true ? Const.enumPlayerState.Ready : Const.enumPlayerState.WaitingInLobby;
+  isPlayerReady(readyState) {
+    this.playerData.state = readyState === true ? Const.enumPlayerState.Ready : Const.enumPlayerState.WaitingInLobby;
   }
 }
 
