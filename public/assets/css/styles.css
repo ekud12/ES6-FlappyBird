@@ -17,8 +17,12 @@ h2 {
   width: 100%;
   padding: 0;
   margin: 0;
+  padding-right: 100px;
+  padding-left: 100px;
   font-family: 'Quantico';
   text-align: center;
+  color: white;
+  font-size: 50px;
 }
 
 #main-canvas {
@@ -30,12 +34,12 @@ h2 {
   background-image: url('../images/bg.jpg');
 }
 
-#main-canvas h1 {
+/* #main-canvas h1 {
   font-size: 60px;
   color: white;
   text-shadow: 5px 0px 0px black, 0px 5px 0px black, -5px 0px 0px black, 0px -5px 0px black;
-  margin: 90px 0 50px 0;
-}
+  margin: 50px 0;
+} */
 
 /* #gs-info-panel {
   position: absolute;
@@ -197,7 +201,8 @@ h2 {
   font-family: 'Quantico';
   margin-left: 5%;
   padding-top: 5px;
-  font-size: 10px;
+  padding-right: 200px;
+  font-size: 35px;
   text-decoration: underline;
   color: white;
 }
@@ -232,30 +237,31 @@ input[type='button'] {
 
 #winner-div {
   display: block;
-  width: 400px;
-  padding: 10px;
+  width: 550px;
+  padding: 5px;
   margin: 25px auto;
-  font-size: 35px;
+  font-size: 30px;
   font-family: 'Quantico';
-  color: rgb(0, 0, 0);
+  color: white;
+  border: 6px dotted #3bff93;
   text-align: center;
-  background: #00ff73;
 }
 
 .filler-top {
   display: flex;
   direction: row;
+  justify-content: space-between;
   width: 100%;
-  background-color: #00c410;
+  background-color: #103025;
   height: 70px;
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid #004b31;
 }
 
 .filler-bottom {
   display: flex;
   direction: row;
-  border-top: 3px solid black;
+  border-top: 3px solid #004b31;
   width: 100%;
-  background-color: #00c410;
+  background-color: #103025;
   height: 170px;
 }
