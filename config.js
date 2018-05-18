@@ -29,12 +29,11 @@ export const config = {
     Ended: 3
   },
   PlayerState: {
-    NoState: 1,
-    WaitingForGame: 2,
-    PlayTime: 3,
-    Dead: 4
+    Unset: 1,
+    WaitingInLobby: 2,
+    Playing: 3,
+    Died: 4
   },
-
   SPRITE_BIRD_HEIGHT: 64,
   SPRITE_BIRD_WIDTH: 64,
   COMPLETE_ANNIMATION_DURATION: 250,
