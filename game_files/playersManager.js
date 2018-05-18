@@ -1,12 +1,10 @@
 import { EventEmitter } from 'events';
 import util from 'util';
-import Scores from './ScoringController';
 import * as enums from './enums';
 import Player from './player';
 
 const _playersList = new Array();
 let _posOnGrid = 0;
-const _scores = new Scores();
 
 class PlayersManager {
   constructor() {
@@ -142,22 +140,12 @@ class PlayersManager {
         winner = _playersList[i].getPlayerName();
       }
     }
-    // Save player score
-    // for (i = 0; i < nbPlayers; i++) {
-    //   _scores.savePlayerScore(_playersList[i], _playersList[i].getScore());
-    //   console.log(_playersList[i]._rank);
-    // }
-
-    // Retreive highscores and then send scores to players
-    // _scores.getHighScores(highScores => {
-    //   const nbPlayers = _playersList.length;
-    //   let i;
-
-    // Send score to the players
+    /**
+     * Send Winner to all
+     */
     for (i = 0; i < nbPlayers; i++) {
       _playersList[i].sendWinner(winner);
     }
-    // });
   }
 
   sendWinner() {
@@ -177,9 +165,6 @@ class PlayersManager {
   prepareNewPlayer(player, nickname) {
     // Set his nickname
     player.setNick(nickname);
-
-    // retreive his highscore
-    _scores.setPlayerHighScore(player);
 
     // Put him on the game grid
     player.preparePlayer(_posOnGrid++);
