@@ -51,7 +51,7 @@ app.get('/config.js', (req, res) => {
  * Start Server Listen on port
  */
 http.createServer(app).listen(app.get('port'), () => {
-  console.log(`Afeka Flappy Bird is ON! ${app.get('port')}`);
+  console.log(`Afeka Flappy Toucan is ON! ${app.get('port')}`);
 });
 
 /**
