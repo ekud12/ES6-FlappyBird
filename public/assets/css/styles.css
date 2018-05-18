@@ -10,8 +10,7 @@ li {
   padding: 0;
 }
 
-h1,
-h2 {
+h1 {
   width: 100%;
   padding: 0;
   margin: 0;
@@ -43,7 +42,7 @@ h2 {
   color: white;
 }
 
-input[type='text'] {
+input {
   display: block;
   width: 320px;
   border: 12px dotted #3bff93;
@@ -73,7 +72,7 @@ input[type='text'] {
 
 #winner-div {
   display: block;
-  width: 550px;
+  width: 750px;
   padding: 5px;
   margin: 25px auto;
   font-size: 30px;

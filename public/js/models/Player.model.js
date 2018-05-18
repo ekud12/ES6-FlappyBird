@@ -11,9 +11,9 @@ class Player {
   draw(cnvsCTX, time, spriteList, gameState) {
     let frameNumber;
     let nickPos;
-    if (this.playerData.state == Config.enumPlayerState.Unset) {
+    if (this.playerData.state == Config.PlayerState.Unset) {
       return;
-    } else if (this.playerData.state == Config.enumPlayerState.WaitingInLobby && gameState == 2) {
+    } else if (this.playerData.state == Config.PlayerState.WaitingInLobby && gameState == 2) {
       return;
     } else {
       cnvsCTX.save();
@@ -26,7 +26,7 @@ class Player {
       }
       cnvsCTX.translate(this.playerData.posX + Config.BIRD_WIDTH / 2, this.playerData.posY + Config.BIRD_HEIGHT / 2);
       cnvsCTX.rotate(this.playerData.rotation * Math.PI / 180);
-      if (this.playerData.state == Config.enumPlayerState.WaitingInLobby) {
+      if (this.playerData.state == Config.PlayerState.WaitingInLobby) {
         cnvsCTX.drawImage(
           spriteList[this.playerData.color],
           0,
@@ -77,7 +77,7 @@ class Player {
   }
 
   isPlayerReady(readyState) {
-    this.playerData.state = readyState === true ? Config.enumPlayerState.Ready : Config.enumPlayerState.WaitingInLobby;
+    this.playerData.state = readyState === true ? Config.PlayerState.Ready : Config.PlayerState.WaitingInLobby;
   }
 }
 

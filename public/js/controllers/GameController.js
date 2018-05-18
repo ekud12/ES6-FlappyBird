@@ -1,8 +1,9 @@
 import { config as Config } from '../../../config.js';
 import PlayersController from '../controllers/PlayersController.js';
-import GUIController from '../controllers/UIController.js';
+import GUIController from '../controllers/GUIController.js';
 
-let state = Config.clientInstanceStates.Login;
+let state = Config.clientInstanceStates.New;
+let GUIControllerInstance = new GUIController();
 let playersCInstance;
 let playerID = null;
 let isPlayerReady = false;
@@ -19,7 +20,7 @@ requestAnimationFrame =
  * On resources Loaded Callback Done
  * run the client's game instance
  */
-GUIController.loadRessources(() => {
+GUIControllerInstance.loadAssets(() => {
   runClientInstance();
 });
 
@@ -29,10 +30,11 @@ function runClientInstance() {
   }
 
   playersCInstance = new PlayersController();
+
   socket = io.connect(`${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}`, { reconnect: false });
   socket.on('connect', () => {
     socket.on('disconnect', () => {
-      console.log(`Disconnected or player quit. Refresh Page`);
+      console.log(`Disconnected or player quit. Refresh Page.`);
     });
     canvasPaint(0, 0);
     document.getElementById('player-connection').onclick = initClientSocketBindings;
@@ -44,36 +46,34 @@ function runClientInstance() {
 }
 
 function clientWaitingLoop() {
-  const now = new Date().getTime();
-  if (state == Config.clientInstanceStates.WaitingRoom) requestAnimationFrame(clientWaitingLoop);
-  canvasPaint(now, 0);
+  if (state == Config.clientInstanceStates.Waiting) requestAnimationFrame(clientWaitingLoop);
+  canvasPaint(new Date().getTime(), 0);
 }
 
 function clientInGameLoop() {
-  const now = new Date().getTime();
   let ellapsedTime = 0;
-  if (state == Config.clientInstanceStates.OnGame) requestAnimationFrame(clientInGameLoop);
+  const currentTime = new Date().getTime();
+  if (state == Config.clientInstanceStates.Playing) requestAnimationFrame(clientInGameLoop);
   if (updateIntervalTime) {
-    ellapsedTime = now - updateIntervalTime;
+    ellapsedTime = currentTime - updateIntervalTime;
   }
-  updateIntervalTime = now;
-  canvasPaint(now, ellapsedTime);
+  updateIntervalTime = currentTime;
+  canvasPaint(currentTime, ellapsedTime);
 }
 
 function clientGetUpdatedState(gameState) {
   state = gameState;
   switch (state) {
-    case Config.clientInstanceStates.WaitingRoom:
+    case Config.clientInstanceStates.Waiting:
       gamePipes = null;
       isPlayerReady = false;
       clientWaitingLoop();
       break;
-    case Config.clientInstanceStates.OnGame:
+    case Config.clientInstanceStates.Playing:
       document.getElementById('winner-div').innerHTML = null;
       clientInGameLoop();
       break;
-
-    case Config.clientInstanceStates.End:
+    case Config.clientInstanceStates.Ended:
       gamePipes = null;
       break;
     default:
@@ -81,7 +81,7 @@ function clientGetUpdatedState(gameState) {
   }
 }
 function canvasPaint(nowTime, totalTime) {
-  GUIController.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
+  GUIControllerInstance.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
 }
 
 function initClientSocketBindings() {
@@ -125,7 +125,7 @@ function initClientSocketBindings() {
     playerID = uuid;
     clientGetUpdatedState(serverState);
 
-    if (serverState == Config.clientInstanceStates.OnGame) {
+    if (serverState == Config.clientInstanceStates.Playing) {
       alert(`Game in Progress. Please wait...`);
     }
   });
@@ -133,12 +133,12 @@ function initClientSocketBindings() {
   document.addEventListener('keydown', event => {
     if (event.keyCode == 32) {
       switch (state) {
-        case Config.clientInstanceStates.WaitingRoom:
+        case Config.clientInstanceStates.Waiting:
           isPlayerReady = !isPlayerReady;
           socket.emit('update_ready_state', isPlayerReady);
           playersCInstance.getActivePlayer().isPlayerReady(isPlayerReady);
           break;
-        case Config.clientInstanceStates.OnGame:
+        case Config.clientInstanceStates.Playing:
           socket.emit('play_action');
           break;
         default:
@@ -152,5 +152,5 @@ function initClientSocketBindings() {
 
 function displayWinner(data) {
   document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
-  setTimeout(GUIController.resetGUI(), 3000);
+  setTimeout(GUIControllerInstance.resetGUI(), 3000);
 }

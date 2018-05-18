@@ -4,12 +4,12 @@ const enumServerState = {
   Ranking: 3
 };
 
-const enumPlayerState = {
+const PlayerState = {
   OnLoginScreen: 1,
   WaitingInLobby: 2,
   Playing: 3,
   Died: 4
 };
 
-export { enumPlayerState as PlayerState };
+export { PlayerState };
 export { enumServerState as ServerState };

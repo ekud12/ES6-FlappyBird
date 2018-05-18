@@ -4,7 +4,7 @@ let players;
 let playersMap;
 let activePlayer;
 
-class PlayersController {
+export default class PlayersController {
   constructor() {
     players = new Array();
     playersMap = new Array();
@@ -56,5 +56,3 @@ class PlayersController {
     return players[activePlayer];
   }
 }
-
-export default PlayersController;
