@@ -1,10 +1,10 @@
-import { constant as Const } from '../global';
+import { config as Config } from '../config';
 
 function checkBirdCollision(pipe, birdInstance) {
   const bird = birdInstance.getPlayerObject();
 
   // If the bird is inside a pipe on the X axis, check if he touch it
-  if (bird.posX + Const.BIRD_WIDTH > pipe.posX && bird.posX < pipe.posX + Const.PIPE_WIDTH) {
+  if (bird.posX + Config.BIRD_WIDTH > pipe.posX && bird.posX < pipe.posX + Config.PIPE_WIDTH) {
     // Notify the bird he is inside the pipe
     birdInstance.updateScore(pipe.id);
 
@@ -12,13 +12,13 @@ function checkBirdCollision(pipe, birdInstance) {
     if (bird.posY < pipe.posY) return true;
 
     // Check if the bird touch the ground pipe
-    if (bird.posY + Const.BIRD_HEIGHT > pipe.posY + Const.HEIGHT_BETWEEN_PIPES) {
+    if (bird.posY + Config.BIRD_HEIGHT > pipe.posY + Config.HEIGHT_BETWEEN_PIPES) {
       return true;
     }
   }
 
   // If the bird hit the ground
-  if (bird.posY + Const.BIRD_HEIGHT > Const.FLOOR_POS_Y) {
+  if (bird.posY + Config.BIRD_HEIGHT > Config.FLOOR_POS_Y) {
     return true;
   }
 

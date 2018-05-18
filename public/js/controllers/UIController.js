@@ -1,10 +1,4 @@
-import { constant as Const } from '../../global.js';
-
-const SPRITE_PIPE_HEIGHT = 768;
-const SPRITE_PIPE_WIDTH = 148;
-const SCORE_POS_Y = 200;
-const SCORE_SHADOW_OFFSET = 5;
-const TOT_RES = 2;
+import { config as Config } from '../../config.js';
 
 const GUIController = {};
 
@@ -15,30 +9,30 @@ let _picPipe;
 const _picBirds = new Array();
 
 function getNbRessourcesToLoad() {
-  return Const.SPRITES.length;
+  return Config.SPRITES.length;
 }
 function drawPipe(pipe) {
   ctx.drawImage(
     _picPipe,
     0,
     0,
-    SPRITE_PIPE_WIDTH,
-    SPRITE_PIPE_HEIGHT,
+    Config.SPRITE_PIPE_WIDTH,
+    Config.SPRITE_PIPE_HEIGHT,
     pipe.posX,
-    pipe.posY - SPRITE_PIPE_HEIGHT,
-    Const.PIPE_WIDTH,
-    SPRITE_PIPE_HEIGHT
+    pipe.posY - Config.SPRITE_PIPE_HEIGHT,
+    Config.PIPE_WIDTH,
+    Config.SPRITE_PIPE_HEIGHT
   );
   ctx.drawImage(
     _picPipe,
     0,
     0,
-    SPRITE_PIPE_WIDTH,
-    SPRITE_PIPE_HEIGHT,
+    Config.SPRITE_PIPE_WIDTH,
+    Config.SPRITE_PIPE_HEIGHT,
     pipe.posX,
-    pipe.posY + Const.HEIGHT_BETWEEN_PIPES,
-    Const.PIPE_WIDTH,
-    SPRITE_PIPE_HEIGHT
+    pipe.posY + Config.HEIGHT_BETWEEN_PIPES,
+    Config.PIPE_WIDTH,
+    Config.SPRITE_PIPE_HEIGHT
   );
 }
 const updateScore = score => {
@@ -51,7 +45,7 @@ GUIController.draw = (currentTime, ellapsedTime, playerManager, pipes, gameState
   if (!_isReadyToDraw) {
     return;
   }
-  ctx.clearRect(0, 0, Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT);
+  ctx.clearRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
   if (pipes) {
     for (i = 0; i < pipes.length; i++) {
@@ -82,9 +76,9 @@ GUIController.loadRessources = onReadyCallback => {
     onRessourceLoaded(onReadyCallback);
   };
 
-  for (i = 0; i < Const.SPRITES.length; i++) {
+  for (i = 0; i < Config.SPRITES.length; i++) {
     bird = new Image();
-    bird.src = Const.SPRITES[i];
+    bird.src = Config.SPRITES[i];
     bird.onload = () => {
       onRessourceLoaded(onReadyCallback);
     };

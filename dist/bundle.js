@@ -196,7 +196,7 @@
               if (typeof io == 'undefined') {
                 document.getElementById('gs-error-message').innerHTML =
                   'Cannot retreive socket.io file at the address ' +
-                  Const.SOCKET_ADDR +
+                  Config.SOCKET_ADDR +
                   '<br/><br/>Please provide a valid address.';
                 showHideMenu(enumPanels.Error, true);
                 console.log('Cannot reach socket.io file !');
@@ -206,7 +206,7 @@
               _playerManager = new PlayersManager();
 
               document.getElementById('gs-loader-text').innerHTML = 'Connecting to the server...';
-              _socket = io.connect(Const.SOCKET_ADDR + ':' + Const.SOCKET_PORT, { reconnect: false });
+              _socket = io.connect(Config.SOCKET_ADDR + ':' + Config.SOCKET_PORT, { reconnect: false });
               _socket.on('connect', function() {
                 console.log('Connection established :)');
 
@@ -284,7 +284,7 @@
               _socket.on('state_updated', function(gameState) {
                 updateClientState(gameState);
               });
-              _socket.on('update_game', function(serverDatasUpdated) {
+              _socket.on('update_game_digital_assets', function(serverDatasUpdated) {
                 _playerManager.refreshPList(serverDatasUpdated.players);
                 _pipeList = serverDatasUpdated.pipes;
               });
@@ -368,7 +368,7 @@
               // Display hish scores in a middle of the waiting time
               window.setTimeout(function() {
                 showHideMenu(enumPanels.HighScores, true);
-              }, Const.TIME_BETWEEN_GAMES / 2);
+              }, Config.TIME_BETWEEN_GAMES / 2);
 
               // reset graphics in case to prepare the next game
               GUIController.resetForNewGame();
@@ -395,7 +395,7 @@
                 case enumState.Ranking:
                   strLog += 'display ranking';
                   // Start timer for next game
-                  _ranking_time = Const.TIME_BETWEEN_GAMES / 1000;
+                  _ranking_time = Config.TIME_BETWEEN_GAMES / 1000;
 
                   // Display the remaining time on the top bar
                   infoPanel(true, 'Next game in <strong>' + _ranking_time + 's</strong>...');
@@ -858,8 +858,8 @@
       Object.defineProperty(exports, '__esModule', {
         value: true
       });
-      // Define all constants usefull by the server and the client
-      var constant = (exports.constant = {
+      // Define all configs usefull by the server and the client
+      var config = (exports.config = {
         SERVER_PORT: 4242,
         SOCKET_PORT: 1337,
         SOCKET_ADDR: 'http://localhost',
@@ -873,7 +873,7 @@
         BIRD_WIDTH: 42,
         BIRD_HEIGHT: 30,
 
-        // Pipe constants
+        // Pipe configs
         PIPE_WIDTH: 100,
         DISTANCE_BETWEEN_PIPES: 380,
         MIN_PIPE_HEIGHT: 60,
@@ -883,11 +883,11 @@
 
       // // To be use by the server part, we have to provide the object with exports
       // if (typeof exports != 'undefined') {
-      //   exports.constant = constant;
+      //   exports.config = config;
       // }
       // // Else provide the const object to require.js with define()
       // else {
-      //   define(constant);
+      //   define(config);
       // }
 
       /***/

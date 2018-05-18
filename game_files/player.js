@@ -1,4 +1,4 @@
-import { constant as Const } from '../global';
+import { config as Config } from '../config';
 import * as enums from './enums';
 
 // Defines
@@ -47,7 +47,7 @@ class Player {
     }
     // If he's died, update it's X position
     else if (this._playerTinyObject.state == enums.PlayerState.Died) {
-      this._playerTinyObject.posX -= Math.floor(timeLapse * Const.LEVEL_SPEED);
+      this._playerTinyObject.posX -= Math.floor(timeLapse * Config.LEVEL_SPEED);
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
     }

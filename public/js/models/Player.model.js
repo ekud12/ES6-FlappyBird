@@ -1,4 +1,4 @@
-import { constant as Const } from '../../global.js';
+import { config as Config } from '../../config.js';
 
 class Player {
   constructor(data, userId) {
@@ -11,45 +11,45 @@ class Player {
   draw(cnvsCTX, time, spriteList, gameState) {
     let frameNumber;
     let nickPos;
-    if (this.playerData.state == Const.enumPlayerState.Unset) {
+    if (this.playerData.state == Config.enumPlayerState.Unset) {
       return;
-    } else if (this.playerData.state == Const.enumPlayerState.WaitingInLobby && gameState == 2) {
+    } else if (this.playerData.state == Config.enumPlayerState.WaitingInLobby && gameState == 2) {
       return;
     } else {
       cnvsCTX.save();
       if (this.isSelf === false) {
-        cnvsCTX.globalAlpha = 0.3;
+        cnvsCTX.configAlpha = 0.3;
         cnvsCTX.font = '15px Quantico';
         cnvsCTX.fillStyle = 'green';
-        nickPos = this.playerData.posX + Const.BIRD_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
+        nickPos = this.playerData.posX + Config.BIRD_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
         cnvsCTX.fillText(`${this.playerData.nick}`, nickPos, this.playerData.posY - 20);
       }
-      cnvsCTX.translate(this.playerData.posX + Const.BIRD_WIDTH / 2, this.playerData.posY + Const.BIRD_HEIGHT / 2);
+      cnvsCTX.translate(this.playerData.posX + Config.BIRD_WIDTH / 2, this.playerData.posY + Config.BIRD_HEIGHT / 2);
       cnvsCTX.rotate(this.playerData.rotation * Math.PI / 180);
-      if (this.playerData.state == Const.enumPlayerState.WaitingInLobby) {
+      if (this.playerData.state == Config.enumPlayerState.WaitingInLobby) {
         cnvsCTX.drawImage(
           spriteList[this.playerData.color],
           0,
           0,
-          Const.SPRITE_BIRD_WIDTH,
-          Const.SPRITE_BIRD_HEIGHT,
-          -(Const.BIRD_WIDTH / 2),
-          -(Const.BIRD_HEIGHT / 2),
-          Const.BIRD_WIDTH,
-          Const.BIRD_HEIGHT
+          Config.SPRITE_BIRD_WIDTH,
+          Config.SPRITE_BIRD_HEIGHT,
+          -(Config.BIRD_WIDTH / 2),
+          -(Config.BIRD_HEIGHT / 2),
+          Config.BIRD_WIDTH,
+          Config.BIRD_HEIGHT
         );
       } else {
-        frameNumber = Math.round(time / Const.COMPLETE_ANNIMATION_DURATION) % Const.ANIMATION_FRAME_NUMBER;
+        frameNumber = Math.round(time / Config.COMPLETE_ANNIMATION_DURATION) % Config.ANIMATION_FRAME_NUMBER;
         cnvsCTX.drawImage(
           spriteList[this.playerData.color],
-          frameNumber * Const.SPRITE_BIRD_WIDTH,
+          frameNumber * Config.SPRITE_BIRD_WIDTH,
           0,
-          Const.SPRITE_BIRD_WIDTH,
-          Const.SPRITE_BIRD_HEIGHT,
-          -(Const.BIRD_WIDTH / 2),
-          -(Const.BIRD_HEIGHT / 2),
-          Const.BIRD_WIDTH,
-          Const.BIRD_HEIGHT
+          Config.SPRITE_BIRD_WIDTH,
+          Config.SPRITE_BIRD_HEIGHT,
+          -(Config.BIRD_WIDTH / 2),
+          -(Config.BIRD_HEIGHT / 2),
+          Config.BIRD_WIDTH,
+          Config.BIRD_HEIGHT
         );
       }
     }
@@ -77,7 +77,7 @@ class Player {
   }
 
   isPlayerReady(readyState) {
-    this.playerData.state = readyState === true ? Const.enumPlayerState.Ready : Const.enumPlayerState.WaitingInLobby;
+    this.playerData.state = readyState === true ? Config.enumPlayerState.Ready : Config.enumPlayerState.WaitingInLobby;
   }
 }
 

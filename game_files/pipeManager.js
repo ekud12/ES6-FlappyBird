@@ -1,10 +1,10 @@
 import { EventEmitter } from 'events';
 import util from 'util';
-import { constant as Const } from '../global';
+import { config as Config } from '../config';
 import Pipe from './pipe';
 
-const FIRST_PIPE_POSX = Const.SCREEN_WIDTH + 60;
-const SPAWN_PIPE_ALERT = Const.SCREEN_WIDTH;
+const FIRST_PIPE_POSX = Config.SCREEN_WIDTH + 60;
+const SPAWN_PIPE_ALERT = Config.SCREEN_WIDTH;
 const MAX_PIPE_CHECK_COLLISION = 3;
 
 let _pipeList = new Array();

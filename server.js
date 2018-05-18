@@ -1,5 +1,5 @@
-/** Author: Liel Kaysari */
 /**
+ * Author: Liel Kaysari
  * Import All Modules
  */
 import bodyParser from 'body-parser';
@@ -13,17 +13,18 @@ import favicon from 'serve-favicon';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import * as game from './game_files/game';
-import { constant as Const } from './global';
+import { config as Config } from './config';
 import webpackConfig from './webpack.config.babel.js';
 
 const app = express();
-app.use(webpackMiddleware(webpack(webpackConfig)));
 
-app.set('port', Const.SERVER_PORT);
+/**
+ * Set Middleware
+ */
+app.use(webpackMiddleware(webpack(webpackConfig)));
+app.set('port', Config.SERVER_PORT);
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-
-// all environments
 app.use(logger('dev'));
 app.use(methodOverride());
 app.use(bodyParser.json());
@@ -36,14 +37,24 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', (req, res) => {
-  res.render('../public/flappybird', { ws: `${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}` });
-});
-app.get('/global.js', (req, res) => {
-  res.sendfile('global.js');
+  res.render('../public/flappybird', { ws: `${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}` });
 });
 
+/**
+ * Load Config File
+ */
+app.get('/config.js', (req, res) => {
+  res.sendfile('config.js');
+});
+
+/**
+ * Start Server Listen on port
+ */
 http.createServer(app).listen(app.get('port'), () => {
   console.log(`Afeka Flappy Bird is ON! ${app.get('port')}`);
 });
 
+/**
+ * Run Game on Server
+ */
 game.startServer();

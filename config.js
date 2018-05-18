@@ -1,4 +1,4 @@
-export const constant = {
+export const config = {
   SERVER_PORT: 4242,
   SOCKET_PORT: 1337,
   SOCKET_ADDR: 'http://localhost',
@@ -37,5 +37,10 @@ export const constant = {
   SPRITE_BIRD_HEIGHT: 64,
   SPRITE_BIRD_WIDTH: 64,
   COMPLETE_ANNIMATION_DURATION: 250,
-  ANIMATION_FRAME_NUMBER: 4
+  ANIMATION_FRAME_NUMBER: 4,
+  SPRITE_PIPE_HEIGHT: 768,
+  SPRITE_PIPE_WIDTH: 148,
+  SCORE_POS_Y: 200,
+  SCORE_SHADOW_OFFSET: 5,
+  TOT_RES: 2
 };

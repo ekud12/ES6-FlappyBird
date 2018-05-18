@@ -1,9 +1,9 @@
-import { constant as Const } from '../global';
+import { config as Config } from '../config';
 import * as CollisionEngine from './collisionEngine';
 import * as enums from './enums';
 import PipeManager from './pipeManager';
 import PlayersManager from './playersManager';
-let io = require('socket.io').listen(Const.SOCKET_PORT);
+let io = require('socket.io').listen(Config.SOCKET_PORT);
 let _playersManager;
 let _pipeManager;
 
@@ -49,7 +49,7 @@ export function startServer() {
     });
   });
 
-  console.log(`Game started and waiting for players on port ${Const.SOCKET_PORT}`);
+  console.log(`Game started and waiting for players on port ${Config.SOCKET_PORT}`);
 }
 
 function playerLog(socket, nick) {
@@ -174,6 +174,9 @@ function startGameLoop() {
     }
 
     // Notify players
-    io.sockets.emit('update_game', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList() });
+    io.sockets.emit('update_game_digital_assets', {
+      players: _playersManager.getOnGamePlayerList(),
+      pipes: _pipeManager.getPipeList()
+    });
   }, 1000 / 60);
 }

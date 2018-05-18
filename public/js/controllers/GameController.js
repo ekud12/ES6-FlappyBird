@@ -1,15 +1,8 @@
-import { constant as Const } from '../../../global.js';
+import { config as Config } from '../../../config.js';
 import PlayersController from '../controllers/PlayersController.js';
 import GUIController from '../controllers/UIController.js';
 
-// const enumPanels = {
-//   Login: 'login-div',
-//   Ranking: 'gs-we_have_a_winner',
-//   HighScores: 'gs-highscores',
-//   Error: 'gs-error'
-// };
-
-let state = Const.clientInstanceStates.Login;
+let state = Config.clientInstanceStates.Login;
 let playersCInstance;
 let playerID = null;
 let isPlayerReady = false;
@@ -22,20 +15,44 @@ requestAnimationFrame =
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
 
-function canvasPaint(nowTime, totalTime) {
-  GUIController.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
+/**
+ * On resources Loaded Callback Done
+ * run the client's game instance
+ */
+GUIController.loadRessources(() => {
+  runClientInstance();
+});
+
+function runClientInstance() {
+  if (typeof io == 'undefined') {
+    return;
+  }
+
+  playersCInstance = new PlayersController();
+  socket = io.connect(`${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}`, { reconnect: false });
+  socket.on('connect', () => {
+    socket.on('disconnect', () => {
+      console.log(`Disconnected or player quit. Refresh Page`);
+    });
+    canvasPaint(0, 0);
+    document.getElementById('player-connection').onclick = initClientSocketBindings;
+  });
+
+  socket.on('error', () => {
+    console.log(`Cannot connect the web_socket`);
+  });
 }
 
 function clientWaitingLoop() {
   const now = new Date().getTime();
-  if (state == Const.clientInstanceStates.WaitingRoom) requestAnimationFrame(clientWaitingLoop);
+  if (state == Config.clientInstanceStates.WaitingRoom) requestAnimationFrame(clientWaitingLoop);
   canvasPaint(now, 0);
 }
 
 function clientInGameLoop() {
   const now = new Date().getTime();
   let ellapsedTime = 0;
-  if (state == Const.clientInstanceStates.OnGame) requestAnimationFrame(clientInGameLoop);
+  if (state == Config.clientInstanceStates.OnGame) requestAnimationFrame(clientInGameLoop);
   if (updateIntervalTime) {
     ellapsedTime = now - updateIntervalTime;
   }
@@ -46,55 +63,29 @@ function clientInGameLoop() {
 function clientGetUpdatedState(gameState) {
   state = gameState;
   switch (state) {
-    case Const.clientInstanceStates.WaitingRoom:
+    case Config.clientInstanceStates.WaitingRoom:
       gamePipes = null;
       isPlayerReady = false;
       clientWaitingLoop();
       break;
-    case Const.clientInstanceStates.OnGame:
+    case Config.clientInstanceStates.OnGame:
       document.getElementById('winner-div').innerHTML = null;
       clientInGameLoop();
       break;
 
-    case Const.clientInstanceStates.End:
+    case Config.clientInstanceStates.End:
       gamePipes = null;
       break;
     default:
       break;
   }
 }
-
-function runClientInstance() {
-  if (typeof io == 'undefined') {
-    return;
-  }
-
-  playersCInstance = new PlayersController();
-  socket = io.connect(`${Const.SOCKET_ADDR}:${Const.SOCKET_PORT}`, { reconnect: false });
-  socket.on('connect', () => {
-    socket.on('disconnect', () => {
-      console.log(`Disconnected or player quit. Refresh Page`);
-      // document.getElementById('gs-error-message').innerHTML = 'Player Left/Disconnected';
-      // showHideMenu(enumPanels.Error, true);
-    });
-
-    canvasPaint(0, 0);
-    // showHideMenu(enumPanels.Login, true);
-
-    /** bind button to load the waiting room */
-    document.getElementById('player-connection').onclick = loadClientWaitingRoom;
-  });
-
-  socket.on('error', () => {
-    // document.getElementById('gs-error-message').innerHTML =
-    //   'Fail to connect the WebSocket to the server.<br/><br/>Please check the WS address.';
-    // showHideMenu(enumPanels.Error, true);
-    console.log('Cannot connect the web_socket ');
-  });
+function canvasPaint(nowTime, totalTime) {
+  GUIController.draw(nowTime, totalTime, playersCInstance, gamePipes, state);
 }
 
-function loadClientWaitingRoom() {
-  const name = document.getElementById('player-name').value;
+function initClientSocketBindings() {
+  const name = document.getElementById(`player-name`).value;
   if (name === '' || name === 'Afeka') {
     alert('Please choose a name!');
     return;
@@ -122,20 +113,19 @@ function loadClientWaitingRoom() {
   socket.on('player_disconnect', player => {
     playersCInstance.deletePlayer(player);
   });
-
   socket.on('we_have_a_winner', score => {
     displayWinner(score);
   });
-  socket.on('update_game', serverDatasUpdated => {
-    playersCInstance.refreshPList(serverDatasUpdated.players);
-    gamePipes = serverDatasUpdated.pipes;
+  socket.on('update_game_digital_assets', newServerData => {
+    playersCInstance.refreshPList(newServerData.players);
+    gamePipes = newServerData.pipes;
   });
 
   socket.emit('say_hi', name, (serverState, uuid) => {
     playerID = uuid;
     clientGetUpdatedState(serverState);
 
-    if (serverState == Const.clientInstanceStates.OnGame) {
+    if (serverState == Config.clientInstanceStates.OnGame) {
       alert(`Game in Progress. Please wait...`);
     }
   });
@@ -143,12 +133,12 @@ function loadClientWaitingRoom() {
   document.addEventListener('keydown', event => {
     if (event.keyCode == 32) {
       switch (state) {
-        case Const.clientInstanceStates.WaitingRoom:
+        case Config.clientInstanceStates.WaitingRoom:
           isPlayerReady = !isPlayerReady;
           socket.emit('update_ready_state', isPlayerReady);
           playersCInstance.getActivePlayer().isPlayerReady(isPlayerReady);
           break;
-        case Const.clientInstanceStates.OnGame:
+        case Config.clientInstanceStates.OnGame:
           socket.emit('play_action');
           break;
         default:
@@ -157,30 +147,10 @@ function loadClientWaitingRoom() {
     }
   });
 
-  // showHideMenu(enumPanels.Login, false);
   return false;
 }
-
-// const inputsManager = () => {};
 
 function displayWinner(data) {
   document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner} with a high score of: ${data.score}`;
   setTimeout(GUIController.resetGUI(), 3000);
 }
-
-// const showHideMenu = (panelName, isShow) => {
-//   const panel = document.getElementById(panelName);
-//   const currentOverlayPanel = document.querySelector('.overlay');
-
-//   if (isShow) {
-//     if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
-//     panel.classList.add('overlay');
-//   } else {
-//     if (currentOverlayPanel) currentOverlayPanel.classList.remove('overlay');
-//   }
-// };
-GUIController.loadRessources(() => {
-  runClientInstance();
-});
-
-// function infoPanel(isShow, htmlText, timeout) {}
