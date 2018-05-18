@@ -56,7 +56,7 @@ class PlayersManager {
     // PlayersManager check if players are ready
     for (i = 0; i < nbPlayers; i++) {
       // if at least one player doesn't ready, return
-      if (_playersList[i].getState() == enums.PlayerState.WaitingInLobby) {
+      if (_playersList[i].getState() == enums.PlayerState.WaitingForGameStart) {
         console.info(`${_playersList[i].getPlayerName()} is not yet ready, don't start game`);
         return;
       }
@@ -86,7 +86,7 @@ class PlayersManager {
     let i;
 
     for (i = 0; i < nbPlayers; i++) {
-      if (_playersList[i].getState() == enums.PlayerState.Playing || _playersList[i].getState() == enums.PlayerState.Died)
+      if (_playersList[i].getState() == enums.PlayerState.InProgress || _playersList[i].getState() == enums.PlayerState.Dead)
         players.push(_playersList[i].getPlayerObject());
     }
 
@@ -111,7 +111,7 @@ class PlayersManager {
     let i;
 
     for (i = 0; i < nbPlayers; i++) {
-      if (_playersList[i].getState() == enums.PlayerState.Playing) return true;
+      if (_playersList[i].getState() == enums.PlayerState.InProgress) return true;
     }
 
     return false;

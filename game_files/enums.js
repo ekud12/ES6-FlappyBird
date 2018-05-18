@@ -6,9 +6,9 @@ const enumServerState = {
 
 const PlayerState = {
   OnLoginScreen: 1,
-  WaitingInLobby: 2,
-  Playing: 3,
-  Died: 4
+  WaitingForGameStart: 2,
+  InProgress: 3,
+  Dead: 4
 };
 
 export { PlayerState };

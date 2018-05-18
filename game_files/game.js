@@ -165,7 +165,7 @@ function startGameLoop() {
     if (
       CollisionEngine.checkCollision(
         _pipeManager.getPotentialPipeHit(),
-        _playersManager.getPlayerList(enums.PlayerState.Playing)
+        _playersManager.getPlayerList(enums.PlayerState.InProgress)
       ) == true
     ) {
       if (_playersManager.arePlayersStillAlive() == false) {

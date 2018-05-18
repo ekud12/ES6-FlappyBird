@@ -36,7 +36,7 @@ class Player {
     // console.info('Update player ' + this._playerTinyObject.nick);
 
     // If player is still alive, update its Y position
-    if (this._playerTinyObject.state == enums.PlayerState.Playing) {
+    if (this._playerTinyObject.state == enums.PlayerState.InProgress) {
       // calc now Y pos
       this._speedY += GRAVITY_SPEED;
       this._playerTinyObject.posY += Math.round(timeLapse * this._speedY);
@@ -46,7 +46,7 @@ class Player {
       if (this._playerTinyObject.rotation > MIN_ROTATION) this._playerTinyObject.rotation = MIN_ROTATION;
     }
     // If he's died, update it's X position
-    else if (this._playerTinyObject.state == enums.PlayerState.Died) {
+    else if (this._playerTinyObject.state == enums.PlayerState.Dead) {
       this._playerTinyObject.posX -= Math.floor(timeLapse * Config.LEVEL_SPEED);
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
@@ -85,16 +85,16 @@ class Player {
 
   sorryYouAreDie(nbPlayersLeft) {
     this._rank = nbPlayersLeft;
-    this._playerTinyObject.state = enums.PlayerState.Died;
+    this._playerTinyObject.state = enums.PlayerState.Dead;
 
     console.info(`OMG ! They kill ${this._playerTinyObject.nick} :p`);
   }
 
   setReadyState(readyState) {
-    this._playerTinyObject.state = readyState == true ? enums.PlayerState.Playing : enums.PlayerState.WaitingInLobby;
+    this._playerTinyObject.state = readyState == true ? enums.PlayerState.InProgress : enums.PlayerState.WaitingForGameStart;
     console.info(
       `${this._playerTinyObject.nick} is ${
-        this._playerTinyObject.state == enums.PlayerState.Playing ? 'ready !' : 'not yet ready'
+        this._playerTinyObject.state == enums.PlayerState.InProgress ? 'ready !' : 'not yet ready'
       }`
     );
   }
@@ -105,7 +105,7 @@ class Player {
   }
 
   isReadyToPlay() {
-    if (this._playerTinyObject.state == enums.PlayerState.Playing) return true;
+    if (this._playerTinyObject.state == enums.PlayerState.InProgress) return true;
     return false;
   }
 
@@ -134,7 +134,7 @@ class Player {
     this._playerTinyObject.score = 0;
     this._playerTinyObject.rotation = 0;
     // Update all register players
-    if (this._playerTinyObject.nick != '') this._playerTinyObject.state = enums.PlayerState.WaitingInLobby;
+    if (this._playerTinyObject.nick != '') this._playerTinyObject.state = enums.PlayerState.WaitingForGameStart;
   }
 
   updateScore(pipeID) {

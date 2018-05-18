@@ -16,6 +16,16 @@ export const config = {
   MIN_PIPE_HEIGHT: 50,
   MAX_PIPE_HEIGHT: 660,
   HEIGHT_BETWEEN_PIPES: 220,
+
+  SPRITE_BIRD_HEIGHT: 64,
+  SPRITE_BIRD_WIDTH: 64,
+  COMPLETE_ANNIMATION_DURATION: 250,
+  ANIMATION_FRAME_NUMBER: 4,
+  SPRITE_PIPE_HEIGHT: 768,
+  SPRITE_PIPE_WIDTH: 148,
+  SCORE_POS_Y: 200,
+  SCORE_SHADOW_OFFSET: 5,
+  TOT_RES: 2,
   TOUCAN_SOURCES: [
     'assets/images/toucan.png',
     'assets/images/toucan-red.png',
@@ -29,18 +39,9 @@ export const config = {
     Ended: 3
   },
   PlayerState: {
-    Unset: 1,
-    WaitingInLobby: 2,
-    Playing: 3,
-    Died: 4
-  },
-  SPRITE_BIRD_HEIGHT: 64,
-  SPRITE_BIRD_WIDTH: 64,
-  COMPLETE_ANNIMATION_DURATION: 250,
-  ANIMATION_FRAME_NUMBER: 4,
-  SPRITE_PIPE_HEIGHT: 768,
-  SPRITE_PIPE_WIDTH: 148,
-  SCORE_POS_Y: 200,
-  SCORE_SHADOW_OFFSET: 5,
-  TOT_RES: 2
+    NoState: 1,
+    WaitingForGameStart: 2,
+    InProgress: 3,
+    Dead: 4
+  }
 };
