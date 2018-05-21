@@ -1,5 +1,4 @@
 import { config as Config } from '../config';
-import * as enums from './enums';
 
 // Defines
 const MAX_BIRDS_IN_A_ROW = 3;
@@ -26,7 +25,7 @@ class Player {
       rotation: 0,
       score: 0,
       best_score: 0,
-      state: enums.PlayerState.NoState,
+      state: Config.PlayerState.NoState,
       posX: 0,
       posY: 0
     };
@@ -36,7 +35,7 @@ class Player {
     // console.info('Update player ' + this._playerTinyObject.nick);
 
     // If player is still alive, update its Y position
-    if (this._playerTinyObject.state == enums.PlayerState.InProgress) {
+    if (this._playerTinyObject.state == Config.PlayerState.InProgress) {
       // calc now Y pos
       this._speedY += GRAVITY_SPEED;
       this._playerTinyObject.posY += Math.round(timeLapse * this._speedY);
@@ -46,7 +45,7 @@ class Player {
       if (this._playerTinyObject.rotation > MIN_ROTATION) this._playerTinyObject.rotation = MIN_ROTATION;
     }
     // If he's died, update it's X position
-    else if (this._playerTinyObject.state == enums.PlayerState.Dead) {
+    else if (this._playerTinyObject.state == Config.PlayerState.Dead) {
       this._playerTinyObject.posX -= Math.floor(timeLapse * Config.SPEED);
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
@@ -85,16 +84,16 @@ class Player {
 
   sorryYouAreDie(nbPlayersLeft) {
     this._rank = nbPlayersLeft;
-    this._playerTinyObject.state = enums.PlayerState.Dead;
+    this._playerTinyObject.state = Config.PlayerState.Dead;
 
     console.info(`OMG ! They kill ${this._playerTinyObject.nick} :p`);
   }
 
   setReadyState(readyState) {
-    this._playerTinyObject.state = readyState == true ? enums.PlayerState.InProgress : enums.PlayerState.WaitingForGameStart;
+    this._playerTinyObject.state = readyState == true ? Config.PlayerState.InProgress : Config.PlayerState.WaitingForGameStart;
     console.info(
       `${this._playerTinyObject.nick} is ${
-        this._playerTinyObject.state == enums.PlayerState.InProgress ? 'ready !' : 'not yet ready'
+        this._playerTinyObject.state == Config.PlayerState.InProgress ? 'ready !' : 'not yet ready'
       }`
     );
   }
@@ -105,7 +104,7 @@ class Player {
   }
 
   isReadyToPlay() {
-    if (this._playerTinyObject.state == enums.PlayerState.InProgress) return true;
+    if (this._playerTinyObject.state == Config.PlayerState.InProgress) return true;
     return false;
   }
 
@@ -134,7 +133,7 @@ class Player {
     this._playerTinyObject.score = 0;
     this._playerTinyObject.rotation = 0;
     // Update all register players
-    if (this._playerTinyObject.nick != '') this._playerTinyObject.state = enums.PlayerState.WaitingForGameStart;
+    if (this._playerTinyObject.nick != '') this._playerTinyObject.state = Config.PlayerState.WaitingForGameStart;
   }
 
   updateScore(vineID) {

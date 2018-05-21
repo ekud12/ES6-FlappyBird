@@ -40,6 +40,11 @@ export const config = {
     Playing: 2,
     Ended: 3
   },
+  serverStates: {
+    WaitingForPlayers: 1,
+    OnGame: 2,
+    Ranking: 3
+  },
   PlayerState: {
     NoState: 1,
     WaitingForGameStart: 2,

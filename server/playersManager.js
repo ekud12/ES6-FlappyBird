@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
+import { config as Config } from '../config';
 import util from 'util';
-import * as enums from './enums';
+
 import Player from './player';
 
 const _playersList = new Array();
@@ -54,7 +55,7 @@ class PlayersManager {
     // PlayersManager check if players are ready
     for (i = 0; i < nbPlayers; i++) {
       // if at least one player doesn't ready, return
-      if (_playersList[i].getState() == enums.PlayerState.WaitingForGameStart) {
+      if (_playersList[i].getState() == Config.PlayerState.WaitingForGameStart) {
         console.info(`${_playersList[i].getPlayerName()} is not yet ready, don't start game`);
         return;
       }
@@ -84,7 +85,7 @@ class PlayersManager {
     let i;
 
     for (i = 0; i < nbPlayers; i++) {
-      if (_playersList[i].getState() == enums.PlayerState.InProgress || _playersList[i].getState() == enums.PlayerState.Dead)
+      if (_playersList[i].getState() == Config.PlayerState.InProgress || _playersList[i].getState() == Config.PlayerState.Dead)
         players.push(_playersList[i].getPlayerObject());
     }
 
@@ -109,7 +110,7 @@ class PlayersManager {
     let i;
 
     for (i = 0; i < nbPlayers; i++) {
-      if (_playersList[i].getState() == enums.PlayerState.InProgress) return true;
+      if (_playersList[i].getState() == Config.PlayerState.InProgress) return true;
     }
 
     return false;

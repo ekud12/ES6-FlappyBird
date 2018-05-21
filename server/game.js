@@ -1,6 +1,6 @@
 import { config as Config } from '../config';
 import * as CollisionEngine from './collisionEngine';
-import * as enums from './enums';
+
 import VineManager from './vineManager';
 import PlayersManager from './playersManager';
 let io = require('socket.io').listen(Config.SOCKET_PORT);
@@ -16,7 +16,7 @@ export function startServer() {
   //   io.set('log level', 2);
   // });
 
-  _gameState = enums.ServerState.WaitingForPlayers;
+  _gameState = Config.serverStates.WaitingForPlayers;
 
   // Create playersManager instance and register events
   _playersManager = new PlayersManager();
@@ -59,7 +59,7 @@ function playerLog(socket, nick) {
   // Bind new client events
   socket.on('update_ready_state', readyState => {
     // If the server is currently waiting for players, update ready state
-    if (_gameState == enums.ServerState.WaitingForPlayers) {
+    if (_gameState == Config.serverStates.WaitingForPlayers) {
       _playersManager.changeLobbyState(player, readyState);
       socket.broadcast.emit('player_is_ready', player.getPlayerObject());
     }
@@ -81,13 +81,13 @@ function updateGameState(newState, notifyClients) {
 
   _gameState = newState;
   switch (_gameState) {
-    case enums.ServerState.WaitingForPlayers:
+    case Config.serverStates.WaitingForPlayers:
       log += 'in lobby waiting for players';
       break;
-    case enums.ServerState.OnGame:
+    case Config.serverStates.OnGame:
       log += 'in game !';
       break;
-    case enums.ServerState.Ranking:
+    case Config.serverStates.Ranking:
       log += 'displaying ranking';
       break;
     default:
@@ -113,7 +113,7 @@ function createNewGame() {
   }
 
   // Notify players of the new game state
-  updateGameState(enums.ServerState.WaitingForPlayers, true);
+  updateGameState(Config.serverStates.WaitingForPlayers, true);
 }
 
 function gameOver() {
@@ -123,14 +123,14 @@ function gameOver() {
   // Stop game loop
   clearInterval(_timer);
   _lastTime = null;
-  updateGameState(enums.ServerState.Ranking, true);
+  updateGameState(Config.serverStates.Ranking, true);
   _playersManager.sendWinner();
   setTimeout(createNewGame, 3000);
 }
 
 function startGameLoop() {
   // Change server state
-  updateGameState(enums.ServerState.OnGame, true);
+  updateGameState(Config.serverStates.OnGame, true);
 
   // Create the first vine
   _vineManager.newVine();
@@ -165,7 +165,7 @@ function startGameLoop() {
     if (
       CollisionEngine.checkCollisions(
         _vineManager.getPotentialVineHit(),
-        _playersManager.getPlayerList(enums.PlayerState.InProgress)
+        _playersManager.getPlayerList(Config.PlayerState.InProgress)
       ) == true
     ) {
       if (_playersManager.arePlayersStillAlive() == false) {
