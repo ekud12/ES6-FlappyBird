@@ -1,9 +1,10 @@
 import { config as Config } from "../../config.js";
 let canvasCTX;
+let vineSrc;
+let toucanSrcs;
 let readyToRender;
 let totalSrcsCount;
-let _picVine;
-let toucanSrcs;
+
 export default class GUIController {
   constructor() {
     toucanSrcs = new Array();
@@ -12,9 +13,9 @@ export default class GUIController {
     canvasCTX = document.getElementById("canvas").getContext("2d");
   }
 
-  render(currentTime, ellapsedTime, playerManager, vines, gameState) {
+  render(currentTime, ellapsedTime, playerController, vines, gameState) {
     let i;
-    const players = playerManager.getAllPlayers();
+    const players = playerController.getAllPlayers();
     if (!readyToRender) {
       return;
     }
@@ -31,7 +32,7 @@ export default class GUIController {
       }
     }
     if (gameState === 2)
-      this.updateScore(playerManager.getActivePlayer().getPlayerScore());
+      this.updateScore(playerController.getActivePlayer().getPlayerScore());
   }
 
   resetGUI() {
@@ -41,9 +42,9 @@ export default class GUIController {
   loadAssets(done) {
     let toucan;
 
-    _picVine = new Image();
-    _picVine.src = "assets/images/vine.png";
-    _picVine.onload = () => {
+    vineSrc = new Image();
+    vineSrc.src = "assets/images/vine.png";
+    vineSrc.onload = () => {
       this.onAllAssetsLoaded(done);
     };
 
@@ -63,7 +64,7 @@ export default class GUIController {
   }
   renderVine(vine) {
     canvasCTX.drawImage(
-      _picVine,
+      vineSrc,
       0,
       0,
       Config.SPRITE_VINE_WIDTH,
@@ -74,7 +75,7 @@ export default class GUIController {
       Config.SPRITE_VINE_HEIGHT
     );
     canvasCTX.drawImage(
-      _picVine,
+      vineSrc,
       0,
       0,
       Config.SPRITE_VINE_WIDTH,

@@ -35,7 +35,6 @@ const runClientInstance = () => {
     canvasPaint(0, 0);
     document.getElementById("enter-game").onclick = initClientSocketBindings;
   });
-
   socket.on("error", () => {
     console.log(`Error connecting to WebSocket`);
   });

@@ -2,7 +2,7 @@ import { config as Config } from "../config";
 import * as CollisionChecker from "./utils/CollisionUtils";
 
 import VineManager from "./vineManager";
-import PlayersManager from "./playersManager";
+import PlayersManager from "./S_PlayerController";
 let io = require("socket.io").listen(Config.SOCKET_PORT);
 let _playersManager;
 let _vineManager;
@@ -71,10 +71,13 @@ function playerLog(socket, nick) {
   });
 
   // Set player's nickname and prepare him for the next game
-  _playersManager.prepareNewPlayer(player, nick);
+  _playersManager.initPlayer(player, nick);
 
   // Notify new client about other players AND notify other about the new one ;)
-  socket.emit("list_of_players_update", _playersManager.getPlayerList());
+  socket.emit(
+    "list_of_players_update",
+    _playersManager.getAllPlayersForState()
+  );
   socket.broadcast.emit("player_joined", player.getPlayerObject());
 }
 
@@ -109,7 +112,7 @@ function createNewGame() {
   _vineManager.clearAllVines();
 
   // Reset players state and send it
-  players = _playersManager.resetPlayersForNewGame();
+  players = _playersManager.resetAllPlayers();
   for (i = 0; i < players.length; i++) {
     io.sockets.emit("player_is_ready", players[i]);
   }
@@ -153,7 +156,7 @@ function startGameLoop() {
     _lastTime = now;
 
     // If everyone has quit the game, exit it
-    if (_playersManager.getNumberOfPlayers() === 0) {
+    if (_playersManager.getTotalPlayers() === 0) {
       gameOver();
     }
 
@@ -167,10 +170,10 @@ function startGameLoop() {
     if (
       CollisionChecker.checkCollisions(
         _vineManager.getPotentialVineHit(),
-        _playersManager.getPlayerList(Config.PlayerState.InProgress)
+        _playersManager.getAllPlayersForState(Config.PlayerState.InProgress)
       ) === true
     ) {
-      if (_playersManager.arePlayersStillAlive() === false) {
+      if (_playersManager.anyActivePlayersLeft() === false) {
         gameOver();
       }
     }
