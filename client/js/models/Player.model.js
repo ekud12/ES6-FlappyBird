@@ -21,10 +21,14 @@ class Player {
         cnvsCTX.configAlpha = 0.3;
         cnvsCTX.font = '15px Quantico';
         cnvsCTX.fillStyle = 'green';
-        nickPos = this.playerData.posX + Config.BIRD_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
+        nickPos =
+          this.playerData.posX + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
         cnvsCTX.fillText(`${this.playerData.nick}`, nickPos, this.playerData.posY - 20);
       }
-      cnvsCTX.translate(this.playerData.posX + Config.BIRD_WIDTH / 2, this.playerData.posY + Config.BIRD_HEIGHT / 2);
+      cnvsCTX.translate(
+        this.playerData.posX + Config.TOUCAN_RENDER_WIDTH / 2,
+        this.playerData.posY + Config.TOUCAN_RENDER_HEIGHT / 2
+      );
       cnvsCTX.rotate(this.playerData.rotation * Math.PI / 180);
       if (this.playerData.state == Config.PlayerState.WaitingForGameStart) {
         cnvsCTX.drawImage(
@@ -33,10 +37,10 @@ class Player {
           0,
           Config.SPRITE_BIRD_WIDTH,
           Config.SPRITE_BIRD_HEIGHT,
-          -(Config.BIRD_WIDTH / 2),
-          -(Config.BIRD_HEIGHT / 2),
-          Config.BIRD_WIDTH,
-          Config.BIRD_HEIGHT
+          -(Config.TOUCAN_RENDER_WIDTH / 2),
+          -(Config.TOUCAN_RENDER_HEIGHT / 2),
+          Config.TOUCAN_RENDER_WIDTH,
+          Config.TOUCAN_RENDER_HEIGHT
         );
       } else {
         frameNumber = Math.round(time / Config.COMPLETE_ANNIMATION_DURATION) % Config.ANIMATION_FRAME_NUMBER;
@@ -46,10 +50,10 @@ class Player {
           0,
           Config.SPRITE_BIRD_WIDTH,
           Config.SPRITE_BIRD_HEIGHT,
-          -(Config.BIRD_WIDTH / 2),
-          -(Config.BIRD_HEIGHT / 2),
-          Config.BIRD_WIDTH,
-          Config.BIRD_HEIGHT
+          -(Config.TOUCAN_RENDER_WIDTH / 2),
+          -(Config.TOUCAN_RENDER_HEIGHT / 2),
+          Config.TOUCAN_RENDER_WIDTH,
+          Config.TOUCAN_RENDER_HEIGHT
         );
       }
     }

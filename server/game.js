@@ -163,7 +163,7 @@ function startGameLoop() {
 
     // Check collisions
     if (
-      CollisionEngine.checkCollision(
+      CollisionEngine.checkCollisions(
         _vineManager.getPotentialVineHit(),
         _playersManager.getPlayerList(enums.PlayerState.InProgress)
       ) == true

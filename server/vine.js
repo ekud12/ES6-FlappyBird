@@ -1,10 +1,10 @@
 import { config as Config } from '../config';
-
+let DISTANCE = 400;
 class Vine {
   constructor(lastVinePosX) {
     this._vineTinyObject = {
       id: new Date().getTime(),
-      posX: lastVinePosX + Config.DISTANCE_BETWEEN_VINES,
+      posX: lastVinePosX + DISTANCE,
       posY: Math.floor(
         Math.random() * (Config.MAX_VINE_HEIGHT - Config.HEIGHT_BETWEEN_VINES - Config.MIN_VINE_HEIGHT + 1) +
           Config.MIN_VINE_HEIGHT
@@ -13,7 +13,7 @@ class Vine {
   }
 
   update(timeLapse) {
-    this._vineTinyObject.posX -= Math.floor(timeLapse * Config.LEVEL_SPEED);
+    this._vineTinyObject.posX -= Math.floor(timeLapse * Config.SPEED);
   }
 
   canBeDroped() {

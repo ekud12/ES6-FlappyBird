@@ -5,18 +5,18 @@ export const config = {
 
   SCREEN_WIDTH: 1920,
   SCREEN_HEIGHT: 768,
-  FLOOR_POS_Y: 768,
-  LEVEL_SPEED: 0.3,
+  // FLOOR_POS_Y: 768,
+  SPEED: 0.3,
 
-  BIRD_WIDTH: 60,
-  BIRD_HEIGHT: 60,
-
+  TOUCAN_RENDER_WIDTH: 60,
+  TOUCAN_RENDER_HEIGHT: 60,
   VINE_WIDTH: 100,
   DISTANCE_BETWEEN_VINES: 380,
   MIN_VINE_HEIGHT: 50,
   MAX_VINE_HEIGHT: 660,
   HEIGHT_BETWEEN_VINES: 220,
 
+  /** Sprites Config */
   SPRITE_BIRD_HEIGHT: 64,
   SPRITE_BIRD_WIDTH: 64,
   COMPLETE_ANNIMATION_DURATION: 250,
@@ -27,6 +27,7 @@ export const config = {
   SCORE_SHADOW_OFFSET: 5,
   TOT_RES: 2,
   PLAY_KEYCODE: 32,
+
   TOUCAN_SOURCES: [
     'assets/images/toucan.png',
     'assets/images/toucan-red.png',

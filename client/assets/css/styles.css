@@ -3,9 +3,7 @@
   src: url('../fonts/Quantico-Bold.ttf') format('truetype');
 }
 
-body,
-ul,
-li {
+body {
   margin: 0;
   padding: 0;
 }

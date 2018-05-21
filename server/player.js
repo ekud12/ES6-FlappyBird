@@ -47,7 +47,7 @@ class Player {
     }
     // If he's died, update it's X position
     else if (this._playerTinyObject.state == enums.PlayerState.Dead) {
-      this._playerTinyObject.posX -= Math.floor(timeLapse * Config.LEVEL_SPEED);
+      this._playerTinyObject.posX -= Math.floor(timeLapse * Config.SPEED);
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
     }
