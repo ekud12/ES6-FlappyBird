@@ -1,31 +1,25 @@
 import { config as Config } from "../../config";
 class Vine {
-  constructor(lastVinePosX) {
-    this._vineTinyObject = {
-      id: new Date().getTime(),
-      XCoordinate: lastVinePosX + 380,
-      YCoordinate: Math.floor(
-        Math.random() *
-          (Config.MAX_VINE_HEIGHT -
-            Config.HEIGHT_BETWEEN_VINES -
-            Config.MIN_VINE_HEIGHT +
-            1) +
-          Config.MIN_VINE_HEIGHT
-      )
-    };
+  constructor(lastVinePosition) {
+    this.id = Math.random() * 10000000000;
+    this.XCoordinate = lastVinePosition + 380;
+    this.YCoordinate = Math.floor(
+      Math.random() *
+        (Config.MAX_VINE_HEIGHT -
+          Config.HEIGHT_BETWEEN_VINES -
+          Config.MIN_VINE_HEIGHT +
+          1) +
+        Config.MIN_VINE_HEIGHT
+    );
   }
 
-  update(timeLapse) {
-    this._vineTinyObject.XCoordinate -= Math.floor(timeLapse * Config.SPEED);
-  }
-
-  canBeDroped() {
-    if (this._vineTinyObject.XCoordinate + Config.VINE_WIDTH < 0) return true;
+  isOutOfScope() {
+    if (this.XCoordinate + Config.VINE_WIDTH < 0) return true;
     return false;
   }
 
-  getVineObject() {
-    return this._vineTinyObject;
+  changePosition(time) {
+    this.XCoordinate = this.XCoordinate - Math.floor(time * Config.SPEED);
   }
 }
 

@@ -3,9 +3,6 @@ import { config as Config } from "../config";
 import util from "util";
 import Vine from "./models/Vine.model";
 
-// const SPAWN_VINE_ALERT = Config.SCREEN_WIDTH;
-// const MAX_VINE_CHECK_COLLISION = 3;
-
 let vines = new Array();
 let socket = null;
 
@@ -19,44 +16,37 @@ class VineController {
     let lastVinePosition = Config.SCREEN_WIDTH + 60;
 
     if (vines.length > 0)
-      lastVinePosition = vines[vines.length - 1].getVineObject().XCoordinate;
+      lastVinePosition = vines[vines.length - 1].XCoordinate;
     newVine = new Vine(lastVinePosition);
     vines.push(newVine);
     return newVine;
   }
 
   refreshVines(lastUpdatedTime) {
-    if (vines[0].canBeDroped() === true) {
+    if (vines[0].isOutOfScope() === true) {
       vines.shift();
     }
-
     for (let i = 0; i < vines.length; i++) {
-      vines[i].update(lastUpdatedTime);
+      vines[i].changePosition(lastUpdatedTime);
     }
 
-    if (
-      vines[vines.length - 1].getVineObject().XCoordinate < Config.SCREEN_WIDTH
-    )
+    if (vines[vines.length - 1].XCoordinate < Config.SCREEN_WIDTH)
       this.emit("create_new_vine");
   }
 
   getVines() {
     const resultSet = new Array();
     for (let i = 0; i < vines.length; i++) {
-      resultSet.push(vines[i].getVineObject());
+      resultSet.push(vines[i]);
     }
     return resultSet;
-  }
-
-  getVinesLength() {
-    return vines.length;
   }
 
   getClosestVines() {
     const resultSet = new Array();
     let totalVines = vines.length > 3 ? 3 : vines.length;
     for (let i = 0; i < totalVines; i++) {
-      resultSet.push(vines[i].getVineObject());
+      resultSet.push(vines[i]);
     }
     return resultSet;
   }
