@@ -1,7 +1,7 @@
 import { config as Config } from "../config";
 import * as CollisionChecker from "./utils/CollisionUtils";
 
-import VineManager from "./vineManager";
+import VineController from "./S_VineController";
 import PlayersManager from "./S_PlayerController";
 let io = require("socket.io").listen(Config.SOCKET_PORT);
 let _playersManager;
@@ -25,7 +25,7 @@ export function startServer() {
   });
 
   // Create vine manager and bind event
-  _vineManager = new VineManager();
+  _vineManager = new VineController();
   _vineManager.on("create_new_vine", () => {
     // Create a vine and send it to clients
     const vine = _vineManager.createNewVine();

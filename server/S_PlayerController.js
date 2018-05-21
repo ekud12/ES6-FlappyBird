@@ -27,21 +27,15 @@ class PlayersManager {
     }
   }
 
-  checkAllPlayersReady(player, isReady) {
-    const pIndex = players.indexOf(player);
+  initPlayer(player, name) {
+    player.setNick(name);
+    player.preparePlayer(position++);
+  }
 
-    if (pIndex >= 0) {
-      players[pIndex].setReadyState(isReady);
-    }
-
+  updatePlayers(currentTime) {
     for (let i = 0; i < this.getTotalPlayers(); i++) {
-      if (players[i].getState() === Config.PlayerState.WaitingForGameStart) {
-        console.info(`Waiting for ${players[i].getPlayerName()} to be Ready.`);
-        return;
-      }
+      players[i].update(currentTime);
     }
-
-    this.emit("all-players-ready-to-play");
   }
 
   getAllPlayersForState(state) {
@@ -69,33 +63,29 @@ class PlayersManager {
     return resultSet;
   }
 
+  checkAllPlayersReady(player, isReady) {
+    const pIndex = players.indexOf(player);
+
+    if (pIndex >= 0) {
+      players[pIndex].setReadyState(isReady);
+    }
+
+    for (let i = 0; i < this.getTotalPlayers(); i++) {
+      if (players[i].getState() === Config.PlayerState.WaitingForGameStart) {
+        console.info(`Waiting for ${players[i].getPlayerName()} to be Ready.`);
+        return;
+      }
+    }
+
+    this.emit("all-players-ready-to-play");
+  }
+
   anyActivePlayersLeft() {
     for (let i = 0; i < this.getTotalPlayers(); i++) {
       if (players[i].getState() === Config.PlayerState.InProgress) return true;
     }
 
     return false;
-  }
-
-  initPlayer(player, name) {
-    player.setNick(name);
-    player.preparePlayer(position++);
-  }
-
-  updatePlayers(currentTime) {
-    for (let i = 0; i < this.getTotalPlayers(); i++) {
-      players[i].update(currentTime);
-    }
-  }
-
-  resetAllPlayers() {
-    const resultSet = new Array();
-    position = 0;
-    for (let i = 0; i < this.getTotalPlayers(); i++) {
-      players[i].preparePlayer(position++);
-      resultSet.push(players[i].getPlayerObject());
-    }
-    return resultSet;
   }
 
   sendWinner() {
@@ -110,6 +100,16 @@ class PlayersManager {
     for (i = 0; i < this.getTotalPlayers(); i++) {
       players[i].sendWinner(winner, score);
     }
+  }
+
+  resetAllPlayers() {
+    const resultSet = new Array();
+    position = 0;
+    for (let i = 0; i < this.getTotalPlayers(); i++) {
+      players[i].preparePlayer(position++);
+      resultSet.push(players[i].getPlayerObject());
+    }
+    return resultSet;
   }
 
   getTotalPlayers() {

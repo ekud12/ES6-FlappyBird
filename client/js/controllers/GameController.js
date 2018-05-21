@@ -10,7 +10,7 @@ let isPlayerReady = false;
 let updateIntervalTime = null;
 let socket;
 let gameVines;
-let audioPlaying = true;
+let audioPlaying = false;
 /**
  * On resources Loaded Callback Done
  * run the client's game instance
@@ -118,7 +118,7 @@ const initClientSocketBindings = () => {
       playersCInstance.addPlayer(list[i], playerID);
     }
     /**
-     * Reset Canvas
+     * Reset Canvas because we have new players
      */
     canvasPaint(0, 0);
   });

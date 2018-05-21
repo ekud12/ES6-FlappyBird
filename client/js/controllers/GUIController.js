@@ -69,8 +69,8 @@ export default class GUIController {
       0,
       Config.SPRITE_VINE_WIDTH,
       Config.SPRITE_VINE_HEIGHT,
-      vine.posX,
-      vine.posY - Config.SPRITE_VINE_HEIGHT,
+      vine.XCoordinate,
+      vine.YCoordinate - Config.SPRITE_VINE_HEIGHT,
       Config.VINE_WIDTH,
       Config.SPRITE_VINE_HEIGHT
     );
@@ -80,8 +80,8 @@ export default class GUIController {
       0,
       Config.SPRITE_VINE_WIDTH,
       Config.SPRITE_VINE_HEIGHT,
-      vine.posX,
-      vine.posY + Config.HEIGHT_BETWEEN_VINES,
+      vine.XCoordinate,
+      vine.YCoordinate + Config.HEIGHT_BETWEEN_VINES,
       Config.VINE_WIDTH,
       Config.SPRITE_VINE_HEIGHT
     );

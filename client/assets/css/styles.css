@@ -22,7 +22,7 @@ h1 {
 }
 #title-animated {
   margin-top: 0%;
-  animation: topAnimation 3s ease-out forwards;
+  animation: topAnimation 1.5s ease-out forwards;
 }
 
 #main-canvas {

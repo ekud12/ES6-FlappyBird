@@ -9,7 +9,7 @@ import Vine from "./models/Vine.model";
 let vines = new Array();
 let socket = null;
 
-class VineManager {
+class VineController {
   constructor() {
     EventEmitter.call(this);
   }
@@ -19,11 +19,9 @@ class VineManager {
     let lastVinePosition = Config.SCREEN_WIDTH + 60;
 
     if (vines.length > 0)
-      lastVinePosition = vines[vines.length - 1].getVineObject().posX;
-
+      lastVinePosition = vines[vines.length - 1].getVineObject().XCoordinate;
     newVine = new Vine(lastVinePosition);
     vines.push(newVine);
-
     return newVine;
   }
 
@@ -36,7 +34,9 @@ class VineManager {
       vines[i].update(lastUpdatedTime);
     }
 
-    if (vines[vines.length - 1].getVineObject().posX < Config.SCREEN_WIDTH)
+    if (
+      vines[vines.length - 1].getVineObject().XCoordinate < Config.SCREEN_WIDTH
+    )
       this.emit("create_new_vine");
   }
 
@@ -70,6 +70,6 @@ class VineManager {
   }
 }
 
-util.inherits(VineManager, EventEmitter);
+util.inherits(VineController, EventEmitter);
 
-export default VineManager;
+export default VineController;

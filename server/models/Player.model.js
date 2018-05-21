@@ -26,8 +26,8 @@ class Player {
       score: 0,
       best_score: 0,
       state: Config.PlayerState.NoState,
-      posX: 0,
-      posY: 0
+      XCoordinate: 0,
+      YCoordinate: 0
     };
   }
 
@@ -38,7 +38,9 @@ class Player {
     if (this._playerTinyObject.state === Config.PlayerState.InProgress) {
       // calc now Y pos
       this._speedY += GRAVITY_SPEED;
-      this._playerTinyObject.posY += Math.round(timeLapse * this._speedY);
+      this._playerTinyObject.YCoordinate += Math.round(
+        timeLapse * this._speedY
+      );
 
       // Calc rotation
       this._playerTinyObject.rotation += Math.round(
@@ -49,7 +51,9 @@ class Player {
     }
     // If he's died, update it's X position
     else if (this._playerTinyObject.state === Config.PlayerState.Dead) {
-      this._playerTinyObject.posX -= Math.floor(timeLapse * Config.SPEED);
+      this._playerTinyObject.XCoordinate -= Math.floor(
+        timeLapse * Config.SPEED
+      );
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
     }
@@ -135,9 +139,9 @@ class Player {
     line = Math.floor(pos / 6);
     col = Math.floor(pos % 6);
     randomMoveX = Math.floor(Math.random() * (SPACE_BETWEEN_BIRDS_X / 2 + 1));
-    this._playerTinyObject.posY =
+    this._playerTinyObject.YCoordinate =
       START_BIRD_POS_Y + line * SPACE_BETWEEN_BIRDS_Y;
-    this._playerTinyObject.posX =
+    this._playerTinyObject.XCoordinate =
       START_BIRD_POS_X + col * SPACE_BETWEEN_BIRDS_X + randomMoveX;
 
     // Reset usefull values
