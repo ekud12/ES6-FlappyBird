@@ -67,23 +67,23 @@ export default class GUIController {
       vineSrc,
       0,
       0,
-      Config.SPRITE_VINE_WIDTH,
-      Config.SPRITE_VINE_HEIGHT,
+      Config.VINE_SPR_W,
+      Config.VINE_SPR_H,
       vine.XCoordinate,
-      vine.YCoordinate - Config.SPRITE_VINE_HEIGHT,
+      vine.YCoordinate - Config.VINE_SPR_H,
       Config.VINE_WIDTH,
-      Config.SPRITE_VINE_HEIGHT
+      Config.VINE_SPR_H
     );
     canvasCTX.drawImage(
       vineSrc,
       0,
       0,
-      Config.SPRITE_VINE_WIDTH,
-      Config.SPRITE_VINE_HEIGHT,
+      Config.VINE_SPR_W,
+      Config.VINE_SPR_H,
       vine.XCoordinate,
       vine.YCoordinate + Config.HEIGHT_BETWEEN_VINES,
       Config.VINE_WIDTH,
-      Config.SPRITE_VINE_HEIGHT
+      Config.VINE_SPR_H
     );
   }
   onAllAssetsLoaded(done) {

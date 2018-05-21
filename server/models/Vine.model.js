@@ -1,4 +1,5 @@
 import { config as Config } from "../../config";
+
 class Vine {
   constructor(lastVinePosition) {
     this.id = Math.random() * 10000000000;

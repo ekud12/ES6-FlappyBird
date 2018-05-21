@@ -44,23 +44,21 @@ class Player {
           spriteAssetsSrcs[this.playerData.color],
           0,
           0,
-          Config.SPRITE_BIRD_WIDTH,
-          Config.SPRITE_BIRD_HEIGHT,
+          Config.TOUCAN_SPR_SRC_W,
+          Config.TOUCAN_SPR_SRC_H,
           -(Config.TOUCAN_RENDER_WIDTH / 2),
           -(Config.TOUCAN_RENDER_HEIGHT / 2),
           Config.TOUCAN_RENDER_WIDTH,
           Config.TOUCAN_RENDER_HEIGHT
         );
       } else {
-        frameNumber =
-          Math.round(time / Config.COMPLETE_ANNIMATION_DURATION) %
-          Config.ANIMATION_FRAME_NUMBER;
+        frameNumber = Math.round(time / 200) % 4;
         cnvsCTX.drawImage(
           spriteAssetsSrcs[this.playerData.color],
-          frameNumber * Config.SPRITE_BIRD_WIDTH,
+          frameNumber * Config.TOUCAN_SPR_SRC_W,
           0,
-          Config.SPRITE_BIRD_WIDTH,
-          Config.SPRITE_BIRD_HEIGHT,
+          Config.TOUCAN_SPR_SRC_W,
+          Config.TOUCAN_SPR_SRC_H,
           -(Config.TOUCAN_RENDER_WIDTH / 2),
           -(Config.TOUCAN_RENDER_HEIGHT / 2),
           Config.TOUCAN_RENDER_WIDTH,

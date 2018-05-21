@@ -29,13 +29,23 @@ GUIControllerInstance.loadAssets(() => {
   runClientInstance();
 });
 
+const canvasPaint = (nowTime, totalTime) => {
+  GUIControllerInstance.render(
+    nowTime,
+    totalTime,
+    playersCInstance,
+    gameVines,
+    state
+  );
+};
+
 const runClientInstance = () => {
   if (typeof io === "undefined") {
     return;
   }
   playersCInstance = new PlayersController();
 
-  socket = io.connect(`${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}`, {
+  socket = io.connect(`${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`, {
     reconnect: false
   });
   socket.on("connect", () => {
@@ -92,15 +102,6 @@ const clientGetUpdatedState = data => {
     default:
       break;
   }
-};
-const canvasPaint = (nowTime, totalTime) => {
-  GUIControllerInstance.render(
-    nowTime,
-    totalTime,
-    playersCInstance,
-    gameVines,
-    state
-  );
 };
 
 const initClientSocketBindings = () => {
