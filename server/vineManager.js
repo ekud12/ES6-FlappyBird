@@ -3,11 +3,10 @@ import { config as Config } from "../config";
 import util from "util";
 import Vine from "./models/Vine.model";
 
-const FIRST_VINE_POSX = Config.SCREEN_WIDTH + 60;
-const SPAWN_VINE_ALERT = Config.SCREEN_WIDTH;
-const MAX_VINE_CHECK_COLLISION = 3;
+// const SPAWN_VINE_ALERT = Config.SCREEN_WIDTH;
+// const MAX_VINE_CHECK_COLLISION = 3;
 
-let _vineList = new Array();
+let vines = new Array();
 let socket = null;
 
 class VineManager {
@@ -15,71 +14,59 @@ class VineManager {
     EventEmitter.call(this);
   }
 
-  setSocket(socket) {
-    socket = socket;
-  }
-
-  newVine() {
+  createNewVine() {
     let newVine;
-    let lastPos = FIRST_VINE_POSX;
+    let lastVinePosition = Config.SCREEN_WIDTH + 60;
 
-    if (_vineList.length > 0)
-      lastPos = _vineList[_vineList.length - 1].getVineObject().posX;
+    if (vines.length > 0)
+      lastVinePosition = vines[vines.length - 1].getVineObject().posX;
 
-    newVine = new Vine(lastPos);
-    _vineList.push(newVine);
+    newVine = new Vine(lastVinePosition);
+    vines.push(newVine);
 
     return newVine;
   }
 
-  updateVines(time) {
-    let nbVines = _vineList.length;
-    let i;
-
-    // If the first vine is out of the screen, erase it
-    if (_vineList[0].canBeDroped() === true) {
-      _vineList.shift();
-      nbVines--;
+  refreshVines(lastUpdatedTime) {
+    if (vines[0].canBeDroped() === true) {
+      vines.shift();
     }
 
-    for (i = 0; i < nbVines; i++) {
-      _vineList[i].update(time);
+    for (let i = 0; i < vines.length; i++) {
+      vines[i].update(lastUpdatedTime);
     }
 
-    if (_vineList[nbVines - 1].getVineObject().posX < SPAWN_VINE_ALERT)
-      this.emit("need_new_vine");
+    if (vines[vines.length - 1].getVineObject().posX < Config.SCREEN_WIDTH)
+      this.emit("create_new_vine");
   }
 
-  getVineList() {
-    const vines = new Array();
-    const nbVines = _vineList.length;
-    let i;
-
-    for (i = 0; i < nbVines; i++) {
-      vines.push(_vineList[i].getVineObject());
+  getVines() {
+    const resultSet = new Array();
+    for (let i = 0; i < vines.length; i++) {
+      resultSet.push(vines[i].getVineObject());
     }
-
-    return vines;
+    return resultSet;
   }
 
-  getPotentialVineHit() {
-    const vines = new Array();
-    let nbVines = _vineList.length;
-    let i;
+  getVinesLength() {
+    return vines.length;
+  }
 
-    // In multiplayer mode, just check the first 2 vines
-    // because the other ones are too far from the players
-    if (nbVines > MAX_VINE_CHECK_COLLISION) nbVines = MAX_VINE_CHECK_COLLISION;
-
-    for (i = 0; i < nbVines; i++) {
-      vines.push(_vineList[i].getVineObject());
+  getClosestVines() {
+    const resultSet = new Array();
+    let totalVines = vines.length > 3 ? 3 : vines.length;
+    for (let i = 0; i < totalVines; i++) {
+      resultSet.push(vines[i].getVineObject());
     }
-
-    return vines;
+    return resultSet;
   }
 
   clearAllVines() {
-    _vineList = new Array();
+    vines = new Array();
+  }
+
+  setSocket(socket) {
+    socket = socket;
   }
 }
 

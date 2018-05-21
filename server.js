@@ -37,7 +37,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', (req, res) => {
-  res.render('../client/flappybird', { ws: `${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}` });
+  res.render('../client/flappytoucan', { ws: `${Config.SOCKET_ADDR}:${Config.SOCKET_PORT}` });
 });
 
 /**

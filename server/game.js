@@ -26,9 +26,9 @@ export function startServer() {
 
   // Create vine manager and bind event
   _vineManager = new VineManager();
-  _vineManager.on("need_new_vine", () => {
+  _vineManager.on("create_new_vine", () => {
     // Create a vine and send it to clients
-    const vine = _vineManager.newVine();
+    const vine = _vineManager.createNewVine();
   });
 
   // On new client connection
@@ -138,7 +138,7 @@ function startGameLoop() {
   updateGameState(Config.serverStates.OnGame, true);
 
   // Create the first vine
-  _vineManager.newVine();
+  _vineManager.createNewVine();
 
   // Start timer
   _timer = setInterval(() => {
@@ -164,12 +164,12 @@ function startGameLoop() {
     _playersManager.updatePlayers(ellapsedTime);
 
     // Update vines
-    _vineManager.updateVines(ellapsedTime);
+    _vineManager.refreshVines(ellapsedTime);
 
     // Check collisions
     if (
       CollisionChecker.checkCollisions(
-        _vineManager.getPotentialVineHit(),
+        _vineManager.getClosestVines(),
         _playersManager.getAllPlayersForState(Config.PlayerState.InProgress)
       ) === true
     ) {
@@ -181,7 +181,7 @@ function startGameLoop() {
     // Notify players
     io.sockets.emit("update_game_digital_assets", {
       players: _playersManager.getOnGamePlayerList(),
-      vines: _vineManager.getVineList()
+      vines: _vineManager.getVines()
     });
   }, 1000 / 60);
 }

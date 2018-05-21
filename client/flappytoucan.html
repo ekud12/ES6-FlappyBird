@@ -11,8 +11,15 @@
 </head>
 
 <body>
+
+
   <div class="filler-top">
-    <div>
+
+    <audio id="myJunglePlayer" autoplay loop volume="0.6">
+      <source src="./assets/images/jungle.mp3">
+    </audio>
+
+    <div id="title-animated">
       <h1>Afeka Flappy Toucan!</h1>
     </div>
     <div id="score-container">
@@ -29,6 +36,10 @@
     <input type="text" id="player-name" maxlength="12" value="Your Name" />
     <button id="enter-game">Play !</button>
     <div id="winner-div">Who will be the Winner?...</div>
+    <a class="speaker" onclick="audioHandler()">
+      <span></span>
+    </a>
+
   </div>
 </body>
 

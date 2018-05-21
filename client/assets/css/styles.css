@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'Quantico';
-  src: url('../fonts/Quantico-Bold.ttf') format('truetype');
+  font-family: "Quantico";
+  src: url("../fonts/Quantico-Bold.ttf") format("truetype");
 }
 
 body {
@@ -12,13 +12,17 @@ h1 {
   width: 100%;
   padding: 0;
   margin: 0;
+  font-size: 50px;
   padding-right: 100px;
   padding-left: 100px;
-  font-family: 'Quantico';
+  font-family: "Quantico";
   text-align: center;
   color: white;
-  font-size: 50px;
   text-decoration: underline;
+}
+#title-animated {
+  margin-top: 0%;
+  animation: topAnimation 3s ease-out forwards;
 }
 
 #main-canvas {
@@ -27,12 +31,16 @@ h1 {
   width: 100%;
   margin: 0 0;
   overflow: hidden;
-  background-image: url('../images/jungle.jpg');
+  background-image: url("../images/jungle.jpg");
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: auto 100%;
+  animation: animatedBackground 200s linear infinite;
 }
 
 #score-container {
   display: block;
-  font-family: 'Quantico';
+  font-family: "Quantico";
   margin-left: 5%;
   padding-top: 5px;
   padding-right: 200px;
@@ -48,11 +56,12 @@ input {
   margin: auto;
   padding: 15px 15px;
   font-size: 50px;
-  font-family: 'Quantico';
+  font-family: "Quantico";
   text-shadow: 2px 2px 0px #073d00;
   color: #ffffff;
   text-align: center;
   background: transparent;
+  animation: bottomFadeAnimation 3s ease-out forwards;
 }
 
 #enter-game {
@@ -63,22 +72,23 @@ input {
   border-radius: 10px;
   margin: 25px auto;
   font-size: 65px;
-  font-family: 'Quantico';
+  font-family: "Quantico";
   color: rgb(0, 0, 0);
   text-align: center;
   background: #00ff73;
+  animation: bottomFadeAnimation 3s ease-out forwards;
 }
 
 #winner-div {
   display: block;
   color: white;
   width: 750px;
-  /* padding: 5px; */
   margin: 25px auto;
   font-size: 40px;
-  font-family: 'Quantico';
+  font-family: "Quantico";
   text-align: center;
   border: 6px dotted #3bff93;
+  animation: bottomFadeAnimation 3s ease-out forwards;
 }
 
 .filler-top {
@@ -98,4 +108,95 @@ input {
   display: flex;
   direction: row;
   border-top: 3px solid #004b31;
+}
+
+/** volume control */
+.speaker {
+  height: 30px;
+  width: 30px;
+  margin: auto 30px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  cursor: pointer;
+}
+.speaker span {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  margin: 11px 0 0 2px;
+}
+.speaker span:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent #fff transparent transparent;
+  border-width: 10px 14px 10px 15px;
+  left: -13px;
+  top: 5px;
+}
+.speaker span:before {
+  transform: rotate(45deg);
+  border-radius: 0 50px 0 0;
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-style: double;
+  border-color: #fff;
+  border-width: 7px 7px 0 0;
+  left: 18px;
+  top: 9px;
+  transition: all 0.2s ease-out;
+}
+
+.speaker:hover span:before {
+  transform: scale(0.8) translate(-3px, 0) rotate(42deg);
+}
+
+/* Animations! */
+@keyframes animatedBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 0;
+  }
+}
+
+@keyframes topAnimation {
+  from {
+    margin-top: -50%;
+  }
+  to {
+    margin-top: 0%;
+  }
+}
+@-webkit-keyframes topAnimation {
+  from {
+    top: -100%;
+  }
+  to {
+    top: 0;
+  }
+}
+
+@keyframes bottomFadeAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes bottomFadeAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

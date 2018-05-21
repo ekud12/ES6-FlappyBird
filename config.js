@@ -1,7 +1,7 @@
 export const config = {
   SERVER_PORT: 4242,
   SOCKET_PORT: 1337,
-  SOCKET_ADDR: 'http://localhost',
+  SOCKET_ADDR: "http://localhost",
 
   SCREEN_WIDTH: 1920,
   SCREEN_HEIGHT: 768,
@@ -27,12 +27,13 @@ export const config = {
   SCORE_SHADOW_OFFSET: 5,
   TOT_RES: 2,
   PLAY_KEYCODE: 32,
+  SOUND_TOGGLE: 109,
 
   TOUCAN_SOURCES: [
-    'assets/images/toucan.png',
-    'assets/images/toucan-red.png',
-    'assets/images/toucan-purple.png',
-    'assets/images/toucan-green.png'
+    "assets/images/toucan.png",
+    "assets/images/toucan-red.png",
+    "assets/images/toucan-purple.png",
+    "assets/images/toucan-green.png"
   ],
   clientInstanceStates: {
     New: 0,

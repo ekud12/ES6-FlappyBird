@@ -10,11 +10,21 @@ let isPlayerReady = false;
 let updateIntervalTime = null;
 let socket;
 let gameVines;
-
+let audioPlaying = true;
 /**
  * On resources Loaded Callback Done
  * run the client's game instance
  */
+
+/** Audio handling */
+window.audioHandler = audioHandler;
+document.addEventListener("keydown", event => {
+  if (event.keyCode === Config.SOUND_TOGGLE) {
+    audioHandler();
+  }
+});
+
+/** On finished loading, run client instance */
 GUIControllerInstance.loadAssets(() => {
   runClientInstance();
 });
@@ -168,6 +178,12 @@ const displayWinner = data => {
   }! </br> The winner Score is: ${data.score}!`;
   setTimeout(GUIControllerInstance.resetGUI(), 3000);
 };
+
+function audioHandler() {
+  let audioRef = document.getElementById("myJunglePlayer");
+  audioRef.muted = audioPlaying ? true : false;
+  audioPlaying = audioRef.muted ? false : true;
+}
 
 requestAnimationFrame =
   window.requestAnimationFrame ||
