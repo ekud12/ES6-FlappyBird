@@ -42,11 +42,10 @@ const canvasPaint = (nowTime, totalTime) => {
 const runClientInstance = () => {
   if (typeof io === "undefined") {
     console.log("DAMN");
-    return;
   }
   playersCInstance = new PlayersController();
 
-  socket = io.connect(`${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`, {
+  socket = io.connect(`${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`, {
     reconnect: false
   });
 
