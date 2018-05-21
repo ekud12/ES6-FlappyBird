@@ -19,7 +19,7 @@ GUIControllerInstance.loadAssets(() => {
   runClientInstance();
 });
 
-function runClientInstance() {
+const runClientInstance = () => {
   if (typeof io == 'undefined') {
     return;
   }
@@ -39,17 +39,17 @@ function runClientInstance() {
   socket.on('error', () => {
     console.log(`Error connecting to WebSocket`);
   });
-}
+};
 
 /**
  * Game Loops
  */
-function clientWaitingLoop() {
+const clientWaitingLoop = () => {
   if (state == Config.clientInstanceStates.Waiting) requestAnimationFrame(clientWaitingLoop);
   canvasPaint(new Date().getTime(), 0);
-}
+};
 
-function clientInGameLoop() {
+const clientInGameLoop = () => {
   let ellapsedTime = 0;
   const currentTime = new Date().getTime();
   if (state == Config.clientInstanceStates.Playing) requestAnimationFrame(clientInGameLoop);
@@ -58,10 +58,10 @@ function clientInGameLoop() {
   }
   updateIntervalTime = currentTime;
   canvasPaint(currentTime, ellapsedTime);
-}
+};
 
-function clientGetUpdatedState(gameState) {
-  state = gameState;
+const clientGetUpdatedState = data => {
+  state = data;
   switch (state) {
     case Config.clientInstanceStates.Waiting:
       document.getElementById('enter-game').disabled = false;
@@ -81,12 +81,12 @@ function clientGetUpdatedState(gameState) {
     default:
       break;
   }
-}
-function canvasPaint(nowTime, totalTime) {
-  GUIControllerInstance.draw(nowTime, totalTime, playersCInstance, gameVines, state);
-}
+};
+const canvasPaint = (nowTime, totalTime) => {
+  GUIControllerInstance.render(nowTime, totalTime, playersCInstance, gameVines, state);
+};
 
-function initClientSocketBindings() {
+const initClientSocketBindings = () => {
   const name = document.getElementById(`player-name`).value;
   if (name === '' || name === 'Your Name') {
     alert('Please choose a name First!');
@@ -153,12 +153,12 @@ function initClientSocketBindings() {
   });
 
   return false;
-}
+};
 
-function displayWinner(data) {
+const displayWinner = data => {
   document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner}! </br> The winner Score is: ${data.score}!`;
   setTimeout(GUIControllerInstance.resetGUI(), 3000);
-}
+};
 
 requestAnimationFrame =
   window.requestAnimationFrame ||

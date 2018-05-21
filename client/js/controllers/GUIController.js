@@ -1,6 +1,6 @@
 import { config as Config } from "../../config.js";
 let canvasCTX;
-let toDraw;
+let readyToRender;
 let totalSrcsCount;
 let _picVine;
 let toucanSrcs;
@@ -8,26 +8,26 @@ export default class GUIController {
   constructor() {
     toucanSrcs = new Array();
     totalSrcsCount = Config.TOUCAN_SOURCES.length;
-    toDraw = false;
+    readyToRender = false;
     canvasCTX = document.getElementById("canvas").getContext("2d");
   }
 
-  draw(currentTime, ellapsedTime, playerManager, vines, gameState) {
+  render(currentTime, ellapsedTime, playerManager, vines, gameState) {
     let i;
     const players = playerManager.getAllPlayers();
-    if (!toDraw) {
+    if (!readyToRender) {
       return;
     }
     canvasCTX.clearRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
     if (vines) {
       for (i = 0; i < vines.length; i++) {
-        this.drawVine(vines[i]);
+        this.renderVine(vines[i]);
       }
     }
     if (players) {
       for (i = 0; i < players.length; i++) {
-        players[i].draw(canvasCTX, currentTime, toucanSrcs, gameState);
+        players[i].render(canvasCTX, currentTime, toucanSrcs, gameState);
       }
     }
     if (gameState == 2)
@@ -38,20 +38,20 @@ export default class GUIController {
     document.getElementById("score-container").innerHTML = ``;
   }
 
-  loadAssets(doneCallBack) {
+  loadAssets(done) {
     let toucan;
 
     _picVine = new Image();
     _picVine.src = "assets/images/vine.png";
     _picVine.onload = () => {
-      this.onAssetsLoadingDone(doneCallBack);
+      this.onAllAssetsLoaded(done);
     };
 
     for (let i = 0; i < Config.TOUCAN_SOURCES.length; i++) {
       toucan = new Image();
       toucan.src = Config.TOUCAN_SOURCES[i];
       toucan.onload = () => {
-        this.onAssetsLoadingDone(doneCallBack);
+        this.onAllAssetsLoaded(done);
       };
       toucanSrcs.push(toucan);
     }
@@ -61,7 +61,7 @@ export default class GUIController {
       "score-container"
     ).innerHTML = `Your score is: ${score}`;
   }
-  drawVine(vine) {
+  renderVine(vine) {
     canvasCTX.drawImage(
       _picVine,
       0,
@@ -85,14 +85,13 @@ export default class GUIController {
       Config.SPRITE_VINE_HEIGHT
     );
   }
-  onAssetsLoadingDone(doneCallBack) {
+  onAllAssetsLoaded(done) {
     const totalRessources = Config.TOUCAN_SOURCES.length;
     if (totalSrcsCount == 0) {
-      toDraw = true;
-      doneCallBack();
+      readyToRender = true;
+      done();
     } else {
       totalSrcsCount--;
-      console.log("Please Wait... Loading Assets");
     }
   }
 }

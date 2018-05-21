@@ -4,11 +4,11 @@ class Player {
   constructor(data, userId) {
     this.playerData = data;
     this.isSelf = false;
-    if (userId && userId == data.id) {
+    if (userId === data.id) {
       this.isSelf = true;
     }
   }
-  draw(cnvsCTX, time, spriteList, gameState) {
+  render(cnvsCTX, time, spriteList, gameState) {
     let frameNumber;
     let nickPos;
     if (this.playerData.state == Config.PlayerState.NoState) {
@@ -18,7 +18,7 @@ class Player {
     } else {
       cnvsCTX.save();
       if (this.isSelf === false) {
-        cnvsCTX.configAlpha = 0.3;
+        cnvsCTX.configAlpha = 0.2;
         cnvsCTX.font = '15px Quantico';
         cnvsCTX.fillStyle = 'green';
         nickPos =

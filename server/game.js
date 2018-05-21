@@ -1,5 +1,5 @@
 import { config as Config } from '../config';
-import * as CollisionEngine from './collisionEngine';
+import * as CollisionChecker from './CollisionUtils';
 
 import VineManager from './vineManager';
 import PlayersManager from './playersManager';
@@ -163,7 +163,7 @@ function startGameLoop() {
 
     // Check collisions
     if (
-      CollisionEngine.checkCollisions(
+      CollisionChecker.checkCollisions(
         _vineManager.getPotentialVineHit(),
         _playersManager.getPlayerList(Config.PlayerState.InProgress)
       ) == true
