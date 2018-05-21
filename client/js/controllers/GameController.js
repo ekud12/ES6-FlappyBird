@@ -44,7 +44,7 @@ const runClientInstance = () => {
   }
   playersCInstance = new PlayersController();
 
-  socket = io.connect(`${Config.SERVER_ADDRESS}:${ 5000}`, {
+  socket = io.connect(`${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`, {
     reconnect: false
   });
 

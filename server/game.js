@@ -3,7 +3,7 @@ import * as CollisionChecker from "./utils/CollisionUtils";
 
 import VineController from "./S_VineController";
 import PlayersManager from "./S_PlayerController";
-let io = require("socket.io").listen(5000);
+let io = require("socket.io").listen(process.env.PORT || 5000);
 let _playersManager;
 let _vineManager;
 
@@ -49,7 +49,9 @@ export function startServer() {
     });
   });
 
-  console.log(`Game started and waiting for players on port ${5000}`);
+  console.log(
+    `Game started and waiting for players on port ${process.env.PORT || 5000}`
+  );
 }
 
 function playerLog(socket, nick) {
