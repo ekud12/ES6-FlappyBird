@@ -18,7 +18,6 @@ class PlayersManager {
     console.info(`New player Added! (id: ${playerId}))`);
     return newPlayer;
   }
-
   removePlayer(player) {
     let pIndex = players.indexOf(player);
     if (pIndex >= 0) {
