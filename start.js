@@ -22,7 +22,7 @@ const app = express();
  * Set Middleware
  */
 app.use(webpackMiddleware(webpack(webpackConfig)));
-app.set("port", process.env.PORT || 5000);
+app.set("port", Config.SERVER_PORT);
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 app.use(logger("dev"));
@@ -38,7 +38,7 @@ if ("development" == app.get("env")) {
 
 app.get("/", (req, res) => {
   res.render("../client/flappytoucan", {
-    ws: `${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`
+    ws: `${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`
   });
 });
 

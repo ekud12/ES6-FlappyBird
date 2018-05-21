@@ -1,7 +1,6 @@
 import { config as Config } from "../../../config.js";
 import PlayersController from "../controllers/PlayersController.js";
 import GUIController from "../controllers/GUIController.js";
-import io from "socket.io";
 let state = Config.clientInstanceStates.New;
 let GUIControllerInstance = new GUIController();
 let playersCInstance;
@@ -45,7 +44,7 @@ const runClientInstance = () => {
   }
   playersCInstance = new PlayersController();
 
-  socket = io.connect(`${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`, {
+  socket = io.connect(`${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`, {
     reconnect: false
   });
 
