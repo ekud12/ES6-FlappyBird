@@ -31,6 +31,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "client")));
 
+let port = process.env.PORT || 5000;
+Config.CLIENT_SOCKET = port;
+console.log(Config.CLIENT_SOCKET);
+
 /** TODO : REMOVE */
 if ("development" == app.get("env")) {
   app.use(errorHandler());
@@ -38,7 +42,7 @@ if ("development" == app.get("env")) {
 
 app.get("/", (req, res) => {
   res.render("../client/flappytoucan", {
-    ws: `${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`
+    ws: `${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`
   });
 });
 
@@ -52,9 +56,11 @@ app.get("/config.js", (req, res) => {
 /**
  * Start Server Listen on port
  */
-http.createServer(app).listen(app.get("port"), () => {
+const server = http.createServer(app).listen(app.get("port"), () => {
   console.log(`Afeka Flappy Toucan is ON! ${app.get("port")}`);
 });
+
+var io = require("socket.io").listen(server);
 
 /**
  * Run Game on Server

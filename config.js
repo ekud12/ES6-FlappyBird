@@ -1,6 +1,7 @@
 export const config = {
   SERVER_PORT: 4500,
   SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
+  // SERVER_ADDRESS: "http://localhost",
 
   CLIENT_SOCKET: 2222,
 
