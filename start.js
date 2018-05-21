@@ -37,9 +37,7 @@ if ("development" == app.get("env")) {
 }
 
 app.get("/", (req, res) => {
-  res.render("../client/flappytoucan", {
-    ws: `${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`
-  });
+  res.render("../client/flappytoucan");
 });
 
 /**
