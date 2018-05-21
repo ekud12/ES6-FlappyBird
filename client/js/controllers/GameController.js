@@ -41,6 +41,7 @@ const canvasPaint = (nowTime, totalTime) => {
 
 const runClientInstance = () => {
   if (typeof io === "undefined") {
+    console.log("DAMN");
     return;
   }
   playersCInstance = new PlayersController();
@@ -48,6 +49,8 @@ const runClientInstance = () => {
   socket = io.connect(`${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`, {
     reconnect: false
   });
+
+  console.log(io);
   socket.on("connect", () => {
     socket.on("disconnect", () => {
       console.log(`Disconnected or player quit. Refresh Page.`);
