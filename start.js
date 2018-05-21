@@ -31,10 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "client")));
 
-let port = process.env.PORT || 5000;
-Config.CLIENT_SOCKET = port;
-console.log(Config.CLIENT_SOCKET);
-
+const port = process.env.PORT || 5000;
 /** TODO : REMOVE */
 if ("development" == app.get("env")) {
   app.use(errorHandler());
@@ -42,7 +39,7 @@ if ("development" == app.get("env")) {
 
 app.get("/", (req, res) => {
   res.render("../client/flappytoucan", {
-    ws: `${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`
+    ws: `${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`
   });
 });
 
@@ -51,6 +48,9 @@ app.get("/", (req, res) => {
  */
 app.get("/config.js", (req, res) => {
   res.sendFile("config.js", { root: __dirname });
+});
+app.get("/aport", (req, res) => {
+  res.send(JSON.stringify(port));
 });
 
 /**

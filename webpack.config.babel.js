@@ -37,5 +37,6 @@ export default {
         ]
       }
     ]
-  }
+  },
+  plugins: [new webpack.EnvironmentPlugin([{ PORT: process.env.PORT || 5000 }])]
 };

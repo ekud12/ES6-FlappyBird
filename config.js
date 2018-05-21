@@ -1,4 +1,4 @@
-export const config = {
+export let config = {
   SERVER_PORT: 4500,
   SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
   // SERVER_ADDRESS: "http://localhost",
@@ -55,3 +55,8 @@ export const config = {
     Dead: 4
   }
 };
+
+export function setVariable(vara) {
+  this.config.CLIENT_SOCKET = vara;
+  console.log(this.config.CLIENT_SOCKET);
+}

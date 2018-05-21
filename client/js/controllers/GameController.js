@@ -10,13 +10,23 @@ let updateIntervalTime = null;
 let socket;
 let gameVines;
 let audioPlaying = false;
+let port;
 /**
+ *
  * On resources Loaded Callback Done
  * run the client's game instance
  */
 
 /** Audio handling */
 window.audioHandler = audioHandler;
+fetch("http://localhost:4500/aport")
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    port = myJson;
+  });
+// console.log(process.env);
 document.addEventListener("keydown", event => {
   if (event.keyCode === Config.SOUND_TOGGLE) {
     audioHandler();
@@ -44,7 +54,7 @@ const runClientInstance = () => {
   }
   playersCInstance = new PlayersController();
 
-  socket = io.connect(`${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`, {
+  socket = io.connect(`${Config.SERVER_ADDRESS}:${port}`, {
     reconnect: false
   });
 
