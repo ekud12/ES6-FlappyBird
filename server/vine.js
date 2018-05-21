@@ -1,5 +1,5 @@
 import { config as Config } from '../config';
-let DISTANCE = 400;
+let DISTANCE = 380;
 class Vine {
   constructor(lastVinePosX) {
     this._vineTinyObject = {

@@ -5,7 +5,7 @@ const enumServerState = {
 };
 
 const PlayerState = {
-  OnLoginScreen: 1,
+  NoState: 1,
   WaitingForGameStart: 2,
   InProgress: 3,
   Dead: 4

@@ -26,7 +26,7 @@ class Player {
       rotation: 0,
       score: 0,
       best_score: 0,
-      state: enums.PlayerState.OnLoginScreen,
+      state: enums.PlayerState.NoState,
       posX: 0,
       posY: 0
     };
