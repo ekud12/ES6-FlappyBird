@@ -1,7 +1,7 @@
-import { EventEmitter } from 'events';
-import { config as Config } from '../config';
-import util from 'util';
-import Vine from './models/Vine.model';
+import { EventEmitter } from "events";
+import { config as Config } from "../config";
+import util from "util";
+import Vine from "./models/Vine.model";
 
 const FIRST_VINE_POSX = Config.SCREEN_WIDTH + 60;
 const SPAWN_VINE_ALERT = Config.SCREEN_WIDTH;
@@ -23,7 +23,8 @@ class VineManager {
     let newVine;
     let lastPos = FIRST_VINE_POSX;
 
-    if (_vineList.length > 0) lastPos = _vineList[_vineList.length - 1].getVineObject().posX;
+    if (_vineList.length > 0)
+      lastPos = _vineList[_vineList.length - 1].getVineObject().posX;
 
     newVine = new Vine(lastPos);
     _vineList.push(newVine);
@@ -36,7 +37,7 @@ class VineManager {
     let i;
 
     // If the first vine is out of the screen, erase it
-    if (_vineList[0].canBeDroped() == true) {
+    if (_vineList[0].canBeDroped() === true) {
       _vineList.shift();
       nbVines--;
     }
@@ -45,7 +46,8 @@ class VineManager {
       _vineList[i].update(time);
     }
 
-    if (_vineList[nbVines - 1].getVineObject().posX < SPAWN_VINE_ALERT) this.emit('need_new_vine');
+    if (_vineList[nbVines - 1].getVineObject().posX < SPAWN_VINE_ALERT)
+      this.emit("need_new_vine");
   }
 
   getVineList() {

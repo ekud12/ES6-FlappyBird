@@ -1,9 +1,9 @@
-import { config as Config } from '../config';
-import * as CollisionChecker from './utils/CollisionUtils';
+import { config as Config } from "../config";
+import * as CollisionChecker from "./utils/CollisionUtils";
 
-import VineManager from './vineManager';
-import PlayersManager from './playersManager';
-let io = require('socket.io').listen(Config.SOCKET_PORT);
+import VineManager from "./vineManager";
+import PlayersManager from "./playersManager";
+let io = require("socket.io").listen(Config.SOCKET_PORT);
 let _playersManager;
 let _vineManager;
 
@@ -20,36 +20,38 @@ export function startServer() {
 
   // Create playersManager instance and register events
   _playersManager = new PlayersManager();
-  _playersManager.on('players-ready', () => {
+  _playersManager.on("all-players-ready-to-play", () => {
     startGameLoop();
   });
 
   // Create vine manager and bind event
   _vineManager = new VineManager();
-  _vineManager.on('need_new_vine', () => {
+  _vineManager.on("need_new_vine", () => {
     // Create a vine and send it to clients
     const vine = _vineManager.newVine();
   });
 
   // On new client connection
-  io.sockets.on('connection', socket => {
+  io.sockets.on("connection", socket => {
     // Add new player
-    let player = _playersManager.addNewPlayer(socket, socket.id);
+    let player = _playersManager.addPlayer(socket, socket.id);
     socket.PlayerInstance = player;
     // Register to socket events
-    socket.on('disconnect', () => {
-      _playersManager.deletePlayer(player);
-      socket.broadcast.emit('player_disconnected', player.getPlayerObject());
+    socket.on("disconnect", () => {
+      _playersManager.removePlayer(player);
+      socket.broadcast.emit("player_disconnected", player.getPlayerObject());
       player = null;
     });
 
-    socket.on('say_hi', (nick, fn) => {
+    socket.on("say_hi", (nick, fn) => {
       fn(_gameState, player.getID());
       playerLog(socket, nick);
     });
   });
 
-  console.log(`Game started and waiting for players on port ${Config.SOCKET_PORT}`);
+  console.log(
+    `Game started and waiting for players on port ${Config.SOCKET_PORT}`
+  );
 }
 
 function playerLog(socket, nick) {
@@ -57,14 +59,14 @@ function playerLog(socket, nick) {
   let player = socket.PlayerInstance;
 
   // Bind new client events
-  socket.on('update_ready_state', readyState => {
+  socket.on("update_ready_state", readyState => {
     // If the server is currently waiting for players, update ready state
-    if (_gameState == Config.serverStates.WaitingForPlayers) {
-      _playersManager.changeLobbyState(player, readyState);
-      socket.broadcast.emit('player_is_ready', player.getPlayerObject());
+    if (_gameState === Config.serverStates.WaitingForPlayers) {
+      _playersManager.checkAllPlayersReady(player, readyState);
+      socket.broadcast.emit("player_is_ready", player.getPlayerObject());
     }
   });
-  socket.on('play_action', () => {
+  socket.on("play_action", () => {
     player.jump();
   });
 
@@ -72,31 +74,31 @@ function playerLog(socket, nick) {
   _playersManager.prepareNewPlayer(player, nick);
 
   // Notify new client about other players AND notify other about the new one ;)
-  socket.emit('list_of_players_update', _playersManager.getPlayerList());
-  socket.broadcast.emit('player_joined', player.getPlayerObject());
+  socket.emit("list_of_players_update", _playersManager.getPlayerList());
+  socket.broadcast.emit("player_joined", player.getPlayerObject());
 }
 
 function updateGameState(newState, notifyClients) {
-  let log = '\t[SERVER] Game state changed ! Server is now ';
+  let log = "\t[SERVER] Game state changed ! Server is now ";
 
   _gameState = newState;
   switch (_gameState) {
     case Config.serverStates.WaitingForPlayers:
-      log += 'in lobby waiting for players';
+      log += "in lobby waiting for players";
       break;
     case Config.serverStates.OnGame:
-      log += 'in game !';
+      log += "in game !";
       break;
     case Config.serverStates.Ranking:
-      log += 'displaying ranking';
+      log += "displaying ranking";
       break;
     default:
-      log += 'dead :p';
+      log += "dead :p";
   }
   console.info(log);
 
   // If requested, inform clients qbout the chsnge
-  io.sockets.emit('state_updated', _gameState);
+  io.sockets.emit("state_updated", _gameState);
 }
 
 function createNewGame() {
@@ -109,7 +111,7 @@ function createNewGame() {
   // Reset players state and send it
   players = _playersManager.resetPlayersForNewGame();
   for (i = 0; i < players.length; i++) {
-    io.sockets.emit('player_is_ready', players[i]);
+    io.sockets.emit("player_is_ready", players[i]);
   }
 
   // Notify players of the new game state
@@ -151,7 +153,7 @@ function startGameLoop() {
     _lastTime = now;
 
     // If everyone has quit the game, exit it
-    if (_playersManager.getNumberOfPlayers() == 0) {
+    if (_playersManager.getNumberOfPlayers() === 0) {
       gameOver();
     }
 
@@ -166,15 +168,15 @@ function startGameLoop() {
       CollisionChecker.checkCollisions(
         _vineManager.getPotentialVineHit(),
         _playersManager.getPlayerList(Config.PlayerState.InProgress)
-      ) == true
+      ) === true
     ) {
-      if (_playersManager.arePlayersStillAlive() == false) {
+      if (_playersManager.arePlayersStillAlive() === false) {
         gameOver();
       }
     }
 
     // Notify players
-    io.sockets.emit('update_game_digital_assets', {
+    io.sockets.emit("update_game_digital_assets", {
       players: _playersManager.getOnGamePlayerList(),
       vines: _vineManager.getVineList()
     });

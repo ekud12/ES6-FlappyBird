@@ -1,10 +1,10 @@
-import { EventEmitter } from 'events';
-import { config as Config } from '../config';
-import util from 'util';
+import { EventEmitter } from "events";
+import { config as Config } from "../config";
+import util from "util";
 
-import Player from './models/Player.model';
+import Player from "./models/Player.model";
 
-const _playersList = new Array();
+let _playersList = new Array();
 let _posOnGrid = 0;
 
 class PlayersManager {
@@ -12,84 +12,70 @@ class PlayersManager {
     EventEmitter.call(this);
   }
 
-  addNewPlayer(playerSocket, id) {
-    let newPlayer;
-    let newPlayerAvatarColor;
-
-    // Set an available color according the number of client's sprites
-    newPlayerAvatarColor = Math.floor(Math.random() * 4);
-
+  addPlayer(playerSocket, id) {
+    let newPlayerAvatarColor = Math.floor(Math.random() * 4);
     // Create new player and add it in the list
-    newPlayer = new Player(playerSocket, id, newPlayerAvatarColor);
+    let newPlayer = new Player(playerSocket, id, newPlayerAvatarColor);
     _playersList.push(newPlayer);
-
-    console.info(`New player connected. There is currently ${_playersList.length} player(s)`);
-
+    console.info(`New player Added! (id: ${id}))`);
     return newPlayer;
   }
 
-  deletePlayer(player) {
-    const pos = _playersList.indexOf(player);
-
-    if (pos < 0) {
-      console.error("[ERROR] Can't find player in playerList");
-    } else {
-      console.info(`Removing player ${player.getPlayerName()}`);
-      _playersList.splice(pos, 1);
-      console.info(`It remains ${_playersList.length} player(s)`);
+  removePlayer(player) {
+    let pIndex = _playersList.indexOf(player);
+    if (pIndex >= 0) {
+      _playersList.splice(pIndex, 1);
+      console.info(`Removed Player ${player.getPlayerName()} from Game.`);
     }
   }
 
-  changeLobbyState(player, isReady) {
-    const pos = _playersList.indexOf(player);
-    const nbPlayers = _playersList.length;
-    let i;
+  checkAllPlayersReady(player, isReady) {
+    const pIndex = _playersList.indexOf(player);
+    // const nbPlayers = _playersList.length;
+    // let i;
 
-    if (pos < 0) {
-      console.error("[ERROR] Can't find player in playerList");
-    } else {
-      // Change ready state
-      _playersList[pos].setReadyState(isReady);
+    if (pIndex >= 0) {
+      _playersList[pIndex].setReadyState(isReady);
     }
 
-    // PlayersManager check if players are ready
-    for (i = 0; i < nbPlayers; i++) {
-      // if at least one player doesn't ready, return
-      if (_playersList[i].getState() == Config.PlayerState.WaitingForGameStart) {
-        console.info(`${_playersList[i].getPlayerName()} is not yet ready, don't start game`);
+    for (let i = 0; i < _playersList.length; i++) {
+      if (
+        _playersList[i].getState() === Config.PlayerState.WaitingForGameStart
+      ) {
+        console.info(
+          `Waiting for ${_playersList[i].getPlayerName()} to be Ready.`
+        );
         return;
       }
     }
 
-    // else raise the start game event !
-    this.emit('players-ready');
+    this.emit("all-players-ready-to-play");
   }
 
   getPlayerList(specificState) {
-    const players = new Array();
-    const nbPlayers = _playersList.length;
-    let i;
+    let resultSet = new Array();
 
-    for (i = 0; i < nbPlayers; i++) {
+    for (let i = 0; i < _playersList.length; i++) {
       if (specificState) {
-        if (_playersList[i].getState() == specificState) players.push(_playersList[i]);
-      } else players.push(_playersList[i].getPlayerObject());
+        if (_playersList[i].getState() === specificState)
+          resultSet.push(_playersList[i]);
+      } else resultSet.push(_playersList[i].getPlayerObject());
     }
 
-    return players;
+    return resultSet;
   }
 
   getOnGamePlayerList() {
-    const players = new Array();
-    const nbPlayers = _playersList.length;
-    let i;
-
-    for (i = 0; i < nbPlayers; i++) {
-      if (_playersList[i].getState() == Config.PlayerState.InProgress || _playersList[i].getState() == Config.PlayerState.Dead)
-        players.push(_playersList[i].getPlayerObject());
+    const resultSet = new Array();
+    for (let i = 0; i < _playersList.length; i++) {
+      if (
+        _playersList[i].getState() === Config.PlayerState.InProgress ||
+        _playersList[i].getState() === Config.PlayerState.Dead
+      )
+        resultSet.push(_playersList[i].getPlayerObject());
     }
 
-    return players;
+    return resultSet;
   }
 
   getNumberOfPlayers() {
@@ -110,7 +96,8 @@ class PlayersManager {
     let i;
 
     for (i = 0; i < nbPlayers; i++) {
-      if (_playersList[i].getState() == Config.PlayerState.InProgress) return true;
+      if (_playersList[i].getState() === Config.PlayerState.InProgress)
+        return true;
     }
 
     return false;

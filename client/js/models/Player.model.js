@@ -1,4 +1,4 @@
-import { config as Config } from '../../config.js';
+import { config as Config } from "../../config.js";
 
 class Player {
   constructor(data, userId) {
@@ -11,26 +11,35 @@ class Player {
   render(cnvsCTX, time, spriteList, gameState) {
     let frameNumber;
     let nickPos;
-    if (this.playerData.state == Config.PlayerState.NoState) {
+    if (this.playerData.state === Config.PlayerState.NoState) {
       return;
-    } else if (this.playerData.state == Config.PlayerState.WaitingForGameStart && gameState == 2) {
+    } else if (
+      this.playerData.state === Config.PlayerState.WaitingForGameStart &&
+      gameState === 2
+    ) {
       return;
     } else {
       cnvsCTX.save();
       if (this.isSelf === false) {
         cnvsCTX.configAlpha = 0.2;
-        cnvsCTX.font = '15px Quantico';
-        cnvsCTX.fillStyle = 'green';
+        cnvsCTX.font = "15px Quantico";
+        cnvsCTX.fillStyle = "green";
         nickPos =
-          this.playerData.posX + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
-        cnvsCTX.fillText(`${this.playerData.nick}`, nickPos, this.playerData.posY - 20);
+          this.playerData.posX +
+          Config.TOUCAN_RENDER_WIDTH / 2 -
+          cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
+        cnvsCTX.fillText(
+          `${this.playerData.nick}`,
+          nickPos,
+          this.playerData.posY - 20
+        );
       }
       cnvsCTX.translate(
         this.playerData.posX + Config.TOUCAN_RENDER_WIDTH / 2,
         this.playerData.posY + Config.TOUCAN_RENDER_HEIGHT / 2
       );
       cnvsCTX.rotate(this.playerData.rotation * Math.PI / 180);
-      if (this.playerData.state == Config.PlayerState.WaitingForGameStart) {
+      if (this.playerData.state === Config.PlayerState.WaitingForGameStart) {
         cnvsCTX.drawImage(
           spriteList[this.playerData.color],
           0,
@@ -43,7 +52,9 @@ class Player {
           Config.TOUCAN_RENDER_HEIGHT
         );
       } else {
-        frameNumber = Math.round(time / Config.COMPLETE_ANNIMATION_DURATION) % Config.ANIMATION_FRAME_NUMBER;
+        frameNumber =
+          Math.round(time / Config.COMPLETE_ANNIMATION_DURATION) %
+          Config.ANIMATION_FRAME_NUMBER;
         cnvsCTX.drawImage(
           spriteList[this.playerData.color],
           frameNumber * Config.SPRITE_BIRD_WIDTH,
@@ -81,7 +92,10 @@ class Player {
   }
 
   isPlayerReady(readyState) {
-    this.playerData.state = readyState === true ? Config.PlayerState.Ready : Config.PlayerState.WaitingForGameStart;
+    this.playerData.state =
+      readyState === true
+        ? Config.PlayerState.Ready
+        : Config.PlayerState.WaitingForGameStart;
   }
 }
 

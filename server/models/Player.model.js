@@ -1,4 +1,4 @@
-import { config as Config } from '../../config';
+import { config as Config } from "../../config";
 
 // Defines
 const MAX_BIRDS_IN_A_ROW = 3;
@@ -20,7 +20,7 @@ class Player {
     this._lastVine = 0;
     this._playerTinyObject = {
       id: uid,
-      nick: '',
+      nick: "",
       color,
       rotation: 0,
       score: 0,
@@ -35,17 +35,20 @@ class Player {
     // console.info('Update player ' + this._playerTinyObject.nick);
 
     // If player is still alive, update its Y position
-    if (this._playerTinyObject.state == Config.PlayerState.InProgress) {
+    if (this._playerTinyObject.state === Config.PlayerState.InProgress) {
       // calc now Y pos
       this._speedY += GRAVITY_SPEED;
       this._playerTinyObject.posY += Math.round(timeLapse * this._speedY);
 
       // Calc rotation
-      this._playerTinyObject.rotation += Math.round(this._speedY * ROTATION_SPEED);
-      if (this._playerTinyObject.rotation > MIN_ROTATION) this._playerTinyObject.rotation = MIN_ROTATION;
+      this._playerTinyObject.rotation += Math.round(
+        this._speedY * ROTATION_SPEED
+      );
+      if (this._playerTinyObject.rotation > MIN_ROTATION)
+        this._playerTinyObject.rotation = MIN_ROTATION;
     }
     // If he's died, update it's X position
-    else if (this._playerTinyObject.state == Config.PlayerState.Dead) {
+    else if (this._playerTinyObject.state === Config.PlayerState.Dead) {
       this._playerTinyObject.posX -= Math.floor(timeLapse * Config.SPEED);
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
@@ -90,21 +93,29 @@ class Player {
   }
 
   setReadyState(readyState) {
-    this._playerTinyObject.state = readyState == true ? Config.PlayerState.InProgress : Config.PlayerState.WaitingForGameStart;
+    this._playerTinyObject.state =
+      readyState === true
+        ? Config.PlayerState.InProgress
+        : Config.PlayerState.WaitingForGameStart;
     console.info(
       `${this._playerTinyObject.nick} is ${
-        this._playerTinyObject.state == Config.PlayerState.InProgress ? 'ready !' : 'not yet ready'
+        this._playerTinyObject.state === Config.PlayerState.InProgress
+          ? "ready !"
+          : "not yet ready"
       }`
     );
   }
 
   setBestScore(score) {
     this._playerTinyObject.best_score = score;
-    console.info(`${this._playerTinyObject.nick} just beat his highscore to ${score}`);
+    console.info(
+      `${this._playerTinyObject.nick} just beat his highscore to ${score}`
+    );
   }
 
   isReadyToPlay() {
-    if (this._playerTinyObject.state == Config.PlayerState.InProgress) return true;
+    if (this._playerTinyObject.state === Config.PlayerState.InProgress)
+      return true;
     return false;
   }
 
@@ -121,11 +132,13 @@ class Player {
     let randomMoveX;
 
     // Place bird on the departure grid
-    line = Math.floor(pos / MAX_BIRDS_IN_A_ROW);
-    col = Math.floor(pos % MAX_BIRDS_IN_A_ROW);
+    line = Math.floor(pos / 6);
+    col = Math.floor(pos % 6);
     randomMoveX = Math.floor(Math.random() * (SPACE_BETWEEN_BIRDS_X / 2 + 1));
-    this._playerTinyObject.posY = START_BIRD_POS_Y + line * SPACE_BETWEEN_BIRDS_Y;
-    this._playerTinyObject.posX = START_BIRD_POS_X + col * SPACE_BETWEEN_BIRDS_X + randomMoveX;
+    this._playerTinyObject.posY =
+      START_BIRD_POS_Y + line * SPACE_BETWEEN_BIRDS_Y;
+    this._playerTinyObject.posX =
+      START_BIRD_POS_X + col * SPACE_BETWEEN_BIRDS_X + randomMoveX;
 
     // Reset usefull values
     this._speedY = 0;
@@ -133,7 +146,8 @@ class Player {
     this._playerTinyObject.score = 0;
     this._playerTinyObject.rotation = 0;
     // Update all register players
-    if (this._playerTinyObject.nick != '') this._playerTinyObject.state = Config.PlayerState.WaitingForGameStart;
+    if (this._playerTinyObject.nick != "")
+      this._playerTinyObject.state = Config.PlayerState.WaitingForGameStart;
   }
 
   updateScore(vineID) {
@@ -151,7 +165,7 @@ class Player {
     }
 
     // Send him complete we_have_a_winner
-    this._socket.emit('we_have_a_winner', {
+    this._socket.emit("we_have_a_winner", {
       score: this._playerTinyObject.score,
       bestScore: this._playerTinyObject.best_score,
       rank: this._rank,
@@ -169,7 +183,7 @@ class Player {
     // Send him complete we_have_a_winner
     console.log(winner);
     console.log(score);
-    this._socket.emit('we_have_a_winner', {
+    this._socket.emit("we_have_a_winner", {
       winner: winner,
       score: score
     });

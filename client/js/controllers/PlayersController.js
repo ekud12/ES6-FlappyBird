@@ -1,4 +1,4 @@
-import Player from '../models/Player.model.js';
+import Player from "../models/Player.model.js";
 
 let players;
 let playersMap;
@@ -18,19 +18,19 @@ export default class PlayersController {
     player = new Player(data, p_id);
     players.push(player);
     playersMap[data.id] = players.length - 1;
-    if (player.isCurrentPlayer() == true) {
+    if (player.isCurrentPlayer() === true) {
       activePlayer = players.length - 1;
     }
   }
 
   deletePlayer(player) {
     const index = playersMap[player.id];
-    if (!(typeof index == 'undefined')) {
+    if (!(typeof index === "undefined")) {
       players.splice(index, 1);
       playersMap = new Array();
       for (let i = 0; i < players.length; i++) {
         playersMap[players[i].getId()] = i;
-        if (players[i].isCurrentPlayer() == true) activePlayer = i;
+        if (players[i].isCurrentPlayer() === true) activePlayer = i;
       }
     }
   }

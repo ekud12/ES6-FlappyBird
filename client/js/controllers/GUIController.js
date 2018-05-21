@@ -30,7 +30,7 @@ export default class GUIController {
         players[i].render(canvasCTX, currentTime, toucanSrcs, gameState);
       }
     }
-    if (gameState == 2)
+    if (gameState === 2)
       this.updateScore(playerManager.getActivePlayer().getPlayerScore());
   }
 
@@ -87,7 +87,7 @@ export default class GUIController {
   }
   onAllAssetsLoaded(done) {
     const totalRessources = Config.TOUCAN_SOURCES.length;
-    if (totalSrcsCount == 0) {
+    if (totalSrcsCount === 0) {
       readyToRender = true;
       done();
     } else {
