@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { config as Config } from '../config';
 import util from 'util';
 
-import Player from './player';
+import Player from './models/Player.model';
 
 const _playersList = new Array();
 let _posOnGrid = 0;

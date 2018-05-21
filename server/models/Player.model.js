@@ -1,4 +1,4 @@
-import { config as Config } from '../config';
+import { config as Config } from '../../config';
 
 // Defines
 const MAX_BIRDS_IN_A_ROW = 3;

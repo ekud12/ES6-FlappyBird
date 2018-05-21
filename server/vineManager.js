@@ -1,14 +1,14 @@
 import { EventEmitter } from 'events';
-import util from 'util';
 import { config as Config } from '../config';
-import Vine from './vine';
+import util from 'util';
+import Vine from './models/Vine.model';
 
 const FIRST_VINE_POSX = Config.SCREEN_WIDTH + 60;
 const SPAWN_VINE_ALERT = Config.SCREEN_WIDTH;
 const MAX_VINE_CHECK_COLLISION = 3;
 
 let _vineList = new Array();
-let _socket = null;
+let socket = null;
 
 class VineManager {
   constructor() {
@@ -16,7 +16,7 @@ class VineManager {
   }
 
   setSocket(socket) {
-    _socket = socket;
+    socket = socket;
   }
 
   newVine() {
@@ -76,7 +76,7 @@ class VineManager {
     return vines;
   }
 
-  flushVineList() {
+  clearAllVines() {
     _vineList = new Array();
   }
 }

@@ -1,5 +1,5 @@
 import { config as Config } from '../config';
-import * as CollisionChecker from './CollisionUtils';
+import * as CollisionChecker from './utils/CollisionUtils';
 
 import VineManager from './vineManager';
 import PlayersManager from './playersManager';
@@ -39,7 +39,7 @@ export function startServer() {
     // Register to socket events
     socket.on('disconnect', () => {
       _playersManager.deletePlayer(player);
-      socket.broadcast.emit('player_disconnect', player.getPlayerObject());
+      socket.broadcast.emit('player_disconnected', player.getPlayerObject());
       player = null;
     });
 
@@ -104,7 +104,7 @@ function createNewGame() {
   let i;
 
   // Flush vine list
-  _vineManager.flushVineList();
+  _vineManager.clearAllVines();
 
   // Reset players state and send it
   players = _playersManager.resetPlayersForNewGame();

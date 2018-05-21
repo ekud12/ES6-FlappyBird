@@ -1,4 +1,4 @@
-import { config as Config } from '../config';
+import { config as Config } from '../../config';
 
 export const checkCollisions = (vine, toucans) => {
   let collision = false;

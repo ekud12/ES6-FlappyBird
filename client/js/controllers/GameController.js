@@ -108,14 +108,14 @@ const initClientSocketBindings = () => {
   socket.on('player_joined', player => {
     playersCInstance.addPlayer(player);
   });
+  socket.on('player_disconnected', player => {
+    playersCInstance.deletePlayer(player);
+  });
   socket.on('player_is_ready', playerInfos => {
     playersCInstance.getPlayerByID(playerInfos.id).updateData(playerInfos);
   });
   socket.on('state_updated', gameState => {
     clientGetUpdatedState(gameState);
-  });
-  socket.on('player_disconnect', player => {
-    playersCInstance.deletePlayer(player);
   });
   socket.on('we_have_a_winner', score => {
     displayWinner(score);

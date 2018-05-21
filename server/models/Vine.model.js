@@ -1,4 +1,4 @@
-import { config as Config } from '../config';
+import { config as Config } from '../../config';
 let DISTANCE = 380;
 class Vine {
   constructor(lastVinePosX) {
