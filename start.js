@@ -22,7 +22,7 @@ const app = express();
  * Set Middleware
  */
 app.use(webpackMiddleware(webpack(webpackConfig)));
-app.set("port", Config.SERVER_PORT);
+app.set("port", process.env.PORT || 5000);
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 app.use(logger("dev"));
