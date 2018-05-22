@@ -13,10 +13,10 @@ export let config = {
   SOUND_TOGGLE: 109,
 
   TOUCAN_SOURCES: [
-    "assets/images/toucan.png",
-    "assets/images/toucan-red.png",
-    "assets/images/toucan-purple.png",
-    "assets/images/toucan-green.png"
+    'assets/images/toucan.png',
+    'assets/images/toucan-red.png',
+    'assets/images/toucan-purple.png',
+    'assets/images/toucan-green.png'
   ],
 
   clientInstanceStates: {
@@ -48,8 +48,3 @@ export let config = {
   MAX_VINE_HEIGHT: 600,
   HEIGHT_BETWEEN_VINES: 240
 };
-
-export function setVariable(vara) {
-  this.config.CLIENT_SOCKET = vara;
-  console.log(this.config.CLIENT_SOCKET);
-}

@@ -19,7 +19,7 @@ export const initializeServer = incomingIO => {
   PlayersControllerInst = new PlayersController();
 
   PlayersControllerInst.on('all-players-ready-to-play', () => {
-    startGameLoop();
+    serverGameInstanceLoop();
   });
 
   // Create vine manager and bind event
@@ -31,45 +31,37 @@ export const initializeServer = incomingIO => {
 
   // On new client connection
   io.sockets.on('connection', socket => {
-    // Add new player
     let player = PlayersControllerInst.addPlayer(socket, socket.id);
-    console.log('PLAYER:' + player);
     socket.PlayerInstance = player;
-    // Register to socket events
     socket.on('disconnect', () => {
       PlayersControllerInst.removePlayer(player);
       socket.broadcast.emit('player_disconnected', player.getPlayerObject());
       player = null;
     });
 
-    socket.on('say_hi', (nick, fn) => {
-      fn(gameState, player.getID());
-      initPlayerWithBindings(socket, nick);
+    socket.on('welcome_player', (name, callback) => {
+      callback(gameState, player.getID());
+      initPlayerWithBindings(socket, name);
     });
   });
 };
 
 const initPlayerWithBindings = (playerSocket, name) => {
-  // Retreive PlayerInstance
   let player = playerSocket.PlayerInstance;
-
   PlayersControllerInst.initPlayer(player, name);
 
-  // Bind new client events
   playerSocket.on('update_ready_state', readyState => {
-    // If the server is currently waiting for players, update ready state
     if (gameState === Config.serverStates.WaitingForPlayers) {
       PlayersControllerInst.checkAllPlayersReady(player, readyState);
       playerSocket.broadcast.emit('player_is_ready', player.getPlayerObject());
     }
   });
+
   playerSocket.on('play_action', () => {
     player.jump();
   });
 
-  // Notify new client about other players AND notify other about the new one ;)
   playerSocket.emit('list_of_players_update', PlayersControllerInst.getAllPlayersForState());
-
   playerSocket.broadcast.emit('player_joined', player.getPlayerObject());
 };
 
@@ -113,13 +105,11 @@ const gameEnded = () => {
   setTimeout(initGameSession, 3000);
 };
 
-const startGameLoop = () => {
+const serverGameInstanceLoop = () => {
   // Change server state
   refreshState(Config.serverStates.OnGame, true);
-
   // Create the first vine
   VineControllerInst.createNewVine();
-
   // Start timer
   timer = setInterval(() => {
     const now = new Date().getTime();
