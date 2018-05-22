@@ -1,32 +1,14 @@
 export let config = {
-  SERVER_PORT: 4500,
-  CLIENT_SOCKET: 2222,
-  SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
+  // SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
   // SERVER_ADDRESS: "http://localhost",
-
-  SCREEN_WIDTH: 1920,
-  SCREEN_HEIGHT: 768,
-  // FLOOR_POS_Y: 768,
-  SPEED: 0.3,
-
-  TOUCAN_RENDER_WIDTH: 60,
-  TOUCAN_RENDER_HEIGHT: 60,
-  VINE_WIDTH: 100,
-  // DISTANCE_BETWEEN_VINES: 400,
-  MIN_VINE_HEIGHT: 50,
-  MAX_VINE_HEIGHT: 600,
-  HEIGHT_BETWEEN_VINES: 240,
 
   /** Sprites Config */
   TOUCAN_SPR_SRC_H: 64,
   TOUCAN_SPR_SRC_W: 64,
-  // SPR_ANIM_DUR: 250,
-  // ANIMATION_FRAME_NUMBER: 4,
   VINE_SPR_H: 768,
   VINE_SPR_W: 148,
-  // SCORE_POS_Y: 200,
-  // SCORE_SHADOW_OFFSET: 5,
-  // TOT_RES: 2,
+
+  /** Action keycodes */
   PLAY_KEYCODE: 32,
   SOUND_TOGGLE: 109,
 
@@ -36,6 +18,7 @@ export let config = {
     "assets/images/toucan-purple.png",
     "assets/images/toucan-green.png"
   ],
+
   clientInstanceStates: {
     New: 0,
     Waiting: 1,
@@ -52,7 +35,18 @@ export let config = {
     WaitingForGameStart: 2,
     InProgress: 3,
     Dead: 4
-  }
+  },
+
+  /** Rendering Options */
+  SCREEN_WIDTH: 1920,
+  SCREEN_HEIGHT: 768,
+  SPEED: 0.3,
+  TOUCAN_RENDER_WIDTH: 60,
+  TOUCAN_RENDER_HEIGHT: 60,
+  VINE_WIDTH: 100,
+  MIN_VINE_HEIGHT: 50,
+  MAX_VINE_HEIGHT: 600,
+  HEIGHT_BETWEEN_VINES: 240
 };
 
 export function setVariable(vara) {

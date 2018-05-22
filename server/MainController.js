@@ -45,11 +45,6 @@ export function startServer(incomingIO) {
       playerLog(socket, nick);
     });
   });
-
-  // console.log(
-  //   `Game started and waiting for players on port ${Config.CLIENT_SOCKET ||
-  //     5000}`
-  // );
 }
 
 function playerLog(socket, nick) {
