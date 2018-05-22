@@ -1,12 +1,13 @@
 @font-face {
-  font-family: "Quantico";
-  src: url("../fonts/Quantico-Bold.ttf") format("truetype");
+  font-family: 'Quantico';
+  src: url('../fonts/Quantico-Bold.ttf') format('truetype');
 }
 
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: #103025;
 }
 
 h1 {
@@ -16,7 +17,7 @@ h1 {
   font-size: 50px;
   padding-right: 100px;
   padding-left: 100px;
-  font-family: "Quantico";
+  font-family: 'Quantico';
   text-align: center;
   color: white;
   text-decoration: underline;
@@ -32,7 +33,7 @@ h1 {
   width: 100%;
   margin: 0 0;
   overflow: hidden;
-  background-image: url("../images/jungle.jpg");
+  background-image: url('../images/jungle.jpg');
   background-repeat: repeat;
   background-position: 0 0;
   background-size: auto 100%;
@@ -41,7 +42,7 @@ h1 {
 
 #score-container {
   display: block;
-  font-family: "Quantico";
+  font-family: 'Quantico';
   margin-left: 5%;
   padding-top: 5px;
   padding-right: 200px;
@@ -57,12 +58,12 @@ input {
   margin: auto;
   padding: 15px 15px;
   font-size: 50px;
-  font-family: "Quantico";
+  font-family: 'Quantico';
   text-shadow: 2px 2px 0px #073d00;
   color: #ffffff;
   text-align: center;
   background: transparent;
-  animation: bottomFadeAnimation 3s ease-out forwards;
+  animation: bottomFadeAnimation 1s ease-out forwards;
 }
 
 #enter-game {
@@ -73,11 +74,11 @@ input {
   border-radius: 10px;
   margin: 15px auto;
   font-size: 65px;
-  font-family: "Quantico";
+  font-family: 'Quantico';
   color: rgb(0, 0, 0);
   text-align: center;
   background: #00ff73;
-  animation: bottomFadeAnimation 3s ease-out forwards;
+  animation: bottomFadeAnimation 1s ease-out forwards;
   cursor: pointer;
 }
 
@@ -87,10 +88,10 @@ input {
   width: 750px;
   margin: 15px auto;
   font-size: 35px;
-  font-family: "Quantico";
+  font-family: 'Quantico';
   text-align: center;
   border: 6px dotted #3bff93;
-  animation: bottomFadeAnimation 3s ease-out forwards;
+  animation: bottomFadeAnimation 1s ease-out forwards;
 }
 
 .filler-top {
@@ -117,13 +118,14 @@ input {
   direction: row;
   font-size: 20px;
   font-weight: bold;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   border-top: 1px solid lightgreen;
   background-color: #103025;
   justify-content: center;
   align-self: center;
   align-items: center;
+  animation: bottomAnimation 1.5s ease-out forwards;
 }
 .smallicon {
   font-size: 16px;
@@ -147,7 +149,7 @@ input {
   margin: 11px 0 0 2px;
 }
 .speaker span:after {
-  content: "";
+  content: '';
   position: absolute;
   width: 0;
   height: 0;
@@ -160,7 +162,7 @@ input {
 .speaker span:before {
   transform: rotate(45deg);
   border-radius: 0 50px 0 0;
-  content: "";
+  content: '';
   position: absolute;
   width: 5px;
   height: 5px;
@@ -203,19 +205,30 @@ input {
   }
 }
 
+@keyframes bottomAnimation {
+  from {
+    margin-top: 50%;
+  }
+  to {
+    margin-top: 0%;
+  }
+}
+
 @keyframes bottomFadeAnimation {
   from {
+    transform: scale(0.5);
     opacity: 0;
   }
   to {
+    transform: scale(1);
     opacity: 1;
   }
 }
-@-webkit-keyframes bottomFadeAnimation {
+/* @-webkit-keyframes bottomFadeAnimation {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
   }
-}
+} */

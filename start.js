@@ -2,18 +2,18 @@
  * Author: Liel Kaysari
  * Import All Modules
  */
-import bodyParser from 'body-parser';
+import { config as Config } from './config';
+// import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 import express from 'express';
 import http from 'http';
-import methodOverride from 'method-override';
+// import methodOverride from 'method-override';
 import logger from 'morgan';
 import path from 'path';
 import favicon from 'serve-favicon';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import * as mainServer from './server/MainController';
-import { config as Config } from './config';
 import webpackConfig from './webpack.config.babel.js';
 
 const app = express();
@@ -26,9 +26,9 @@ app.set('port', port);
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(logger('dev'));
-app.use(methodOverride());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(methodOverride());
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'client')));
 app.use(favicon(path.join(__dirname, 'client/assets/images', 'favicon.ico')));
 

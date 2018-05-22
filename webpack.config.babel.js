@@ -1,4 +1,3 @@
-var webpack = require("webpack");
 export default {
   entry: "./index.js",
   output: {

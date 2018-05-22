@@ -1,4 +1,4 @@
-import { config as Config } from "../../config.js";
+import { config as Config } from '../../config.js';
 
 class Player {
   constructor(data, userId) {
@@ -10,29 +10,20 @@ class Player {
   }
   render(cnvsCTX, time, spriteAssetsSrcs, state) {
     let frameNumber;
-    let nickPos;
+    let pName;
     if (this.playerData.state === Config.PlayerState.NoState) {
       return;
-    } else if (
-      this.playerData.state === Config.PlayerState.WaitingForGameStart &&
-      state === 2
-    ) {
+    } else if (this.playerData.state === Config.PlayerState.WaitingForGameStart && state === 2) {
       return;
     } else {
       cnvsCTX.save();
       if (this.isSelf === false) {
-        cnvsCTX.configAlpha = 0.2;
-        cnvsCTX.font = "15px Quantico";
-        cnvsCTX.fillStyle = "green";
-        nickPos =
-          this.playerData.XCoordinate +
-          Config.TOUCAN_RENDER_WIDTH / 2 -
-          cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
-        cnvsCTX.fillText(
-          `${this.playerData.nick}`,
-          nickPos,
-          this.playerData.YCoordinate - 20
-        );
+        cnvsCTX.configAlpha = 0.5;
+        cnvsCTX.font = '20px Quantico';
+        cnvsCTX.fillStyle = 'green';
+        pName =
+          this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
+        cnvsCTX.fillText(`${this.playerData.nick}`, pName, this.playerData.YCoordinate - 20);
       }
       cnvsCTX.translate(
         this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2,
@@ -52,6 +43,13 @@ class Player {
           Config.TOUCAN_RENDER_HEIGHT
         );
       } else {
+        if (this.isSelf === false) {
+          cnvsCTX.shadowBlur = 20;
+          cnvsCTX.shadowColor = 'red';
+        } else {
+          cnvsCTX.shadowBlur = 20;
+          cnvsCTX.shadowColor = 'white';
+        }
         frameNumber = Math.round(time / 200) % 4;
         cnvsCTX.drawImage(
           spriteAssetsSrcs[this.playerData.color],
@@ -90,10 +88,7 @@ class Player {
   }
 
   isPlayerReady(readyState) {
-    this.playerData.state =
-      readyState === true
-        ? Config.PlayerState.Ready
-        : Config.PlayerState.WaitingForGameStart;
+    this.playerData.state = readyState === true ? Config.PlayerState.Ready : Config.PlayerState.WaitingForGameStart;
   }
 }
 
