@@ -22,7 +22,7 @@ const app = express();
  * Set Middleware
  */
 app.use(webpackMiddleware(webpack(webpackConfig)));
-app.set("port", Config.SERVER_PORT);
+app.set("port", process.env.PORT || 5000);
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 app.use(logger("dev"));
@@ -38,9 +38,12 @@ if ("development" == app.get("env")) {
 }
 
 app.get("/", (req, res) => {
-  res.render("../client/flappytoucan", {
-    ws: `${Config.SERVER_ADDRESS}:${process.env.PORT || 5000}`
-  });
+  res.render(
+    "../client/flappytoucan"
+    // , {
+    //   ws: `${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`
+    // }
+  );
 });
 
 /**
@@ -60,9 +63,9 @@ const server = http.createServer(app).listen(app.get("port"), () => {
   console.log(`Afeka Flappy Toucan is ON! ${app.get("port")}`);
 });
 
-var io = require("socket.io").listen(server);
+const io = require("socket.io")(server, { pingTimeout: 30000 });
 
 /**
  * Run Game on Server
  */
-game.startServer();
+game.startServer(io);

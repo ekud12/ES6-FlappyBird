@@ -1,9 +1,8 @@
 export let config = {
   SERVER_PORT: 4500,
-  SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
-  // SERVER_ADDRESS: "http://localhost",
-
   CLIENT_SOCKET: 2222,
+  // SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
+  SERVER_ADDRESS: "http://localhost",
 
   SCREEN_WIDTH: 1920,
   SCREEN_HEIGHT: 768,

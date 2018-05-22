@@ -3,20 +3,16 @@ import * as CollisionChecker from "./utils/CollisionUtils";
 
 import VineController from "./S_VineController";
 import PlayersManager from "./S_PlayerController";
-console.log("THE SOCKET IS: " + process.env.PORT);
-let io = require("socket.io").listen(process.env.PORT || 5000);
+
 let _playersManager;
 let _vineManager;
-
+let io;
 let _gameState;
 let _timeStartGame;
 let _lastTime = null;
 let _timer;
-export function startServer(port) {
-  // io.configure(() => {
-  //   io.set('log level', 2);
-  // });
-
+export function startServer(incomingIO) {
+  io = incomingIO;
   _gameState = Config.serverStates.WaitingForPlayers;
 
   // Create playersManager instance and register events
@@ -51,7 +47,8 @@ export function startServer(port) {
   });
 
   console.log(
-    `Game started and waiting for players on port ${process.env.PORT || 5000}`
+    `Game started and waiting for players on port ${Config.CLIENT_SOCKET ||
+      5000}`
   );
 }
 
