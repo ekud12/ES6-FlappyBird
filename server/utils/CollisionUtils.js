@@ -1,4 +1,4 @@
-import { config as Config } from "../../config";
+import { config as Config } from '../../config';
 
 export const checkCollisions = (vine, toucans) => {
   let collisionDetected = false;
@@ -16,15 +16,12 @@ export const checkCollisions = (vine, toucans) => {
 const checkSingleCollision = (vine, toucanLatestProps) => {
   const toucan = toucanLatestProps.getPlayerObject();
   if (
-    toucan.XCoordinate + Config.TOUCAN_RENDER_WIDTH > vine.XCoordinate &&
+    toucan.XCoordinate + Config.TOUCAN_RENDER_WIDTH > vine.XCoordinate + 70 &&
     toucan.XCoordinate < vine.XCoordinate + Config.VINE_WIDTH
   ) {
     toucanLatestProps.updateScore(vine.id);
     if (toucan.YCoordinate < vine.YCoordinate) return true;
-    if (
-      toucan.YCoordinate + Config.TOUCAN_RENDER_HEIGHT >
-      vine.YCoordinate + Config.HEIGHT_BETWEEN_VINES
-    ) {
+    if (toucan.YCoordinate + Config.TOUCAN_RENDER_HEIGHT > vine.YCoordinate + Config.HEIGHT_BETWEEN_VINES) {
       return true;
     }
   }

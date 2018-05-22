@@ -1,7 +1,7 @@
 import { config as Config } from '../config';
 import * as CollisionChecker from './utils/CollisionUtils';
-import VineController from './S_VineController';
-import PlayersController from './S_PlayerController';
+import VineController from './controllers/S_VineController';
+import PlayersController from './controllers/S_PlayerController';
 
 let PlayersControllerInst;
 let VineControllerInst;

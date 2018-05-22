@@ -1,7 +1,7 @@
-import { EventEmitter } from "events";
-import { config as Config } from "../config";
-import util from "util";
-import Player from "./models/Player.model";
+import { EventEmitter } from 'events';
+import { config as Config } from '../../config';
+import util from 'util';
+import Player from '../models/Player.model';
 
 let players = new Array();
 let index = 0;
@@ -12,7 +12,6 @@ class PlayersController {
   }
 
   addPlayer(socket, playerId) {
-    
     let newPlayerAvatarColor = Math.floor(Math.random() * 4);
     let newPlayer = new Player(socket, playerId, newPlayerAvatarColor);
     players.push(newPlayer);
@@ -53,10 +52,7 @@ class PlayersController {
   getOnGamePlayerList() {
     const resultSet = new Array();
     for (let i = 0; i < this.getTotalPlayers(); i++) {
-      if (
-        players[i].getState() === Config.PlayerState.InProgress ||
-        players[i].getState() === Config.PlayerState.Dead
-      )
+      if (players[i].getState() === Config.PlayerState.InProgress || players[i].getState() === Config.PlayerState.Dead)
         resultSet.push(players[i].getPlayerObject());
     }
 
@@ -77,7 +73,7 @@ class PlayersController {
       }
     }
 
-    this.emit("all-players-ready-to-play");
+    this.emit('all-players-ready-to-play');
   }
 
   anyActivePlayersLeft() {
