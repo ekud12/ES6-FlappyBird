@@ -19,14 +19,6 @@ let port;
 
 /** Audio handling */
 window.audioHandler = audioHandler;
-// fetch("http://localhost/aport")
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     port = myJson;
-//   });
-// console.log(port);
 document.addEventListener("keydown", event => {
   if (event.keyCode === Config.SOUND_TOGGLE) {
     audioHandler();
@@ -50,13 +42,11 @@ const canvasPaint = (nowTime, totalTime) => {
 
 const runClientInstance = () => {
   if (typeof io === "undefined") {
-    console.log("DAMN");
+    console.log("ERROR INIT IO");
   }
   playersCInstance = new PlayersController();
 
   socket = io.connect();
-
-  console.log(socket);
   socket.on("connect", () => {
     socket.on("disconnect", () => {
       console.log(`Disconnected or player quit. Refresh Page.`);

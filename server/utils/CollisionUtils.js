@@ -1,17 +1,16 @@
 import { config as Config } from "../../config";
 
 export const checkCollisions = (vine, toucans) => {
-  let collision = false;
+  let collisionDetected = false;
   for (let i = 0; i < vine.length; i++) {
     for (let j = 0; j < toucans.length; j++) {
       if (checkSingleCollision(vine[i], toucans[j]) === true) {
         toucans[j].sorryYouAreDie(toucans.length);
-        collision = true;
+        collisionDetected = true;
       }
     }
   }
-
-  return collision;
+  return collisionDetected;
 };
 
 const checkSingleCollision = (vine, toucanLatestProps) => {
