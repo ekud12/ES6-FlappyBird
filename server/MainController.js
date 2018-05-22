@@ -1,180 +1,167 @@
-import { config as Config } from "../config";
-import * as CollisionChecker from "./utils/CollisionUtils";
-import VineController from "./S_VineController";
-import PlayersManager from "./S_PlayerController";
+import { config as Config } from '../config';
+import * as CollisionChecker from './utils/CollisionUtils';
+import VineController from './S_VineController';
+import PlayersController from './S_PlayerController';
 
-let _playersManager;
-let _vineManager;
+let PlayersControllerInst;
+let VineControllerInst;
+let gameState;
+let gameStart;
+let lastUpdate = null;
+let timer;
 let io;
-let _gameState;
-let _timeStartGame;
-let _lastTime = null;
-let _timer;
-export function startServer(incomingIO) {
-  io = incomingIO;
-  _gameState = Config.serverStates.WaitingForPlayers;
 
-  // Create playersManager instance and register events
-  _playersManager = new PlayersManager();
-  _playersManager.on("all-players-ready-to-play", () => {
+export const initializeServer = incomingIO => {
+  io = incomingIO;
+  gameState = Config.serverStates.WaitingForPlayers;
+
+  // Create PlayersControllerInst instance and register events
+  PlayersControllerInst = new PlayersController();
+
+  PlayersControllerInst.on('all-players-ready-to-play', () => {
     startGameLoop();
   });
 
   // Create vine manager and bind event
-  _vineManager = new VineController();
-  _vineManager.on("create_new_vine", () => {
+  VineControllerInst = new VineController();
+  VineControllerInst.on('create_new_vine', () => {
     // Create a vine and send it to clients
-    const vine = _vineManager.createNewVine();
+    const vine = VineControllerInst.createNewVine();
   });
 
   // On new client connection
-  io.sockets.on("connection", socket => {
+  io.sockets.on('connection', socket => {
     // Add new player
-    let player = _playersManager.addPlayer(socket, socket.id);
-    console.log("PLAYER:" + player);
+    let player = PlayersControllerInst.addPlayer(socket, socket.id);
+    console.log('PLAYER:' + player);
     socket.PlayerInstance = player;
     // Register to socket events
-    socket.on("disconnect", () => {
-      _playersManager.removePlayer(player);
-      socket.broadcast.emit("player_disconnected", player.getPlayerObject());
+    socket.on('disconnect', () => {
+      PlayersControllerInst.removePlayer(player);
+      socket.broadcast.emit('player_disconnected', player.getPlayerObject());
       player = null;
     });
 
-    socket.on("say_hi", (nick, fn) => {
-      fn(_gameState, player.getID());
-      playerLog(socket, nick);
+    socket.on('say_hi', (nick, fn) => {
+      fn(gameState, player.getID());
+      initPlayerWithBindings(socket, nick);
     });
   });
-}
+};
 
-function playerLog(socket, nick) {
+const initPlayerWithBindings = (playerSocket, name) => {
   // Retreive PlayerInstance
-  let player = socket.PlayerInstance;
+  let player = playerSocket.PlayerInstance;
+
+  PlayersControllerInst.initPlayer(player, name);
 
   // Bind new client events
-  socket.on("update_ready_state", readyState => {
+  playerSocket.on('update_ready_state', readyState => {
     // If the server is currently waiting for players, update ready state
-    if (_gameState === Config.serverStates.WaitingForPlayers) {
-      _playersManager.checkAllPlayersReady(player, readyState);
-      socket.broadcast.emit("player_is_ready", player.getPlayerObject());
+    if (gameState === Config.serverStates.WaitingForPlayers) {
+      PlayersControllerInst.checkAllPlayersReady(player, readyState);
+      playerSocket.broadcast.emit('player_is_ready', player.getPlayerObject());
     }
   });
-  socket.on("play_action", () => {
+  playerSocket.on('play_action', () => {
     player.jump();
   });
 
-  // Set player's nickname and prepare him for the next game
-  _playersManager.initPlayer(player, nick);
-
   // Notify new client about other players AND notify other about the new one ;)
-  socket.emit(
-    "list_of_players_update",
-    _playersManager.getAllPlayersForState()
-  );
-  socket.broadcast.emit("player_joined", player.getPlayerObject());
-}
+  playerSocket.emit('list_of_players_update', PlayersControllerInst.getAllPlayersForState());
 
-function updateGameState(newState, notifyClients) {
-  let log = "\t[SERVER] Game state changed ! Server is now ";
+  playerSocket.broadcast.emit('player_joined', player.getPlayerObject());
+};
 
-  _gameState = newState;
-  switch (_gameState) {
+const refreshState = (state, notifyClients) => {
+  let log = '\t[SERVER] Game state changed ! Server is now ';
+
+  gameState = state;
+  switch (gameState) {
     case Config.serverStates.WaitingForPlayers:
-      log += "in lobby waiting for players";
+      log += 'in lobby waiting for players';
       break;
     case Config.serverStates.OnGame:
-      log += "in game !";
+      log += 'in game !';
       break;
     case Config.serverStates.Ranking:
-      log += "displaying ranking";
+      log += 'displaying ranking';
       break;
     default:
-      log += "dead :p";
+      log += 'dead :p';
   }
   console.info(log);
+  io.sockets.emit('state_updated', gameState);
+};
 
-  // If requested, inform clients qbout the chsnge
-  io.sockets.emit("state_updated", _gameState);
-}
+const initGameSession = () => {
+  VineControllerInst.clearAllVines();
 
-function createNewGame() {
-  let players;
-  let i;
-
-  // Flush vine list
-  _vineManager.clearAllVines();
-
-  // Reset players state and send it
-  players = _playersManager.resetAllPlayers();
-  for (i = 0; i < players.length; i++) {
-    io.sockets.emit("player_is_ready", players[i]);
+  let players = PlayersControllerInst.resetAllPlayers();
+  for (let i = 0; i < players.length; i++) {
+    io.sockets.emit('player_is_ready', players[i]);
   }
 
-  // Notify players of the new game state
-  updateGameState(Config.serverStates.WaitingForPlayers, true);
-}
+  refreshState(Config.serverStates.WaitingForPlayers, true);
+};
 
-function gameOver() {
-  let players;
-  let i;
+const gameEnded = () => {
+  clearInterval(timer);
+  lastUpdate = null;
+  refreshState(Config.serverStates.Ranking, true);
+  PlayersControllerInst.sendWinner();
+  setTimeout(initGameSession, 3000);
+};
 
-  // Stop game loop
-  clearInterval(_timer);
-  _lastTime = null;
-  updateGameState(Config.serverStates.Ranking, true);
-  _playersManager.sendWinner();
-  setTimeout(createNewGame, 3000);
-}
-
-function startGameLoop() {
+const startGameLoop = () => {
   // Change server state
-  updateGameState(Config.serverStates.OnGame, true);
+  refreshState(Config.serverStates.OnGame, true);
 
   // Create the first vine
-  _vineManager.createNewVine();
+  VineControllerInst.createNewVine();
 
   // Start timer
-  _timer = setInterval(() => {
+  timer = setInterval(() => {
     const now = new Date().getTime();
     let ellapsedTime = 0;
     let plList;
 
     // get time difference between the last call and now
-    if (_lastTime) {
-      ellapsedTime = now - _lastTime;
+    if (lastUpdate) {
+      ellapsedTime = now - lastUpdate;
     } else {
-      _timeStartGame = now;
+      gameStart = now;
     }
 
-    _lastTime = now;
+    lastUpdate = now;
 
     // If everyone has quit the game, exit it
-    if (_playersManager.getTotalPlayers() === 0) {
-      gameOver();
+    if (PlayersControllerInst.getTotalPlayers() === 0) {
+      gameEnded();
     }
 
     // Update players position
-    _playersManager.updatePlayers(ellapsedTime);
+    PlayersControllerInst.updatePlayers(ellapsedTime);
 
     // Update vines
-    _vineManager.refreshVines(ellapsedTime);
+    VineControllerInst.refreshVines(ellapsedTime);
 
     // Check collisions
     if (
       CollisionChecker.checkCollisions(
-        _vineManager.getClosestVines(),
-        _playersManager.getAllPlayersForState(Config.PlayerState.InProgress)
+        VineControllerInst.getClosestVines(),
+        PlayersControllerInst.getAllPlayersForState(Config.PlayerState.InProgress)
       ) === true
     ) {
-      if (_playersManager.anyActivePlayersLeft() === false) {
-        gameOver();
+      if (PlayersControllerInst.anyActivePlayersLeft() === false) {
+        gameEnded();
       }
     }
 
     // Notify players
-    io.sockets.emit("update_game_digital_assets", {
-      players: _playersManager.getOnGamePlayerList(),
-      vines: _vineManager.getVines()
+    io.sockets.emit('update_game_digital_assets', {
+      players: PlayersControllerInst.getOnGamePlayerList(),
+      vines: VineControllerInst.getVines()
     });
   }, 1000 / 60);
-}
+};

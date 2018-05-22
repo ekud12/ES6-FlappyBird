@@ -4,9 +4,9 @@ import util from "util";
 import Player from "./models/Player.model";
 
 let players = new Array();
-let position = 0;
+let index = 0;
 
-class PlayersManager {
+class PlayersController {
   constructor() {
     EventEmitter.call(this);
   }
@@ -29,7 +29,7 @@ class PlayersManager {
 
   initPlayer(player, name) {
     player.setNick(name);
-    player.preparePlayer(position++);
+    player.preparePlayer(index++);
   }
 
   updatePlayers(currentTime) {
@@ -104,9 +104,9 @@ class PlayersManager {
 
   resetAllPlayers() {
     const resultSet = new Array();
-    position = 0;
+    index = 0;
     for (let i = 0; i < this.getTotalPlayers(); i++) {
-      players[i].preparePlayer(position++);
+      players[i].preparePlayer(index++);
       resultSet.push(players[i].getPlayerObject());
     }
     return resultSet;
@@ -117,6 +117,6 @@ class PlayersManager {
   }
 }
 
-util.inherits(PlayersManager, EventEmitter);
+util.inherits(PlayersController, EventEmitter);
 
-export default PlayersManager;
+export default PlayersController;
