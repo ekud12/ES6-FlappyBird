@@ -3,6 +3,7 @@ import PlayersController from '../controllers/PlayersController.js';
 import GUIController from '../controllers/GUIController.js';
 let state = Config.clientInstanceStates.New;
 let GUIControllerInstance = new GUIController();
+let audio = new Audio('./../../assets/images/jungle.mp3');
 let playersCInstance;
 let playerID = null;
 let isPlayerReady = false;
@@ -11,8 +12,9 @@ let socket;
 let gameVines;
 let audioPlaying = false;
 let port;
+
 /**
- *
+ *s
  * On resources Loaded Callback Done
  * run the client's game instance
  */
@@ -27,6 +29,7 @@ document.addEventListener('keydown', event => {
 
 /** On finished loading, run client instance */
 GUIControllerInstance.loadAssets(() => {
+  audio.loop = true;
   runClientInstance();
 });
 
@@ -171,10 +174,18 @@ const displayWinner = data => {
 
 function audioHandler() {
   let audioRef = document.getElementById('myJunglePlayer');
+  if (audioRef.muted) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
   audioRef.muted = audioPlaying ? true : false;
   audioPlaying = audioRef.muted ? false : true;
 }
 
+/** This is better than using SetInterval because its inbrowser
+ * and helps us get frames so that the canvas will render without jitters
+  */
 requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||

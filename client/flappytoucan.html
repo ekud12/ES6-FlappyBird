@@ -18,7 +18,7 @@
 <body>
   <div class="filler-top">
 
-    <audio id="myJunglePlayer" loop>
+    <audio id="myJunglePlayer" loop muted>
       <source src="./assets/images/jungle.mp3">
     </audio>
 
@@ -40,14 +40,15 @@
     <input type="text" id="player-name" maxlength="12" value="Your Name" />
     <button id="enter-game">Play !</button>
     <div id="winner-div">Who will be the Winner?...</div>
-    <a class="speaker" onclick="audioHandler()">
-      <span></span>
-    </a>
+
 
   </div>
   <div class="author">
     Made with &nbsp;
     <i class="fas fa-heart smallicon"></i>&nbsp; by Liel Kaysrai.
+    <a class="speaker" onclick="audioHandler()">
+      <span></span>
+    </a>
   </div>
 </body>
 
