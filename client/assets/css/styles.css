@@ -77,6 +77,7 @@ input {
   text-align: center;
   background: #00ff73;
   animation: bottomFadeAnimation 3s ease-out forwards;
+  cursor: pointer;
 }
 
 #winner-div {
