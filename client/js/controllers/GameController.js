@@ -19,14 +19,14 @@ let port;
 
 /** Audio handling */
 window.audioHandler = audioHandler;
-fetch("http://localhost/aport")
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    port = myJson;
-  });
-console.log(port);
+// fetch("http://localhost/aport")
+//   .then(function(response) {
+//     return response.json();
+//   })
+//   .then(function(myJson) {
+//     port = myJson;
+//   });
+// console.log(port);
 document.addEventListener("keydown", event => {
   if (event.keyCode === Config.SOUND_TOGGLE) {
     audioHandler();
@@ -54,9 +54,7 @@ const runClientInstance = () => {
   }
   playersCInstance = new PlayersController();
 
-  socket = io.connect(`${Config.SERVER_ADDRESS}:${5000}`, {
-    reconnect: false
-  });
+  socket = io.connect();
 
   console.log(socket);
   socket.on("connect", () => {
