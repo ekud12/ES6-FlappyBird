@@ -111,6 +111,23 @@ input {
   border-top: 3px solid #004b31;
 }
 
+.author {
+  display: flex;
+  direction: row;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  border-top: 1px solid lightgreen;
+  background-color: #103025;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+}
+.smallicon {
+  font-size: 16px;
+  color: rgb(255, 89, 89);
+}
 /** volume control */
 .speaker {
   height: 30px;
