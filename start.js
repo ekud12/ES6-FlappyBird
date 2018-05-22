@@ -12,7 +12,7 @@ import path from "path";
 import favicon from "serve-favicon";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
-import * as server from "./server/MainController";
+import * as mainServer from "./server/MainController";
 import { config as Config } from "./config";
 import webpackConfig from "./webpack.config.babel.js";
 
@@ -63,4 +63,4 @@ const io = require("socket.io")(server, { pingTimeout: 30000 });
 /**
  * Run Game on Server
  */
-server.startServer(io);
+mainServer.startServer(io);
