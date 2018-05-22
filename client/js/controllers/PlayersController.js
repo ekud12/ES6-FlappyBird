@@ -11,6 +11,7 @@ export default class PlayersController {
   }
 
   addPlayer(data, p_id) {
+    console.log(data);
     let player;
     if (this.getPlayerByID(data.id) !== null) {
       return;

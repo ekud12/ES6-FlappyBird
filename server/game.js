@@ -32,6 +32,7 @@ export function startServer(incomingIO) {
   io.sockets.on("connection", socket => {
     // Add new player
     let player = _playersManager.addPlayer(socket, socket.id);
+    console.log("PLAYER:" + player);
     socket.PlayerInstance = player;
     // Register to socket events
     socket.on("disconnect", () => {
@@ -46,10 +47,10 @@ export function startServer(incomingIO) {
     });
   });
 
-  console.log(
-    `Game started and waiting for players on port ${Config.CLIENT_SOCKET ||
-      5000}`
-  );
+  // console.log(
+  //   `Game started and waiting for players on port ${Config.CLIENT_SOCKET ||
+  //     5000}`
+  // );
 }
 
 function playerLog(socket, nick) {

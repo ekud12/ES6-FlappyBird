@@ -115,7 +115,7 @@ const clientGetUpdatedState = data => {
 
 const initClientSocketBindings = () => {
   const name = document.getElementById(`player-name`).value;
-  if (name === "" || name === "Your Name") {
+  if (name === "" || name === "Your Name" || name === " ") {
     alert("Please choose a name First!");
     return;
   }

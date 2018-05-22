@@ -12,6 +12,7 @@ class PlayersManager {
   }
 
   addPlayer(socket, playerId) {
+    
     let newPlayerAvatarColor = Math.floor(Math.random() * 4);
     let newPlayer = new Player(socket, playerId, newPlayerAvatarColor);
     players.push(newPlayer);
