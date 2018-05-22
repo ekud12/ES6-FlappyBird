@@ -1,6 +1,5 @@
 import { config as Config } from "../config";
 import * as CollisionChecker from "./utils/CollisionUtils";
-
 import VineController from "./S_VineController";
 import PlayersManager from "./S_PlayerController";
 

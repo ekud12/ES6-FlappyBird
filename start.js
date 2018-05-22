@@ -12,7 +12,7 @@ import path from "path";
 import favicon from "serve-favicon";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
-import * as game from "./server/game";
+import * as server from "./server/MainController";
 import { config as Config } from "./config";
 import webpackConfig from "./webpack.config.babel.js";
 
@@ -38,12 +38,7 @@ if ("development" == app.get("env")) {
 }
 
 app.get("/", (req, res) => {
-  res.render(
-    "../client/flappytoucan"
-    // , {
-    //   ws: `${Config.SERVER_ADDRESS}:${Config.CLIENT_SOCKET}`
-    // }
-  );
+  res.render("../client/flappytoucan");
 });
 
 /**
@@ -68,4 +63,4 @@ const io = require("socket.io")(server, { pingTimeout: 30000 });
 /**
  * Run Game on Server
  */
-game.startServer(io);
+server.startServer(io);
