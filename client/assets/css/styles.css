@@ -6,6 +6,7 @@
 body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 h1 {
@@ -105,7 +106,7 @@ input {
 .filler-bottom {
   background-color: #103025;
   width: 100%;
-  height: 143px;
+  height: 142px;
   display: flex;
   direction: row;
   border-top: 3px solid #004b31;
