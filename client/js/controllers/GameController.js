@@ -19,14 +19,14 @@ let port;
 
 /** Audio handling */
 window.audioHandler = audioHandler;
-// fetch("http://localhost/aport")
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     port = myJson;
-//   });
-// console.log(process.env);
+fetch("http://localhost/aport")
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    port = myJson;
+  });
+console.log(port);
 document.addEventListener("keydown", event => {
   if (event.keyCode === Config.SOUND_TOGGLE) {
     audioHandler();
