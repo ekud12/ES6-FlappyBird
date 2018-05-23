@@ -66,23 +66,7 @@ const initPlayerWithBindings = (playerSocket, name) => {
 };
 
 const refreshState = (state, notifyClients) => {
-  let log = '\t[SERVER] Game state changed ! Server is now ';
-
   gameState = state;
-  switch (gameState) {
-    case Config.serverStates.WaitingForPlayers:
-      log += 'in lobby waiting for players';
-      break;
-    case Config.serverStates.OnGame:
-      log += 'in game !';
-      break;
-    case Config.serverStates.Ranking:
-      log += 'displaying ranking';
-      break;
-    default:
-      log += 'dead :p';
-  }
-  console.info(log);
   io.sockets.emit('state_updated', gameState);
 };
 

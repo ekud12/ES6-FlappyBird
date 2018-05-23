@@ -65,14 +65,12 @@ class PlayersController {
     if (pIndex >= 0) {
       players[pIndex].setReadyState(isReady);
     }
-
     for (let i = 0; i < this.getTotalPlayers(); i++) {
       if (players[i].getState() === Config.PlayerState.WaitingForGameStart) {
         console.info(`Waiting for ${players[i].getPlayerName()} to be Ready.`);
         return;
       }
     }
-
     this.emit('all-players-ready-to-play');
   }
 

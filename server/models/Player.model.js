@@ -1,4 +1,4 @@
-import { config as Config } from "../../config";
+import { config as Config } from '../../config';
 
 // Defines
 const MAX_BIRDS_IN_A_ROW = 3;
@@ -14,14 +14,14 @@ const ROTATION_SPEED = 8;
 
 class Player {
   constructor(socket, uid, color) {
-    this._socket = socket;
-    this._speedY = 0;
-    this._rank = 1;
-    this._lastVine = 0;
+    this.socketId = socket;
+    this.speed = 0;
+    this.ranking = 1;
+    this.latestVineId = 0;
+    this.color = color;
     this._playerTinyObject = {
       id: uid,
-      nick: "",
-      color,
+      nick: '',
       rotation: 0,
       score: 0,
       best_score: 0,
@@ -37,30 +37,23 @@ class Player {
     // If player is still alive, update its Y position
     if (this._playerTinyObject.state === Config.PlayerState.InProgress) {
       // calc now Y pos
-      this._speedY += GRAVITY_SPEED;
-      this._playerTinyObject.YCoordinate += Math.round(
-        timeLapse * this._speedY
-      );
+      this.speed += GRAVITY_SPEED;
+      this._playerTinyObject.YCoordinate += Math.round(timeLapse * this.speed);
 
       // Calc rotation
-      this._playerTinyObject.rotation += Math.round(
-        this._speedY * ROTATION_SPEED
-      );
-      if (this._playerTinyObject.rotation > MIN_ROTATION)
-        this._playerTinyObject.rotation = MIN_ROTATION;
+      this._playerTinyObject.rotation += Math.round(this.speed * ROTATION_SPEED);
+      if (this._playerTinyObject.rotation > MIN_ROTATION) this._playerTinyObject.rotation = MIN_ROTATION;
     }
     // If he's died, update it's X position
     else if (this._playerTinyObject.state === Config.PlayerState.Dead) {
-      this._playerTinyObject.XCoordinate -= Math.floor(
-        timeLapse * Config.SPEED
-      );
+      this._playerTinyObject.XCoordinate -= Math.floor(timeLapse * Config.SPEED);
     } else {
       // console.info(this._playerTinyObject.nick + " doesn't move because he's in state " + this._playerTinyObject.state);
     }
   }
 
   jump() {
-    this._speedY = JUMP_SPEED;
+    this.speed = JUMP_SPEED;
     this._playerTinyObject.rotation = MAX_ROTATION;
   }
 
@@ -90,36 +83,28 @@ class Player {
   }
 
   sorryYouAreDie(nbPlayersLeft) {
-    this._rank = nbPlayersLeft;
+    this.ranking = nbPlayersLeft;
     this._playerTinyObject.state = Config.PlayerState.Dead;
 
     console.info(`OMG ! They kill ${this._playerTinyObject.nick} :p`);
   }
 
   setReadyState(readyState) {
-    this._playerTinyObject.state =
-      readyState === true
-        ? Config.PlayerState.InProgress
-        : Config.PlayerState.WaitingForGameStart;
+    this._playerTinyObject.state = readyState === true ? Config.PlayerState.InProgress : Config.PlayerState.WaitingForGameStart;
     console.info(
       `${this._playerTinyObject.nick} is ${
-        this._playerTinyObject.state === Config.PlayerState.InProgress
-          ? "ready !"
-          : "not yet ready"
+        this._playerTinyObject.state === Config.PlayerState.InProgress ? 'ready !' : 'not yet ready'
       }`
     );
   }
 
   setBestScore(score) {
     this._playerTinyObject.best_score = score;
-    console.info(
-      `${this._playerTinyObject.nick} just beat his highscore to ${score}`
-    );
+    console.info(`${this._playerTinyObject.nick} just beat his highscore to ${score}`);
   }
 
   isReadyToPlay() {
-    if (this._playerTinyObject.state === Config.PlayerState.InProgress)
-      return true;
+    if (this._playerTinyObject.state === Config.PlayerState.InProgress) return true;
     return false;
   }
 
@@ -127,7 +112,7 @@ class Player {
     return this._playerTinyObject;
   }
   getPlayerRank() {
-    return this._rank;
+    return this.ranking;
   }
 
   preparePlayer(pos) {
@@ -139,55 +124,43 @@ class Player {
     line = Math.floor(pos / 6);
     col = Math.floor(pos % 6);
     randomMoveX = Math.floor(Math.random() * (SPACE_BETWEEN_BIRDS_X / 2 + 1));
-    this._playerTinyObject.YCoordinate =
-      START_BIRD_POS_Y + line * SPACE_BETWEEN_BIRDS_Y;
-    this._playerTinyObject.XCoordinate =
-      START_BIRD_POS_X + col * SPACE_BETWEEN_BIRDS_X + randomMoveX;
+    this._playerTinyObject.YCoordinate = START_BIRD_POS_Y + line * SPACE_BETWEEN_BIRDS_Y;
+    this._playerTinyObject.XCoordinate = START_BIRD_POS_X + col * SPACE_BETWEEN_BIRDS_X + randomMoveX;
 
     // Reset usefull values
-    this._speedY = 0;
-    this._rank = 0;
+    this.speed = 0;
+    this.ranking = 0;
     this._playerTinyObject.score = 0;
     this._playerTinyObject.rotation = 0;
     // Update all register players
-    if (this._playerTinyObject.nick != "")
-      this._playerTinyObject.state = Config.PlayerState.WaitingForGameStart;
+    if (this._playerTinyObject.nick != '') this._playerTinyObject.state = Config.PlayerState.WaitingForGameStart;
   }
 
   updateScore(vineID) {
-    // If the current vine ID is different from the last one, it means the players meets a new vine. So update score
-    if (vineID != this._lastVine) {
+    if (vineID != this.latestVineId) {
       this._playerTinyObject.score++;
-      this._lastVine = vineID;
+      this.latestVineId = vineID;
     }
   }
 
-  sendScore(NBPlayers, HighScores) {
-    // Update player best score if he just make a new one !
-    if (this._playerTinyObject.score > this._playerTinyObject.best_score) {
-      this._playerTinyObject.best_score = this._playerTinyObject.score;
-    }
+  // sendScore(NBPlayers, HighScores) {
+  //   // Update player best score if he just make a new one !
+  //   if (this._playerTinyObject.score > this._playerTinyObject.best_score) {
+  //     this._playerTinyObject.best_score = this._playerTinyObject.score;
+  //   }
 
-    // Send him complete we_have_a_winner
-    this._socket.emit("we_have_a_winner", {
-      score: this._playerTinyObject.score,
-      bestScore: this._playerTinyObject.best_score,
-      rank: this._rank,
-      nbPlayers: NBPlayers,
-      highscores: HighScores
-    });
-  }
+  //   // Send him complete we_have_a_winner
+  //   this.socketId.emit("we_have_a_winner", {
+  //     score: this._playerTinyObject.score,
+  //     bestScore: this._playerTinyObject.best_score,
+  //     rank: this.ranking,
+  //     nbPlayers: NBPlayers,
+  //     highscores: HighScores
+  //   });
+  // }
 
   sendWinner(winner, score) {
-    // Update player best score if he just make a new one !
-    // if (this._playerTinyObject.score > this._playerTinyObject.best_score) {
-    //   this._playerTinyObject.best_score = this._playerTinyObject.score;
-    // }
-
-    // Send him complete we_have_a_winner
-    console.log(winner);
-    console.log(score);
-    this._socket.emit("we_have_a_winner", {
+    this.socketId.emit('we_have_a_winner', {
       winner: winner,
       score: score
     });
