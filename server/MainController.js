@@ -58,7 +58,7 @@ const initPlayerWithBindings = (playerSocket, name) => {
   });
 
   playerSocket.on('play_action', () => {
-    player.jump();
+    player.action();
   });
 
   playerSocket.emit('list_of_players_update', PlayersControllerInst.getAllPlayersForState());
@@ -85,16 +85,15 @@ const gameEnded = () => {
   clearInterval(timer);
   lastUpdate = null;
   refreshState(Config.serverStates.Ranking, true);
-  PlayersControllerInst.sendWinner();
-  setTimeout(initGameSession, 3000);
+  PlayersControllerInst.broadcastWinner();
+  setTimeout(initGameSession, 2500);
 };
 
 const serverGameInstanceLoop = () => {
-  // Change server state
   refreshState(Config.serverStates.OnGame, true);
-  // Create the first vine
   VineControllerInst.createNewVine();
-  // Start timer
+
+  /** Game loop Timer - equivalent to requestAnimationFrame in client */
   timer = setInterval(() => {
     const now = new Date().getTime();
     let ellapsedTime = 0;

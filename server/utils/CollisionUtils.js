@@ -5,7 +5,7 @@ export const checkCollisions = (vine, toucans) => {
   for (let i = 0; i < vine.length; i++) {
     for (let j = 0; j < toucans.length; j++) {
       if (checkSingleCollision(vine[i], toucans[j]) === true) {
-        toucans[j].sorryYouAreDie(toucans.length);
+        toucans[j].setPlayerIsDead(toucans.length);
         collisionDetected = true;
       }
     }

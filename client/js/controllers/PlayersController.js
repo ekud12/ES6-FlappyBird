@@ -1,4 +1,4 @@
-import Player from "../models/Player.model.js";
+import Player from '../models/Player.model.js';
 
 let players;
 let playersIndices;
@@ -13,7 +13,7 @@ export default class PlayersController {
   addPlayer(data, p_id) {
     console.log(data);
     let player;
-    if (this.getPlayerByID(data.id) !== null) {
+    if (this.findPlayerById(data.id) !== null) {
       return;
     }
     player = new Player(data, p_id);
@@ -26,7 +26,7 @@ export default class PlayersController {
 
   deletePlayer(player) {
     const index = playersIndices[player.id];
-    if (!(typeof index === "undefined")) {
+    if (!(typeof index === 'undefined')) {
       players.splice(index, 1);
       playersIndices = new Array();
       for (let i = 0; i < players.length; i++) {
@@ -38,11 +38,11 @@ export default class PlayersController {
 
   refreshPList(playersData) {
     for (let i = 0; i < playersData.length; i++) {
-      players[playersIndices[playersData[i].id]].updateData(playersData[i]);
+      players[playersIndices[playersData[i].id]].updatePlayerData(playersData[i]);
     }
   }
 
-  getPlayerByID(playerID) {
+  findPlayerById(playerID) {
     for (let i = 0; i < players.length; i++) {
       if (players[i].getId() === playerID) return players[i];
     }

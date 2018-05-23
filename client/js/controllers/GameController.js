@@ -124,7 +124,7 @@ const initClientSocketBindings = () => {
     playersCInstance.deletePlayer(player);
   });
   socket.on('player_is_ready', playerInfos => {
-    playersCInstance.getPlayerByID(playerInfos.id).updateData(playerInfos);
+    playersCInstance.findPlayerById(playerInfos.id).updatePlayerData(playerInfos);
   });
   socket.on('state_updated', gameState => {
     clientGetUpdatedState(gameState);
@@ -185,7 +185,7 @@ function audioHandler() {
 
 /** This is better than using SetInterval because its inbrowser
  * and helps us get frames so that the canvas will render without jitters
-  */
+ */
 requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||

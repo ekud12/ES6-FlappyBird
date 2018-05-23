@@ -27,7 +27,7 @@ class PlayersController {
   }
 
   initPlayer(player, name) {
-    player.setNick(name);
+    player.setName(name);
     player.preparePlayer(index++);
   }
 
@@ -82,7 +82,7 @@ class PlayersController {
     return false;
   }
 
-  sendWinner() {
+  broadcastWinner() {
     let winner, score;
     let i;
     for (i = 0; i < this.getTotalPlayers(); i++) {

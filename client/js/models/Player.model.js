@@ -22,8 +22,8 @@ class Player {
         cnvsCTX.font = '20px Quantico';
         cnvsCTX.fillStyle = 'green';
         pName =
-          this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.nick}`).width / 2;
-        cnvsCTX.fillText(`${this.playerData.nick}`, pName, this.playerData.YCoordinate - 20);
+          this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.name}`).width / 2;
+        cnvsCTX.fillText(`${this.playerData.name}`, pName, this.playerData.YCoordinate - 20);
       }
       cnvsCTX.translate(
         this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2,
@@ -67,7 +67,7 @@ class Player {
     cnvsCTX.restore();
   }
 
-  updateData(data) {
+  updatePlayerData(data) {
     this.playerData = data;
   }
 
@@ -80,7 +80,7 @@ class Player {
   }
 
   getPlayerName() {
-    return this.playerData.nick;
+    return this.playerData.name;
   }
 
   getPlayerScore() {
