@@ -5,7 +5,7 @@ export let config = {
   VINE_SPR_H: 768,
   VINE_SPR_W: 148,
   TOUCAN_SOURCES: [
-    'assets/images/toucan.png',
+    'assets/images/toucan-black.png',
     'assets/images/toucan-red.png',
     'assets/images/toucan-purple.png',
     'assets/images/toucan-green.png'
