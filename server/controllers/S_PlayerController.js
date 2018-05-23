@@ -15,14 +15,14 @@ class PlayersController {
     let newPlayerAvatarColor = Math.floor(Math.random() * 4);
     let newPlayer = new Player(socket, playerId, newPlayerAvatarColor);
     players.push(newPlayer);
-    console.info(`New player Added! (id: ${playerId}))`);
+    console.info(`Player Added! (id: ${playerId}))`);
     return newPlayer;
   }
   removePlayer(player) {
     let pIndex = players.indexOf(player);
     if (pIndex >= 0) {
       players.splice(pIndex, 1);
-      console.info(`Removed Player ${player.getPlayerName()} from Game.`);
+      console.info(`Player Removed ${player.getPlayerName()}.`);
     }
   }
 

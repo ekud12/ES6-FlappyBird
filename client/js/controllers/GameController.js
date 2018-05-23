@@ -38,20 +38,20 @@ const canvasPaint = (nowTime, totalTime) => {
 
 const runClientInstance = () => {
   if (typeof io === 'undefined') {
-    console.log('ERROR INIT IO');
+    console.log('ERROR INIT socket.io instance.');
   }
   playersCInstance = new PlayersController();
 
   socket = io.connect();
   socket.on('connect', () => {
     socket.on('disconnect', () => {
-      console.log(`Disconnected or player quit. Refresh Page.`);
+      console.log(`Server Disconnected or player quit. Hit F5`);
     });
     canvasPaint(0, 0);
     document.getElementById('enter-game').onclick = initClientSocketBindings;
   });
   socket.on('error', () => {
-    console.log(`Error connecting to WebSocket`);
+    console.log(`Error. Check WebSockets (Maybe Proxy).`);
   });
 };
 
