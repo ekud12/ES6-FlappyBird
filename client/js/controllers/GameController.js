@@ -1,9 +1,9 @@
 import { config as Config } from '../../../config.js';
 import PlayersController from '../controllers/PlayersController.js';
 import GUIController from '../controllers/GUIController.js';
+let audio = new Audio('./../../assets/images/jungle.mp3');
 let state = Config.clientInstanceStates.New;
 let GUIControllerInstance = new GUIController();
-let audio = new Audio('./../../assets/images/jungle.mp3');
 let playersCInstance;
 let playerID = null;
 let isPlayerReady = false;
@@ -11,7 +11,6 @@ let updateIntervalTime = null;
 let socket;
 let gameVines;
 let audioPlaying = false;
-let port;
 
 /**
  *s
@@ -137,11 +136,9 @@ const initClientSocketBindings = () => {
     gameVines = newServerData.vines;
   });
 
-  /** TODO: REMOVE */
   socket.emit('welcome_player', name, (serverState, uuid) => {
     playerID = uuid;
     clientGetUpdatedState(serverState);
-
     if (serverState === Config.clientInstanceStates.Playing) {
       alert(`Game in Progress. Please wait...`);
     }
@@ -185,6 +182,7 @@ function audioHandler() {
 
 /** This is better than using SetInterval because its inbrowser
  * and helps us get frames so that the canvas will render without jitters
+ * possible only on client because browser does this
  */
 requestAnimationFrame =
   window.requestAnimationFrame ||

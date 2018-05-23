@@ -21,14 +21,10 @@ class Player {
         cnvsCTX.configAlpha = 0.5;
         cnvsCTX.font = '20px Quantico';
         cnvsCTX.fillStyle = 'green';
-        pName =
-          this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.name}`).width / 2;
-        cnvsCTX.fillText(`${this.playerData.name}`, pName, this.playerData.YCoordinate - 20);
+        pName = this.playerData.X + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.name}`).width / 2;
+        cnvsCTX.fillText(`${this.playerData.name}`, pName, this.playerData.Y - 20);
       }
-      cnvsCTX.translate(
-        this.playerData.XCoordinate + Config.TOUCAN_RENDER_WIDTH / 2,
-        this.playerData.YCoordinate + Config.TOUCAN_RENDER_HEIGHT / 2
-      );
+      cnvsCTX.translate(this.playerData.X + Config.TOUCAN_RENDER_WIDTH / 2, this.playerData.Y + Config.TOUCAN_RENDER_HEIGHT / 2);
       cnvsCTX.rotate(this.playerData.rotation * Math.PI / 180);
       if (this.playerData.state === Config.PlayerState.WaitingForGameStart) {
         cnvsCTX.drawImage(
@@ -67,6 +63,10 @@ class Player {
     cnvsCTX.restore();
   }
 
+  isPlayerReady(isInReadyState) {
+    this.playerData.state = isInReadyState === true ? Config.PlayerState.Ready : Config.PlayerState.WaitingForGameStart;
+  }
+
   updatePlayerData(data) {
     this.playerData = data;
   }
@@ -85,10 +85,6 @@ class Player {
 
   getPlayerScore() {
     return this.playerData.score;
-  }
-
-  isPlayerReady(readyState) {
-    this.playerData.state = readyState === true ? Config.PlayerState.Ready : Config.PlayerState.WaitingForGameStart;
   }
 }
 

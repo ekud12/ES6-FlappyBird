@@ -1,75 +1,49 @@
 import { config as Config } from '../../config';
 
-// Defines
-const MAX_BIRDS_IN_A_ROW = 3;
-const START_BIRD_POS_X = 100;
-const SPACE_BETWEEN_BIRDS_X = 120;
-const START_BIRD_POS_Y = 100;
-const SPACE_BETWEEN_BIRDS_Y = 100;
-const GRAVITY_SPEED = 0.05;
-const JUMP_SPEED = -0.5;
-const MAX_ROTATION = -6;
-const MIN_ROTATION = 60;
-const ROTATION_SPEED = 8;
-
 class Player {
-  constructor(socket, uid, color) {
-    this.socketId = socket;
+  constructor(socket, newID, newColor) {
     this.playerVars = {
-      id: uid,
+      id: newID,
       name: '',
+      X: 0,
+      Y: 0,
       rotation: 0,
-      color,
+      color: newColor,
       score: 0,
-      state: Config.PlayerState.NoState,
-      XCoordinate: 0,
-      YCoordinate: 0
+      state: Config.PlayerState.NoState
     };
+    this.socketHandler = socket;
     this.speed = 0;
     this.ranking = 1;
     this.latestVineId = 0;
   }
 
-  update(timeLapse) {
-    if (this.playerVars.state === Config.PlayerState.InProgress) {
-      // calc now Y pos
-      this.speed += GRAVITY_SPEED;
-      this.playerVars.YCoordinate += Math.round(timeLapse * this.speed);
-
-      // Calc rotation
-      this.playerVars.rotation += Math.round(this.speed * ROTATION_SPEED);
-      if (this.playerVars.rotation > MIN_ROTATION) this.playerVars.rotation = MIN_ROTATION;
-    }
-    // If he's died, update it's X position
-    else if (this.playerVars.state === Config.PlayerState.Dead) {
-      this.playerVars.XCoordinate -= Math.floor(timeLapse * Config.SPEED);
-    } else {
-      // console.info(this.playerVars.name + " doesn't move because he's in state " + this.playerVars.state);
-    }
-  }
-
-  preparePlayer(pos) {
-    let line;
-    let col;
-    let randomMoveX;
-
-    // Place bird on the departure grid
-    line = Math.floor(pos / 6);
-    col = Math.floor(pos % 6);
-    randomMoveX = Math.floor(Math.random() * (SPACE_BETWEEN_BIRDS_X / 2 + 1));
-    this.playerVars.YCoordinate = START_BIRD_POS_Y + line * SPACE_BETWEEN_BIRDS_Y;
-    this.playerVars.XCoordinate = START_BIRD_POS_X + col * SPACE_BETWEEN_BIRDS_X + randomMoveX;
-
-    // Reset usefull values
-    this.speed = 0;
-    this.ranking = 0;
+  initPlayerVars(position) {
+    let yGrid = Math.floor(position / 10);
+    let xGrid = Math.floor(position % 10);
+    let randomGridPositionForToucan = Math.floor(Math.random() * (150 / 2 + 1));
+    this.playerVars.Y = 100 + yGrid * 100;
+    this.playerVars.X = 100 + xGrid * 150 + randomGridPositionForToucan;
     this.playerVars.score = 0;
     this.playerVars.rotation = 0;
-    // Update all register players
-    if (this.playerVars.name != '') this.playerVars.state = Config.PlayerState.WaitingForGameStart;
+    this.speed = 0;
+    this.ranking = 0;
+    if (this.playerVars.name != '' && this.playerVars.name != ' ' && this.playerVars.name != 'Your Name')
+      this.playerVars.state = Config.PlayerState.WaitingForGameStart;
   }
 
-  updateScore(vineID) {
+  refreshPlayerProgress(time) {
+    if (this.playerVars.state === Config.PlayerState.InProgress) {
+      this.speed += 0.04;
+      this.playerVars.Y += Math.round(time * this.speed);
+      this.playerVars.rotation += Math.round(this.speed * 6);
+      if (this.playerVars.rotation > 10) this.playerVars.rotation = 10;
+    } else if (this.playerVars.state === Config.PlayerState.Dead) {
+      this.playerVars.X -= Math.floor(time * Config.SPEED);
+    }
+  }
+
+  updatePlayerScore(vineID) {
     if (vineID != this.latestVineId) {
       this.playerVars.score++;
       this.latestVineId = vineID;
@@ -77,15 +51,15 @@ class Player {
   }
 
   sendWinner(winner, score) {
-    this.socketId.emit('we_have_a_winner', {
+    this.socketHandler.emit('we_have_a_winner', {
       winner: winner,
       score: score
     });
   }
 
   action() {
-    this.speed = JUMP_SPEED;
-    this.playerVars.rotation = MAX_ROTATION;
+    this.speed = -0.4;
+    this.playerVars.rotation = -7;
   }
 
   setPlayerIsDead(totalPlayersStillInGame) {
@@ -106,11 +80,11 @@ class Player {
    * Getters and Setters
    */
 
-  getPlayerObject() {
+  getPlayerVars() {
     return this.playerVars;
   }
 
-  getPlayerRank() {
+  getPlayerRanking() {
     return this.ranking;
   }
 
@@ -122,7 +96,7 @@ class Player {
     this.playerVars.name = name;
   }
 
-  getID() {
+  getId() {
     return this.playerVars.id;
   }
 

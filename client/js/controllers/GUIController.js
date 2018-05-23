@@ -1,4 +1,4 @@
-import { config as Config } from "../../config.js";
+import { config as Config } from '../../config.js';
 let canvasCTX;
 let vineSrc;
 let toucanSrcs;
@@ -10,7 +10,7 @@ export default class GUIController {
     toucanSrcs = new Array();
     totalSrcsCount = Config.TOUCAN_SOURCES.length;
     readyToRender = false;
-    canvasCTX = document.getElementById("canvas").getContext("2d");
+    canvasCTX = document.getElementById('canvas').getContext('2d');
   }
 
   render(currentTime, ellapsedTime, playerController, vines, gameState) {
@@ -31,19 +31,18 @@ export default class GUIController {
         players[i].render(canvasCTX, currentTime, toucanSrcs, gameState);
       }
     }
-    if (gameState === 2)
-      this.updateScore(playerController.getActivePlayer().getPlayerScore());
+    if (gameState === 2) this.updateScore(playerController.getActivePlayer().getPlayerScore());
   }
 
   resetGUI() {
-    document.getElementById("score-container").innerHTML = ``;
+    document.getElementById('score-container').innerHTML = ``;
   }
 
   loadAssets(done) {
     let toucan;
 
     vineSrc = new Image();
-    vineSrc.src = "assets/images/vine.png";
+    vineSrc.src = 'assets/images/vine.png';
     vineSrc.onload = () => {
       this.onAllAssetsLoaded(done);
     };
@@ -58,9 +57,7 @@ export default class GUIController {
     }
   }
   updateScore(score) {
-    document.getElementById(
-      "score-container"
-    ).innerHTML = `Your score is: ${score}`;
+    document.getElementById('score-container').innerHTML = `Your score is: ${score}`;
   }
   renderVine(vine) {
     canvasCTX.drawImage(
@@ -69,8 +66,8 @@ export default class GUIController {
       0,
       Config.VINE_SPR_W,
       Config.VINE_SPR_H,
-      vine.XCoordinate,
-      vine.YCoordinate - Config.VINE_SPR_H,
+      vine.X,
+      vine.Y - Config.VINE_SPR_H,
       Config.VINE_WIDTH,
       Config.VINE_SPR_H
     );
@@ -80,8 +77,8 @@ export default class GUIController {
       0,
       Config.VINE_SPR_W,
       Config.VINE_SPR_H,
-      vine.XCoordinate,
-      vine.YCoordinate + Config.HEIGHT_BETWEEN_VINES,
+      vine.X,
+      vine.Y + Config.HEIGHT_BETWEEN_VINES,
       Config.VINE_WIDTH,
       Config.VINE_SPR_H
     );

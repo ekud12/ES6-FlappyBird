@@ -35,12 +35,12 @@ export const initializeServer = incomingIO => {
     socket.PlayerInstance = player;
     socket.on('disconnect', () => {
       PlayersControllerInst.removePlayer(player);
-      socket.broadcast.emit('player_disconnected', player.getPlayerObject());
+      socket.broadcast.emit('player_disconnected', player.getPlayerVars());
       player = null;
     });
 
     socket.on('welcome_player', (name, callback) => {
-      callback(gameState, player.getID());
+      callback(gameState, player.getId());
       initPlayerWithBindings(socket, name);
     });
   });
@@ -53,7 +53,7 @@ const initPlayerWithBindings = (playerSocket, name) => {
   playerSocket.on('update_ready_state', readyState => {
     if (gameState === Config.serverStates.WaitingForPlayers) {
       PlayersControllerInst.checkAllPlayersReady(player, readyState);
-      playerSocket.broadcast.emit('player_is_ready', player.getPlayerObject());
+      playerSocket.broadcast.emit('player_is_ready', player.getPlayerVars());
     }
   });
 
@@ -62,7 +62,7 @@ const initPlayerWithBindings = (playerSocket, name) => {
   });
 
   playerSocket.emit('list_of_players_update', PlayersControllerInst.getAllPlayersForState());
-  playerSocket.broadcast.emit('player_joined', player.getPlayerObject());
+  playerSocket.broadcast.emit('player_joined', player.getPlayerVars());
 };
 
 const refreshState = (state, notifyClients) => {
@@ -114,7 +114,7 @@ const serverGameInstanceLoop = () => {
     }
 
     // Update players position
-    PlayersControllerInst.updatePlayers(ellapsedTime);
+    PlayersControllerInst.updatePlayersProgress(ellapsedTime);
 
     // Update vines
     VineControllerInst.refreshVines(ellapsedTime);

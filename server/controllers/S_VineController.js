@@ -15,7 +15,7 @@ class VineController {
     let newVine;
     let lastVinePosition = Config.SCREEN_WIDTH + 60;
 
-    if (vines.length > 0) lastVinePosition = vines[vines.length - 1].XCoordinate;
+    if (vines.length > 0) lastVinePosition = vines[vines.length - 1].X;
     newVine = new Vine(lastVinePosition);
     vines.push(newVine);
     return newVine;
@@ -29,7 +29,7 @@ class VineController {
       vines[i].changePosition(lastUpdatedTime);
     }
 
-    if (vines[vines.length - 1].XCoordinate < Config.SCREEN_WIDTH) this.emit('create_new_vine');
+    if (vines[vines.length - 1].X < Config.SCREEN_WIDTH) this.emit('create_new_vine');
   }
 
   getVines() {

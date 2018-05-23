@@ -14,19 +14,16 @@ export const checkCollisions = (vine, toucans) => {
 };
 
 const checkSingleCollision = (vine, toucanLatestProps) => {
-  const toucan = toucanLatestProps.getPlayerObject();
-  if (
-    toucan.XCoordinate + Config.TOUCAN_RENDER_WIDTH > vine.XCoordinate + 70 &&
-    toucan.XCoordinate < vine.XCoordinate + Config.VINE_WIDTH
-  ) {
-    toucanLatestProps.updateScore(vine.id);
-    if (toucan.YCoordinate < vine.YCoordinate) return true;
-    if (toucan.YCoordinate + Config.TOUCAN_RENDER_HEIGHT > vine.YCoordinate + Config.HEIGHT_BETWEEN_VINES) {
+  const toucan = toucanLatestProps.getPlayerVars();
+  if (toucan.X + Config.TOUCAN_RENDER_WIDTH > vine.X + 70 && toucan.X < vine.X + Config.VINE_WIDTH) {
+    toucanLatestProps.updatePlayerScore(vine.id);
+    if (toucan.Y < vine.Y) return true;
+    if (toucan.Y + Config.TOUCAN_RENDER_HEIGHT > vine.Y + Config.HEIGHT_BETWEEN_VINES) {
       return true;
     }
   }
 
-  if (toucan.YCoordinate + Config.TOUCAN_RENDER_HEIGHT > Config.SCREEN_HEIGHT) {
+  if (toucan.Y + Config.TOUCAN_RENDER_HEIGHT > Config.SCREEN_HEIGHT) {
     return true;
   }
 

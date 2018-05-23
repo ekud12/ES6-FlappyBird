@@ -11,12 +11,10 @@ export default class PlayersController {
   }
 
   addPlayer(data, p_id) {
-    console.log(data);
-    let player;
     if (this.findPlayerById(data.id) !== null) {
       return;
     }
-    player = new Player(data, p_id);
+    let player = new Player(data, p_id);
     players.push(player);
     playersIndices[data.id] = players.length - 1;
     if (player.isCurrentPlayer() === true) {

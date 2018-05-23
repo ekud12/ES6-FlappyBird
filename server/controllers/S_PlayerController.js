@@ -28,12 +28,12 @@ class PlayersController {
 
   initPlayer(player, name) {
     player.setName(name);
-    player.preparePlayer(index++);
+    player.initPlayerVars(index++);
   }
 
-  updatePlayers(currentTime) {
+  updatePlayersProgress(currentTime) {
     for (let i = 0; i < this.getTotalPlayers(); i++) {
-      players[i].update(currentTime);
+      players[i].refreshPlayerProgress(currentTime);
     }
   }
 
@@ -43,7 +43,7 @@ class PlayersController {
     for (let i = 0; i < this.getTotalPlayers(); i++) {
       if (state) {
         if (players[i].getState() === state) resultSet.push(players[i]);
-      } else resultSet.push(players[i].getPlayerObject());
+      } else resultSet.push(players[i].getPlayerVars());
     }
 
     return resultSet;
@@ -53,7 +53,7 @@ class PlayersController {
     const resultSet = new Array();
     for (let i = 0; i < this.getTotalPlayers(); i++) {
       if (players[i].getState() === Config.PlayerState.InProgress || players[i].getState() === Config.PlayerState.Dead)
-        resultSet.push(players[i].getPlayerObject());
+        resultSet.push(players[i].getPlayerVars());
     }
 
     return resultSet;
@@ -86,9 +86,9 @@ class PlayersController {
     let winner, score;
     let i;
     for (i = 0; i < this.getTotalPlayers(); i++) {
-      if (players[i].getPlayerRank() === 1) {
+      if (players[i].getPlayerRanking() === 1) {
         winner = players[i].getPlayerName();
-        score = players[i].getPlayerObject().score;
+        score = players[i].getPlayerVars().score;
       }
     }
     for (i = 0; i < this.getTotalPlayers(); i++) {
@@ -100,8 +100,8 @@ class PlayersController {
     const resultSet = new Array();
     index = 0;
     for (let i = 0; i < this.getTotalPlayers(); i++) {
-      players[i].preparePlayer(index++);
-      resultSet.push(players[i].getPlayerObject());
+      players[i].initPlayerVars(index++);
+      resultSet.push(players[i].getPlayerVars());
     }
     return resultSet;
   }
