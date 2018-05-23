@@ -5,7 +5,7 @@ class Vine {
     this.id = Math.random() * 10000000000;
     this.X = lastVinePosition + 380;
     this.Y = Math.floor(
-      Math.random() * (Config.MAX_VINE_HEIGHT - Config.HEIGHT_BETWEEN_VINES - Config.MIN_VINE_HEIGHT + 1) + Config.MIN_VINE_HEIGHT
+      Math.random() * (Config.MAX_VINE_HEIGHT - Config.VINES_CUTOUT - Config.MIN_VINE_HEIGHT + 1) + Config.MIN_VINE_HEIGHT
     );
   }
 

@@ -78,7 +78,7 @@ export default class GUIController {
       Config.VINE_SPR_W,
       Config.VINE_SPR_H,
       vine.X,
-      vine.Y + Config.HEIGHT_BETWEEN_VINES,
+      vine.Y + Config.VINES_CUTOUT,
       Config.VINE_WIDTH,
       Config.VINE_SPR_H
     );

@@ -18,7 +18,7 @@ const checkSingleCollision = (vine, toucanLatestProps) => {
   if (toucan.X + Config.TOUCAN_RENDER_WIDTH > vine.X + 70 && toucan.X < vine.X + Config.VINE_WIDTH) {
     toucanLatestProps.updatePlayerScore(vine.id);
     if (toucan.Y < vine.Y) return true;
-    if (toucan.Y + Config.TOUCAN_RENDER_HEIGHT > vine.Y + Config.HEIGHT_BETWEEN_VINES) {
+    if (toucan.Y + Config.TOUCAN_RENDER_HEIGHT > vine.Y + Config.VINES_CUTOUT) {
       return true;
     }
   }

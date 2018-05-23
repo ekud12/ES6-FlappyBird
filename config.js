@@ -1,17 +1,9 @@
 export let config = {
-  // SERVER_ADDRESS: "https://afeka-flappy-bird.herokuapp.com",
-  // SERVER_ADDRESS: "http://localhost",
-
   /** Sprites Config */
   TOUCAN_SPR_SRC_H: 64,
   TOUCAN_SPR_SRC_W: 64,
   VINE_SPR_H: 768,
   VINE_SPR_W: 148,
-
-  /** Action keycodes */
-  PLAY_KEYCODE: 32,
-  SOUND_TOGGLE: 109,
-
   TOUCAN_SOURCES: [
     'assets/images/toucan.png',
     'assets/images/toucan-red.png',
@@ -19,6 +11,11 @@ export let config = {
     'assets/images/toucan-green.png'
   ],
 
+  /** Action keycodes */
+  PLAY_KEYCODE: 32,
+  SOUND_TOGGLE: 109,
+
+  /** States Config */
   clientInstanceStates: {
     New: 0,
     Waiting: 1,
@@ -38,13 +35,14 @@ export let config = {
   },
 
   /** Rendering Options */
+  /** DO NOT CHANGE */
   SCREEN_WIDTH: 1920,
   SCREEN_HEIGHT: 768,
-  SPEED: 0.3,
   TOUCAN_RENDER_WIDTH: 60,
   TOUCAN_RENDER_HEIGHT: 60,
   VINE_WIDTH: 100,
   MIN_VINE_HEIGHT: 50,
   MAX_VINE_HEIGHT: 600,
-  HEIGHT_BETWEEN_VINES: 240
+  VINES_CUTOUT: 240,
+  SPEED: 0.3
 };
