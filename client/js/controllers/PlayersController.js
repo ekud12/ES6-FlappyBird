@@ -1,5 +1,11 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports and var definition
+ */
 import Player from '../models/Player.model.js';
-
 let players;
 let playersIndices;
 let activePlayer;

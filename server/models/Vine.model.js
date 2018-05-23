@@ -1,3 +1,10 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports
+ */
 import { config as Config } from '../../config';
 
 class Vine {

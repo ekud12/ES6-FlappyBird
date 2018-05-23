@@ -1,8 +1,14 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports and var definition
+ */
 import { EventEmitter } from 'events';
 import { config as Config } from '../../config';
 import util from 'util';
 import Player from '../models/Player.model';
-
 let players = new Array();
 let index = 0;
 

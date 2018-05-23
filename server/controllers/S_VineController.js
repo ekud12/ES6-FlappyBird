@@ -1,8 +1,14 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports and var definition
+ */
 import { EventEmitter } from 'events';
 import { config as Config } from '../../config';
 import util from 'util';
 import Vine from '../models/Vine.model';
-
 let vines = new Array();
 let socket = null;
 

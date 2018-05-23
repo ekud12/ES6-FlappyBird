@@ -1,3 +1,10 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports
+ */
 import { config as Config } from '../../config';
 
 export const checkCollisions = (vine, toucans) => {
@@ -13,6 +20,10 @@ export const checkCollisions = (vine, toucans) => {
   return collisionDetected;
 };
 
+/** uses sprite configuration from config.js
+ *  2D Sprites have fixed height but when we render we can alter it
+ *  abit
+ */
 const checkSingleCollision = (vine, toucanLatestProps) => {
   const toucan = toucanLatestProps.getPlayerVars();
   if (toucan.X + Config.TOUCAN_RENDER_WIDTH > vine.X + 70 && toucan.X < vine.X + Config.VINE_WIDTH) {

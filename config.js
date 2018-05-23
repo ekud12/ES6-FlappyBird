@@ -1,3 +1,13 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Config.js - DO NOT TOUCH THIS FILE.
+ * holds env vars instead of .env file because
+ * we serve it to the static client as well and it does not
+ * have access to process.env.NODE_ENV via browser.
+ */
 export let config = {
   /** Sprites Config */
   TOUCAN_SPR_SRC_H: 64,

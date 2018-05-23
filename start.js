@@ -1,6 +1,12 @@
 /**
  * Author: Liel Kaysari
- * Import All Modules
+ *     ID: 201322054
+ */
+/**
+ * Main App Endpoint imports and initialization.
+ * I use ejs to serve html, and webpack to bundle the entire
+ * app.
+ * I used some more middleware here to support bundling.
  */
 import { config as Config } from './config';
 import express from 'express';
@@ -29,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 /**
- * Load Config File
+ * Load Config File Endpoint for client
  */
 app.get('/config.js', (req, res) => {
   res.sendFile('config.js', { root: __dirname });
@@ -45,6 +51,6 @@ const server = http.createServer(app).listen(app.get('port'), () => {
 const io = require('socket.io')(server, { pingTimeout: 30000 });
 
 /**
- * Run Game on Server
+ * Run a Server Instance for the game and give it out server's socket.io instance
  */
 mainServer.initializeServer(io);

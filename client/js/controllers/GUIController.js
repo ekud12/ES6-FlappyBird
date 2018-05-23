@@ -1,3 +1,10 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports and var definition
+ */
 import { config as Config } from '../../config.js';
 let canvasCTX;
 let vineSrc;

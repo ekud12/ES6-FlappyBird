@@ -1,8 +1,14 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Imports and var definitions
+ */
 import { config as Config } from '../config';
 import * as CollisionChecker from './utils/CollisionUtils';
 import VineController from './controllers/S_VineController';
 import PlayersController from './controllers/S_PlayerController';
-
 let PlayersControllerInst;
 let VineControllerInst;
 let gameState;

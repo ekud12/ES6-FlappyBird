@@ -1,3 +1,10 @@
+/**
+ * Author: Liel Kaysari
+ *     ID: 201322054
+ */
+/**
+ * Import Config
+ */
 import { config as Config } from '../../config.js';
 
 class Player {
