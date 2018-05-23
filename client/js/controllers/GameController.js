@@ -172,7 +172,7 @@ const initClientSocketBindings = () => {
 };
 
 const displayWinner = data => {
-  document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner}! </br> The winner Score is: ${data.score}!`;
+  document.getElementById('winner-div').innerHTML = `The winner is : ${data.winner}! </br> The winner's Score is: ${data.score}!`;
   setTimeout(GUIControllerInstance.resetGUI(), 3000);
 };
 

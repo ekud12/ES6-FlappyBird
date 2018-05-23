@@ -27,7 +27,7 @@ class Player {
       if (this.isSelf === false) {
         cnvsCTX.configAlpha = 0.5;
         cnvsCTX.font = '20px Quantico';
-        cnvsCTX.fillStyle = 'green';
+        cnvsCTX.fillStyle = 'white';
         pName = this.playerData.X + Config.TOUCAN_RENDER_WIDTH / 2 - cnvsCTX.measureText(`${this.playerData.name}`).width / 2;
         cnvsCTX.fillText(`${this.playerData.name}`, pName, this.playerData.Y - 20);
       }
